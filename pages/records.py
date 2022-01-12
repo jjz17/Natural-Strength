@@ -1,6 +1,6 @@
-import streamlit as st
 import numpy as np
 import pandas as pd
+import streamlit as st
 
 
 # @st.cache
@@ -25,6 +25,9 @@ def app():
                 df = df[df[query[0]] == query[1]]
         return df
 
+    def insert_space():
+        st.markdown('#')
+
     record_data = load_record_data()
     numerics = record_data.select_dtypes('number').columns
 
@@ -36,11 +39,10 @@ def app():
         st.header('Dataset: American USAPL Raw Powerlifting Records')
         st.markdown('I scraped this dataset from... https://usapl.liftingdatabase.com/')
         st.markdown('**It contains the current Male and Female American Raw Powerlifting Records recorded by USAPL**')
-        st.text('Below is the DataFrame')
+        st.text('USAPL athletes are tested and guaranteed to be natural athletes')
         st.write(record_data)
 
-    st.markdown('#')
-    st.markdown('#')
+    insert_space()
 
     dataQuerying = st.container()
 

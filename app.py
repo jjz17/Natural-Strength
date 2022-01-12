@@ -21,7 +21,7 @@ app = MultiPage()
 
 # Add all your application here
 # app.add_page('Upload Data', records.app)
-app.add_page('Records', records.app)
+app.add_page('USAPL American Records', records.app)
 app.add_page('Personal Dashboard', user_dashboard.app)
 
 # The main app
