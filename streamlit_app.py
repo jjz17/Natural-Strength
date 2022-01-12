@@ -17,11 +17,6 @@ with dataExploration:
 
 
 
-
-df = record_data[record_data['Weight Class'] == 52]
-df
-
-
 def query_records(weight_class: float, lift: str = '', sex: str = 'M'):
     if lift == '':
         return record_data[(record_data['Weight Class'] == weight_class) & (record_data['Sex'] == sex)]
@@ -30,9 +25,14 @@ def query_records(weight_class: float, lift: str = '', sex: str = 'M'):
             (record_data['Weight Class'] == weight_class) & (record_data['Lift'] == lift) & (record_data['Sex'] == sex)]
 
 
-def myFun(**kwargs):
-    for key, value in kwargs.items():
-        print("%s == %s" % (key, value))
+def query_kwargs(**kwargs):
+    # for key, value in kwargs.items():
+    #     print("%s == %s" % (key, value))
+    df = record_data.copy()
+    for category, value in kwargs.items():
+        df = df[df[category] == value]
+    return df
+
 
 
 # Driver code
@@ -45,9 +45,11 @@ def myFun(**kwargs):
 #     'Weight Class',
 #     (52.0, 56.0, 60.0))
 
-weight_class = st.selectbox(
-    'Weight Class',
-    np.sort(record_data['Weight Class'].unique()))
+weight_classes = np.sort(record_data['Weight Class'].unique())
+weight_classes = list(weight_classes)
+weight_classes.insert(0, '<select>')
+# np.insert(weight_classes, 0, '<select>')
+weight_class = st.selectbox('Weight Class', weight_classes)
 
 st.write('You selected:', weight_class)
 
