@@ -2,6 +2,19 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+
+def lbs_to_kg(lbs):
+    return lbs * 0.453592
+
+
+def kg_to_lbs(kg):
+    return kg * 2.20462
+
+@st.cache
+def load_record_data():
+    return pd.read_csv('current_usapl_american_raw_records.csv')
+
+
 def generate_options(category: str):
     options = np.sort(record_data[category].unique())
     options = list(options)
@@ -19,9 +32,10 @@ def query_args(*queries):
             df = df[df[query[0]] == query[1]]
     return df
 
+
 dataExploration = st.container()
 
-record_data = pd.read_csv('current_usapl_american_raw_records.csv')
+record_data = load_record_data()
 
 with dataExploration:
     st.title('Natural Strength Building')
@@ -68,12 +82,12 @@ with dataQuerying:
 
     st.write(query_args(wc_input, lift_input, sex_input))
 
-side_bar =  st.sidebar.selectbox(
+side_bar = st.sidebar.selectbox(
     'What is my weight class?',
     ('', "Home phone", "Mobile phone")
 )
 
-#adding a text input widget to the sidebar
-
-add_textbox = st.sidebar.text_input('Enter your name: ')
+# # adding a text input widget to the sidebar
+#
+# add_textbox = st.sidebar.text_input('Enter your name: ')
 
