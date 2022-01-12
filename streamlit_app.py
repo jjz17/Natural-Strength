@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
+import random
 
 dataExploration = st.container()
 
@@ -15,54 +16,46 @@ with dataExploration:
     st.text('Below is the DataFrame')
     st.write(record_data)
 
+# @st.cache
+def make_select_box(category: str):
+    options = np.sort(record_data[category].unique())
+    options = list(options)
+    options.insert(0, '<select>')
+    return options
+    # select_box = st.selectbox(category, options, key=random.random())
+    # # user_input = ('Weight Class', weight_class)
+    # return select_box
 
 
-def query_records(weight_class: float, lift: str = '', sex: str = 'M'):
-    if lift == '':
-        return record_data[(record_data['Weight Class'] == weight_class) & (record_data['Sex'] == sex)]
-    else:
-        return record_data[
-            (record_data['Weight Class'] == weight_class) & (record_data['Lift'] == lift) & (record_data['Sex'] == sex)]
-
-
-def query_kwargs(**kwargs):
-    # for key, value in kwargs.items():
-    #     print("%s == %s" % (key, value))
+def query_args(*queries):
     df = record_data.copy()
-    for category, value in kwargs.items():
-        df = df[df[category] == value]
+    for query in queries:
+        if query[1] != '<select>':
+            df = df[df[query[0]] == query[1]]
     return df
 
 
+wc_category = 'Weight Class'
+wc_options = make_select_box(wc_category)
+wc = st.selectbox(wc_category, wc_options)
+wc_input = (wc_category, wc)
 
-# Driver code
-# myFun(first='Geeks', mid='for', last='Geeks')
+st.write('You selected:', wc)
 
-# st.write(query_records(52.0))
-# st.write(query_records(60.0, 'Raw Open - Bench press single lift'))
+st.write(query_args(wc_input))
+# make_select_box('Lift')
 
-# option = st.selectbox(
-#     'Weight Class',
-#     (52.0, 56.0, 60.0))
+# lift = st.selectbox(
+#     'Lift',
+#     np.sort(record_data['Lift'].unique()))
+#
+# st.write('You selected:', lift)
+#
+# sex = st.selectbox(
+#     'Sex',
+#     np.sort(record_data['Sex'].unique()))
+#
+# st.write('You selected:', sex)
 
-weight_classes = np.sort(record_data['Weight Class'].unique())
-weight_classes = list(weight_classes)
-weight_classes.insert(0, '<select>')
-# np.insert(weight_classes, 0, '<select>')
-weight_class = st.selectbox('Weight Class', weight_classes)
-
-st.write('You selected:', weight_class)
-
-lift = st.selectbox(
-    'Lift',
-    np.sort(record_data['Lift'].unique()))
-
-st.write('You selected:', lift)
-
-sex = st.selectbox(
-    'Sex',
-    np.sort(record_data['Sex'].unique()))
-
-st.write('You selected:', sex)
-
-st.write(query_records(weight_class, lift, sex))
+# st.write(query_records(weight_class, lift, sex))
+query_args(wc_input)
