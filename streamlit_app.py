@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-import os
 
 dataExploration = st.container()
 
@@ -14,3 +13,10 @@ with dataExploration:
     st.markdown('**It contains the current Male and Female American Raw Powerlifting Records recorded by USAPL**')
     st.text('Below is the DataFrame')
     st.write(record_data)
+
+
+def query_records(weight_class: str, lift: str=''):
+    if lift == '':
+        return record_data[record_data['Weight Class'] == weight_class]
+    else:
+        return record_data[record_data['Weight Class'] == weight_class & record_data['Lift'] == lift]
