@@ -16,6 +16,12 @@ with dataExploration:
     st.write(record_data)
 
 
+
+
+df = record_data[record_data['Weight Class'] == 52]
+df
+
+
 def query_records(weight_class: float, lift: str = '', sex: str = 'M'):
     if lift == '':
         return record_data[(record_data['Weight Class'] == weight_class) & (record_data['Sex'] == sex)]
