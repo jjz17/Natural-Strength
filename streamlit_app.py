@@ -19,7 +19,7 @@ def query_records(weight_class: float, lift: str = ''):
     if lift == '':
         return record_data[record_data['Weight Class'] == weight_class]
     else:
-        return record_data[record_data['Weight Class'] == weight_class & record_data['Lift'] == lift]
+        return record_data[(record_data['Weight Class'] == weight_class) & (record_data['Lift'] == lift)]
 
 
 st.write(query_records(52.0))
