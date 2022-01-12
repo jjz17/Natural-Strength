@@ -15,8 +15,12 @@ with dataExploration:
     st.write(record_data)
 
 
-def query_records(weight_class: str, lift: str=''):
+def query_records(weight_class: float, lift: str = ''):
     if lift == '':
         return record_data[record_data['Weight Class'] == weight_class]
     else:
         return record_data[record_data['Weight Class'] == weight_class & record_data['Lift'] == lift]
+
+
+st.write(query_records(52.0))
+st.write(query_records(60.0, 'Raw Open - Bench press single lift'))
