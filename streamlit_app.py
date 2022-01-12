@@ -32,6 +32,8 @@ with dataExploration:
     st.text('Below is the DataFrame')
     st.write(record_data)
 
+st.markdown('#')
+st.markdown('#')
 
 dataQuerying = st.container()
 
