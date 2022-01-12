@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
+import seaborn as sns
 import numpy as np
 import pandas as pd
 import streamlit as st
 
-'''
-GLOBAL VARIABLES
-'''
+# '''
+# GLOBAL VARIABLES
+# '''
 # Units
 metric_units = False
 
@@ -63,6 +64,7 @@ def query_args(*queries):
 dataExploration = st.container()
 
 record_data = load_record_data()
+numerics = record_data.select_dtypes('number').columns
 
 with dataExploration:
     st.title('Natural Strength Building')
@@ -123,8 +125,10 @@ weight_input = st.sidebar.number_input(
     'Let\'s figure out your weight class', min_value=0, max_value=1500)
 st.sidebar.write(f'Your weight class is {compute_weight_class(weight_input)}')
 
-# # adding a text input widget to the sidebar
-#
-# add_textbox = st.sidebar.text_input('Enter your name: ')
 
-st.bar_chart(data=record_data[['Weight (kg)', 'Weight Class']])
+
+hist_data = st.sidebar.selectbox('Category', options=numerics)
+
+fig = plt.figure(figsize=(10, 4))
+sns.distplot(record_data['Weight (kg)'])
+st.pyplot(fig)
