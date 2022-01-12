@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
-
+from pages import utils as u
 
 # @st.cache
 def app():
@@ -25,9 +25,6 @@ def app():
                 df = df[df[query[0]] == query[1]]
         return df
 
-    def insert_space():
-        st.markdown('#')
-
     record_data = load_record_data()
     numerics = record_data.select_dtypes('number').columns
 
@@ -42,7 +39,7 @@ def app():
         st.text('USAPL athletes are tested and guaranteed to be natural athletes')
         st.write(record_data)
 
-    insert_space()
+    u.insert_space()
 
     dataQuerying = st.container()
 
