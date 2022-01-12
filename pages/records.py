@@ -5,81 +5,72 @@ import pandas as pd
 
 # @st.cache
 def app():
-    st.markdown("## Data Upload")
+    @st.cache
+    def load_record_data():
+        return pd.read_csv('current_usapl_american_raw_records.csv')
 
-    # Upload the dataset and save as csv
-    st.markdown("### Upload a csv file for analysis.")
-    st.write("\n")
+    def generate_options(category: str):
+        options = np.sort(record_data[category].unique())
+        options = list(options)
+        options.insert(0, '<select>')
+        return options
+        # select_box = st.selectbox(category, options, key=random.random())
+        # # user_input = ('Weight Class', weight_class)
+        # return select_box
 
-    # Code to read a single file
-    uploaded_file = st.file_uploader("Choose a file", type=['csv', 'xlsx'])
-    global data
-    if uploaded_file is not None:
-        try:
-            data = pd.read_csv(uploaded_file)
-        except Exception as e:
-            print(e)
-            data = pd.read_excel(uploaded_file)
+    def query_args(*queries):
+        df = record_data.copy()
+        for query in queries:
+            if query[1] != '<select>':
+                df = df[df[query[0]] == query[1]]
+        return df
 
-    # uploaded_files = st.file_uploader("Upload your CSV file here.", type='csv', accept_multiple_files=False)
-    # # Check if file exists
-    # if uploaded_files:
-    #     for file in uploaded_files:
-    #         file.seek(0)
-    #     uploaded_data_read = [pd.read_csv(file) for file in uploaded_files]
-    #     raw_data = pd.concat(uploaded_data_read)
+    record_data = load_record_data()
+    numerics = record_data.select_dtypes('number').columns
 
-    # uploaded_files = st.file_uploader("Upload CSV", type="csv", accept_multiple_files=False)
-    # print(uploaded_files, type(uploaded_files))
-    # if uploaded_files:
-    #     for file in uploaded_files:
-    #         file.seek(0)
-    #     uploaded_data_read = [pd.read_csv(file) for file in uploaded_files]
-    #     raw_data = pd.concat(uploaded_data_read)
+    dataExploration = st.container()
 
-    # read temp data
-    # data = pd.read_csv('data/2015.csv')
+    with dataExploration:
+        st.title('Natural Strength Building')
+        st.subheader('Progress With Real Raw Data')
+        st.header('Dataset: American USAPL Raw Powerlifting Records')
+        st.markdown('I scraped this dataset from... https://usapl.liftingdatabase.com/')
+        st.markdown('**It contains the current Male and Female American Raw Powerlifting Records recorded by USAPL**')
+        st.text('Below is the DataFrame')
+        st.write(record_data)
 
-    ''' Load the data and save the columns with categories as a dataframe. 
-    This section also allows changes in the numerical and categorical columns. '''
-    if st.button("Load Data"):
+    st.markdown('#')
+    st.markdown('#')
 
-        # Raw data
-        st.dataframe(data)
-        # utils.getProfile(data)
-        # st.markdown("<a href='output.html' download target='_blank' > Download profiling report </a>",unsafe_allow_html=True)
-        # HtmlFile = open("data/output.html", 'r', encoding='utf-8')
-        # source_code = HtmlFile.read()
-        # components.iframe("data/output.html")# Save the data to a new file
-        data.to_csv('data/main_data.csv', index=False)
+    dataQuerying = st.container()
 
-        # Generate a pandas profiling report
-        # if st.button("Generate an analysis report"):
-        #    utils.getProfile(data)
-        # Open HTML file
+    with dataQuerying:
+        st.subheader('Query the Records')
+        # st.header('Dataset: American USAPL Raw Powerlifting Records')
+        # st.markdown('I scraped this dataset from... https://usapl.liftingdatabase.com/')
+        # st.markdown('**It contains the current Male and Female American Raw Powerlifting Records recorded by USAPL**')
+        # st.text('Below is the DataFrame')
+        # st.write(record_data)
 
-        # 	pass
+        # Weight Class
+        wc_category = 'Weight Class'
+        wc_options = generate_options(wc_category)
+        wc = st.selectbox(wc_category, wc_options)
+        wc_input = (wc_category, wc)
+        st.write('You selected:', wc)
 
-        # Collect the categorical and numerical columns
+        # Lift
+        lift_category = 'Lift'
+        lift_options = generate_options(lift_category)
+        lift = st.selectbox(lift_category, lift_options)
+        lift_input = (lift_category, lift)
+        st.write('You selected:', lift)
 
-        numeric_cols = data.select_dtypes(include=np.number).columns.tolist()
-        categorical_cols = list(set(list(data.columns)) - set(numeric_cols))
+        # Sex
+        sex_category = 'Sex'
+        sex_options = generate_options(sex_category)
+        sex = st.selectbox(sex_category, sex_options)
+        sex_input = (sex_category, sex)
+        st.write('You selected:', sex)
 
-        # Save the columns as a dataframe or dictionary
-        columns = []
-
-        # Iterate through the numerical and categorical columns and save in columns
-        # columns = utils.genMetaData(data)
-
-        # Save the columns as a dataframe with categories
-        # Here column_name is the name of the field and the type is whether it's numerical or categorical
-        columns_df = pd.DataFrame(columns, columns=['column_name', 'type'])
-        columns_df.to_csv('data/metadata/column_type_desc.csv', index=False)
-
-        # Display columns
-        st.markdown("**Column Name**-**Type**")
-        for i in range(columns_df.shape[0]):
-            st.write(f"{i + 1}. **{columns_df.iloc[i]['column_name']}** - {columns_df.iloc[i]['type']}")
-
-        st.markdown("""The above are the automated column types detected by the application in the data. 
-        In case you wish to change the column types, head over to the **Column Change** section. """)
+        st.write(query_args(wc_input, lift_input, sex_input))

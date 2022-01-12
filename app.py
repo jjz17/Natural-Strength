@@ -5,7 +5,7 @@ from PIL import  Image
 
 # Custom imports
 from multipage import MultiPage
-from pages import records, records2 # import your pages here
+from pages import example, records, user_dashboard # import your pages here
 
 # Create an instance of the app
 app = MultiPage()
@@ -20,12 +20,9 @@ app = MultiPage()
 # col2.title("Data Storyteller Application")
 
 # Add all your application here
-app.add_page('Upload Data', records.app)
-app.add_page('Records', records2.app)
-# app.add_page("Change Metadata", metadata.app)
-# app.add_page("Machine Learning", machine_learning.app)
-# app.add_page("Data Analysis",data_visualize.app)
-# app.add_page("Y-Parameter Optimization",redundant.app)
+# app.add_page('Upload Data', records.app)
+app.add_page('Records', records.app)
+app.add_page('Personal Dashboard', user_dashboard.app)
 
 # The main app
 app.run()
