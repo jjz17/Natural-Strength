@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
 import pandas as pd
+import seaborn as sns
 import streamlit as st
 
 # '''
@@ -12,6 +12,7 @@ metric_units = False
 
 # Sex
 male = True
+
 
 def lbs_to_kg(lbs):
     return lbs * 0.453592
@@ -34,8 +35,6 @@ def compute_weight_class(weight: float):
             return _class
     # If not in previous classes, return max weight class
     return classes[-1]
-
-
 
 
 @st.cache
@@ -124,8 +123,6 @@ else:
 weight_input = st.sidebar.number_input(
     'Let\'s figure out your weight class', min_value=0, max_value=1500)
 st.sidebar.write(f'Your weight class is {compute_weight_class(weight_input)}')
-
-
 
 hist_data = st.sidebar.selectbox('Category', options=numerics)
 
