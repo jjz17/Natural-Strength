@@ -24,8 +24,16 @@ def query_records(weight_class: float, lift: str = '', sex: str = 'M'):
             (record_data['Weight Class'] == weight_class) & (record_data['Lift'] == lift) & (record_data['Sex'] == sex)]
 
 
-st.write(query_records(52.0))
-st.write(query_records(60.0, 'Raw Open - Bench press single lift'))
+def myFun(**kwargs):
+    for key, value in kwargs.items():
+        print("%s == %s" % (key, value))
+
+
+# Driver code
+# myFun(first='Geeks', mid='for', last='Geeks')
+
+# st.write(query_records(52.0))
+# st.write(query_records(60.0, 'Raw Open - Bench press single lift'))
 
 # option = st.selectbox(
 #     'Weight Class',
