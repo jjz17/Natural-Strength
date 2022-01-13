@@ -13,7 +13,7 @@ def app():
     # '''
     # Units
     metric_units = False
-
+    unit_label = 'Lbs'
     # Sex
     male = True
 
@@ -68,6 +68,7 @@ def app():
         # st.text('Below is the DataFrame')
 
     units = st.radio('Units', ['Lbs', 'Kg'])
+    unit_label = units
     # Toggle global variable
     if units == 'Lbs':
         metric_units = False
@@ -105,11 +106,11 @@ def app():
 
     with userLifts:
         bench_input = st.number_input('Enter your bench', min_value=0, max_value=2000)
-        st.write(f'Your bench is {bench_input}')
+        st.write(f'Your bench is {bench_input} {unit_label}')
         squat_input = st.number_input('Enter your squat', min_value=0, max_value=2000)
-        st.write(f'Your squat is {squat_input}')
+        st.write(f'Your squat is {squat_input} {unit_label}')
         deadlift_input = st.number_input('Enter your deadlift', min_value=0, max_value=2000)
-        st.write(f'Your deadlift is {deadlift_input}')
+        st.write(f'Your deadlift is {deadlift_input} {unit_label}')
 
 
     # Convert units if necessary
@@ -136,8 +137,10 @@ def app():
         load_model = cPickle.load(open(f'Bench_model.pickle', 'rb'))
 
         # Apply model to make predictions
-        prediction = load_model.predict(np.array(scaled_stats).reshape(1, -1))
-        st.write(f'Predicted bench: {kg_to_lbs(prediction)}')
+        prediction = load_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
+        if not metric_units:
+            prediction = kg_to_lbs(prediction)
+        st.write(f'Predicted bench: {round(prediction, 2)} {unit_label}')
 
     predictSquat = st.container()
 
