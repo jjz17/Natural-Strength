@@ -24,24 +24,24 @@ def app():
         if not metric_units:
             weight = lbs_to_kg(weight)
         if male:
-            classes = [52.0, 56.0, 60.0, 67.5, 75.0, 82.5, 90.0, 100.0, 110.0, 125.0, 140.0, 141.0]
+            weight_classes = [52.0, 56.0, 60.0, 67.5, 75.0, 82.5, 90.0, 100.0, 110.0, 125.0, 140.0, 141.0]
         else:
-            classes = [44.0, 48.0, 52.0, 56.0, 60.0, 67.5, 75.0, 82.5, 90.0, 100.0, 101.0]
+            weight_classes = [44.0, 48.0, 52.0, 56.0, 60.0, 67.5, 75.0, 82.5, 90.0, 100.0, 101.0]
 
-        for _class in classes:
+        for _class in weight_classes:
             if weight <= _class:
                 return _class
         # If not in previous classes, return max weight class
-        return classes[-1]
+        return weight_classes[-1]
 
     def compute_age_class(age: int):
-        classes = [15, 17, 19, 23, 34, 39, 44, 49, 54, 59, 64, 69, 74, 79, 999]
+        age_classes = [15, 17, 19, 23, 34, 39, 44, 49, 54, 59, 64, 69, 74, 79, 999]
 
-        for _class in classes:
+        for _class in age_classes:
             if age <= _class:
                 return _class
         # If not in previous classes, return max age class
-        return classes[-1]
+        return age_classes[-1]
 
     # ['13-15', '16-17', '18-19', '20-23', '24-34', '35-39', '40-44',
     #  '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79',
@@ -79,3 +79,10 @@ def app():
         weight_input = st.number_input(
             'Let\'s figure out your weight class', min_value=0, max_value=1500)
         st.write(f'Your weight class is {compute_weight_class(weight_input)} Kg')
+
+    ageClass = st.container()
+
+    with ageClass:
+        age_input = st.number_input(
+            'Let\'s figure out your age class', min_value=0, max_value=200)
+        st.write(f'Your age class is {compute_age_class(age_input)}')
