@@ -5,7 +5,7 @@ from PIL import  Image
 
 # Custom imports
 from multipage import MultiPage
-from pages import example, records, user_dashboard # import your pages here
+from pages import example, records, user_dashboard, about # import your pages here
 
 # Create an instance of the app
 app = MultiPage()
@@ -23,6 +23,7 @@ app = MultiPage()
 # app.add_page('Upload Data', records.app)
 app.add_page('USAPL American Records', records.app)
 app.add_page('Personal Dashboard', user_dashboard.app)
+app.add_page('About Us', about.app)
 
 # The main app
 app.run()
