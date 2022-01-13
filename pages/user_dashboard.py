@@ -206,7 +206,7 @@ def app():
 
         # Apply model to make predictions
         prediction = load_model.predict(np.array(scaled_stats).reshape(1, -1))
-        st.write(f'Predicted bench: {prediction}')
+        st.write(f'Predicted bench: {kg_to_lbs(prediction)}')
 
     predictSquat = st.container()
 
