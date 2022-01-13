@@ -101,11 +101,21 @@ def app():
 
     st.header('Let\'s Set Some Goals!')
 
+    userLifts = st.container()
+
+    with userLifts:
+        bench_input = st.number_input('Enter your bench', min_value=0, max_value=2000)
+        st.write(f'Your bench is {bench_input}')
+        squat_input = st.number_input('Enter your squat', min_value=0, max_value=2000)
+        st.write(f'Your squat is {squat_input}')
+        deadlift_input = st.number_input('Enter your deadlift', min_value=0, max_value=2000)
+        st.write(f'Your deadlift is {deadlift_input}')
+
     predictBench = st.container()
 
     with predictBench:
         st.header('Scaled set stats')
-        stats = [19, lbs_to_kg(136), lbs_to_kg(195), lbs_to_kg(210), 0, 1]
+        stats = [age_input, lbs_to_kg(weight_input), lbs_to_kg(squat_input), lbs_to_kg(deadlift_input), 0, 1]
         scaler = joblib.load(f'Bench_scaler')
         scaled_stats = scaler.transform(np.array(stats).reshape(1, -1))
         st.write(scaled_stats)
