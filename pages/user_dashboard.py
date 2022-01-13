@@ -1,6 +1,9 @@
-import streamlit as st
+import _pickle as cPickle
+
+import joblib
 import numpy as np
 import pandas as pd
+import streamlit as st
 
 
 # @st.cache
@@ -39,7 +42,7 @@ def app():
 
         for i, _class in enumerate(age_classes):
             if age <= _class and i >= 1:
-                return age_classes[i-1] + 1, _class
+                return age_classes[i - 1] + 1, _class
             if age <= _class and i == 0:
                 return 13, _class
         # If not in previous classes, return max age class
@@ -48,6 +51,12 @@ def app():
     # ['13-15', '16-17', '18-19', '20-23', '24-34', '35-39', '40-44',
     #  '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79',
     #  '80-999']
+
+    def encode_and_bind(original_dataframe, feature_to_encode):
+        dummies = pd.get_dummies(original_dataframe[[feature_to_encode]])
+        res = pd.concat([original_dataframe, dummies], axis=1)
+        res = res.drop([feature_to_encode], axis=1)
+        return res
 
     personalData = st.container()
 
@@ -94,14 +103,114 @@ def app():
 
     predictBench = st.container()
 
+    with predictBench:
+        st.header('Scaled set stats')
+        # ['Sex', 'Age', 'AgeClass', 'BodyweightKg', 'WeightClassKg', 'Best3BenchKg', 'Best3SquatKg']
+        # Age
+        # 17.50
+        # BodyweightKg
+        # 72.45
+        # Best3BenchKg
+        # 107.50
+        # Best3SquatKg
+        # 165.00
+        # Sex_F
+        # 0.00
+        # Sex_M
+        # 1.00
+        # AgeClass_18 - 19
+        # 1.00
+        # AgeClass_20 - 23
+        # 0.00
+        # AgeClass_24 - 34
+        # 0.00
+        # AgeClass_35 - 39
+        # 0.00
+        # WeightClassKg_100
+        # 0.00
+        # WeightClassKg_105
+        # 0.00
+        # WeightClassKg_110
+        # 0.00
+        # WeightClassKg_120
+        # 0.00
+        # WeightClassKg_120 + 0.00
+        # WeightClassKg_125
+        # 0.00
+        # WeightClassKg_125 + 0.00
+        # WeightClassKg_40
+        # 0.00
+        # WeightClassKg_43
+        # 0.00
+        # WeightClassKg_44
+        # 0.00
+        # WeightClassKg_47
+        # 0.00
+        # WeightClassKg_48
+        # 0.00
+        # WeightClassKg_52
+        # 0.00
+        # WeightClassKg_53
+        # 0.00
+        # WeightClassKg_56
+        # 0.00
+        # WeightClassKg_57
+        # 0.00
+        # WeightClassKg_59
+        # 0.00
+        # WeightClassKg_60
+        # 0.00
+        # WeightClassKg_63
+        # 0.00
+        # WeightClassKg_66
+        # 0.00
+        # WeightClassKg_67
+        # .5
+        # 0.00
+        # WeightClassKg_69
+        # 0.00
+        # WeightClassKg_72
+        # 0.00
+        # WeightClassKg_74
+        # 1.00
+        # WeightClassKg_75
+        # 0.00
+        # WeightClassKg_76
+        # 0.00
+        # WeightClassKg_82
+        # .5
+        # 0.00
+        # WeightClassKg_83
+        # 0.00
+        # WeightClassKg_84
+        # 0.00
+        # WeightClassKg_84 + 0.00
+        # WeightClassKg_90
+        # 0.00
+        # WeightClassKg_90 + 0.00
+        # WeightClassKg_93
+        # 0.00
+        stats = [19, lbs_to_kg(136), lbs_to_kg(195), lbs_to_kg(210), 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        scaler = joblib.load(f'Bench_scaler')
+        scaled_stats = scaler.transform(np.array(stats).reshape(1, -1))
+        st.write(scaled_stats)
+        # scaled_stats2
 
+        ######################
+        # Pre-built model
+        ######################
+
+        # Reads in saved model
+        load_model = cPickle.load(open(f'Bench_model.pickle', 'rb'))
+
+        # Apply model to make predictions
+        prediction = load_model.predict(np.array(scaled_stats).reshape(1, -1))
+        st.write(f'Predicted bench: {prediction}')
 
     predictSquat = st.container()
 
-
-
     predictDeadlift = st.container()
-
 
 # Link to highlight points in a graph
 # 'https://www.futurelearn.com/info/courses/data-visualisation-with-python-seaborn-and-scatter-plots/0/steps/193495'
