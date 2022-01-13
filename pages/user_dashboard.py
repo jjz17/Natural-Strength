@@ -111,11 +111,19 @@ def app():
         deadlift_input = st.number_input('Enter your deadlift', min_value=0, max_value=2000)
         st.write(f'Your deadlift is {deadlift_input}')
 
+
+    # Convert units if necessary
+    if not metric_units:
+        weight_input = lbs_to_kg(weight_input)
+        bench_input = lbs_to_kg(bench_input)
+        squat_input = lbs_to_kg(squat_input)
+        deadlift_input = lbs_to_kg(deadlift_input)
+
     predictBench = st.container()
 
     with predictBench:
         st.header('Scaled set stats')
-        stats = [age_input, lbs_to_kg(weight_input), lbs_to_kg(squat_input), lbs_to_kg(deadlift_input), 0, 1]
+        stats = [age_input, weight_input, squat_input, deadlift_input, 0, 1]
         scaler = joblib.load(f'Bench_scaler')
         scaled_stats = scaler.transform(np.array(stats).reshape(1, -1))
         st.write(scaled_stats)
