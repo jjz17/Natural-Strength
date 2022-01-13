@@ -101,3 +101,7 @@ def app():
 
 
     predictDeadlift = st.container()
+
+
+# Link to highlight points in a graph
+# 'https://www.futurelearn.com/info/courses/data-visualisation-with-python-seaborn-and-scatter-plots/0/steps/193495'
