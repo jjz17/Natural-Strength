@@ -34,6 +34,19 @@ def app():
         # If not in previous classes, return max weight class
         return classes[-1]
 
+    def compute_age_class(age: int):
+        classes = [15, 17, 19, 23, 34, 39, 44, 49, 54, 59, 64, 69, 74, 79, 999]
+
+        for _class in classes:
+            if age <= _class:
+                return _class
+        # If not in previous classes, return max age class
+        return classes[-1]
+
+    # ['13-15', '16-17', '18-19', '20-23', '24-34', '35-39', '40-44',
+    #  '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79',
+    #  '80-999']
+
     personalData = st.container()
 
     with personalData:
@@ -60,6 +73,9 @@ def app():
     # st.sidebar.write(units)
     # st.sidebar.write(metric_units)
 
-    weight_input = st.number_input(
-        'Let\'s figure out your weight class', min_value=0, max_value=1500)
-    st.write(f'Your weight class is {compute_weight_class(weight_input)}')
+    weightClass = st.container()
+
+    with weightClass:
+        weight_input = st.number_input(
+            'Let\'s figure out your weight class', min_value=0, max_value=1500)
+        st.write(f'Your weight class is {compute_weight_class(weight_input)} Kg')
