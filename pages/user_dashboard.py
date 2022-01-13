@@ -87,4 +87,17 @@ def app():
     with ageClass:
         age_input = st.number_input(
             'Let\'s figure out your age class', min_value=0, max_value=200)
-        st.write(f'Your age class is {compute_age_class(age_input)}')
+        user_age_class = compute_age_class(age_input)
+        st.write(f'Your age class is {user_age_class[0]}-{user_age_class[1]}')
+
+    st.header('Let\'s Set Some Goals!')
+
+    predictBench = st.container()
+
+
+
+    predictSquat = st.container()
+
+
+
+    predictDeadlift = st.container()
