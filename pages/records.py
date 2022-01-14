@@ -8,7 +8,7 @@ import os
 def app():
     @st.cache
     def load_record_data():
-        return pd.read_csv(f'current_usapl_american_raw_records.csv')
+        return pd.read_csv(f'data{os.path.sep}current_usapl_american_raw_records.csv')
 
     def generate_options(category: str):
         options = np.sort(record_data[category].unique())

@@ -39,7 +39,7 @@ def compute_weight_class(weight: float):
 
 @st.cache
 def load_record_data():
-    return pd.read_csv('current_usapl_american_raw_records.csv')
+    return pd.read_csv('data/current_usapl_american_raw_records.csv')
 
 
 def generate_options(category: str):
