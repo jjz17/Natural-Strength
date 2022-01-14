@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from pages import utils as u
+import os
 
 # @st.cache
 def app():
@@ -31,6 +32,7 @@ def app():
     dataExploration = st.container()
 
     with dataExploration:
+        # st.write(f'{os.path.abspath(__file__)}')
         st.title('Natural Strength Building')
         st.subheader('Progress With Real Raw Data')
         st.header('Dataset: American USAPL Raw Powerlifting Records')
