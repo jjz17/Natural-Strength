@@ -126,11 +126,11 @@ def app():
     predictBench = st.container()
 
     with predictBench:
-        st.header('Scaled set stats')
+        # st.header('Scaled set stats')
         stats = [age_input, weight_input, squat_input, deadlift_input, f_sex, m_sex]
         scaler = joblib.load(f'Bench_scaler')
         scaled_stats = scaler.transform(np.array(stats).reshape(1, -1))
-        st.write(scaled_stats)
+        # st.write(scaled_stats)
 
         ######################
         # Pre-built model
@@ -147,7 +147,47 @@ def app():
 
     predictSquat = st.container()
 
+    with predictSquat:
+        # st.header('Scaled set stats')
+        stats = [age_input, weight_input, deadlift_input, bench_input, f_sex, m_sex]
+        scaler = joblib.load(f'Squat_scaler')
+        scaled_stats = scaler.transform(np.array(stats).reshape(1, -1))
+        # st.write(scaled_stats)
+
+        ######################
+        # Pre-built model
+        ######################
+
+        # Reads in saved model
+        load_model = cPickle.load(open(f'Squat_model.pickle', 'rb'))
+
+        # Apply model to make predictions
+        prediction = load_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
+        if not metric_units:
+            prediction = kg_to_lbs(prediction)
+        st.write(f'Predicted squat: {round(prediction, 2)} {unit_label}')
+
     predictDeadlift = st.container()
+
+    with predictDeadlift:
+        # st.header('Scaled set stats')
+        stats = [age_input, weight_input, squat_input, bench_input, f_sex, m_sex]
+        scaler = joblib.load(f'Deadlift_scaler')
+        scaled_stats = scaler.transform(np.array(stats).reshape(1, -1))
+        # st.write(scaled_stats)
+
+        ######################
+        # Pre-built model
+        ######################
+
+        # Reads in saved model
+        load_model = cPickle.load(open(f'Deadlift_model.pickle', 'rb'))
+
+        # Apply model to make predictions
+        prediction = load_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
+        if not metric_units:
+            prediction = kg_to_lbs(prediction)
+        st.write(f'Predicted deadlift: {round(prediction, 2)} {unit_label}')
 
 # Link to highlight points in a graph
 # 'https://www.futurelearn.com/info/courses/data-visualisation-with-python-seaborn-and-scatter-plots/0/steps/193495'
