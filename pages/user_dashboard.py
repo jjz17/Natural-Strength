@@ -63,42 +63,46 @@ def app():
         st.markdown('**Enter your information**')
         # st.text('Below is the DataFrame')
 
-    units = st.radio('Units', ['Lbs', 'Kg'])
-    unit_label = units
-    # Toggle global variable
-    if units == 'Lbs':
-        metric_units = False
-    else:
-        metric_units = True
+    userInfo = st.container()
 
-    user_sex = st.radio('Sex', ['M', 'F'])
-    # Toggle global variable
-    if user_sex == 'F':
-        male = False
-        m_sex = 0
-        f_sex = 1
-    else:
-        male = True
-        m_sex = 1
-        f_sex = 0
+    with userInfo:
+        units_col, sex_col, weight_col, age_col = st.columns(4)
 
-    # st.sidebar.write(units)
-    # st.sidebar.write(metric_units)
+        with units_col:
 
-    weightClass = st.container()
+            units = st.radio('Units', ['Lbs', 'Kg'])
+            unit_label = units
+            # Toggle global variable
+            if units == 'Lbs':
+                metric_units = False
+            else:
+                metric_units = True
 
-    with weightClass:
-        weight_input = st.number_input(
-            'Let\'s figure out your weight class', min_value=0, max_value=1500)
-        st.write(f'Your weight class is {compute_weight_class(weight_input)} Kg')
+        with sex_col:
 
-    ageClass = st.container()
+            user_sex = st.radio('Sex', ['M', 'F'])
+            # Toggle global variable
+            if user_sex == 'F':
+                male = False
+                m_sex = 0
+                f_sex = 1
+            else:
+                male = True
+                m_sex = 1
+                f_sex = 0
 
-    with ageClass:
-        age_input = st.number_input(
-            'Let\'s figure out your age class', min_value=0, max_value=200)
-        user_age_class = compute_age_class(age_input)
-        st.write(f'Your age class is {user_age_class[0]}-{user_age_class[1]}')
+        with weight_col:
+
+            weight_input = st.number_input(
+                'Compute your weight class', min_value=0, max_value=1500)
+            # st.write(f'Your weight class is {compute_weight_class(weight_input)} Kg')
+
+        with age_col:
+
+            age_input = st.number_input(
+                'Compute your age class', min_value=0, max_value=200)
+            user_age_class = compute_age_class(age_input)
+            # st.write(f'Your age class is {user_age_class[0]}-{user_age_class[1]}')
 
     st.header('Let\'s Set Some Goals!')
     st.text('Note: the estimation tools are most accurate for ages 18 through 40')
@@ -106,12 +110,20 @@ def app():
     userLifts = st.container()
 
     with userLifts:
-        bench_input = st.number_input('Enter your bench', min_value=0, max_value=2000)
-        st.write(f'Your bench is {bench_input} {unit_label}')
-        squat_input = st.number_input('Enter your squat', min_value=0, max_value=2000)
-        st.write(f'Your squat is {squat_input} {unit_label}')
-        deadlift_input = st.number_input('Enter your deadlift', min_value=0, max_value=2000)
-        st.write(f'Your deadlift is {deadlift_input} {unit_label}')
+
+        bench_col, squat_col, deadlift_col = st.columns(3)
+
+        with bench_col:
+            bench_input = st.number_input('Enter your bench', min_value=0, max_value=2000)
+            st.write(f'Your bench is {bench_input} {unit_label}')
+
+        with squat_col:
+            squat_input = st.number_input('Enter your squat', min_value=0, max_value=2000)
+            st.write(f'Your squat is {squat_input} {unit_label}')
+
+        with deadlift_col:
+            deadlift_input = st.number_input('Enter your deadlift', min_value=0, max_value=2000)
+            st.write(f'Your deadlift is {deadlift_input} {unit_label}')
 
 
     # Convert units if necessary
