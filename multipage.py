@@ -43,10 +43,10 @@ class MultiPage:
         )
 
         lbs_to_kg = st.sidebar.number_input('Lbs to Kg')
-        st.sidebar.write(utils.lbs_to_kg(lbs_to_kg))
+        st.sidebar.write(f'{round(utils.lbs_to_kg(lbs_to_kg), 2)} Kg')
 
         kg_to_lbs = st.sidebar.number_input('Kg to Lbs')
-        st.sidebar.write(utils.kg_to_lbs(kg_to_lbs))
+        st.sidebar.write(f'{round(utils.kg_to_lbs(kg_to_lbs), 2)} Lbs')
 
 
         # run the app function

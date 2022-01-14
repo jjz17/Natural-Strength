@@ -133,8 +133,7 @@ def app():
         squat_input = utils.lbs_to_kg(squat_input)
         deadlift_input = utils.lbs_to_kg(deadlift_input)
 
-    st.text('Each PR estimation is calculated based on your age, weight, sex, and performance in the'
-            'other two lifts')
+    st.text('Each PR estimation is calculated based on your age, weight, sex, and performance in the other two lifts')
 
     predictBench = st.container()
 
@@ -173,10 +172,11 @@ def app():
         ######################
 
         # Reads in saved model
-        load_model = cPickle.load(open(f'Squat_model.pickle', 'rb'))
+        # squat_model = cPickle.load(open(f'Squat_model.pickle', 'rb'))
+        squat_model = load_model('Squat_model.pickle')
 
         # Apply model to make predictions
-        prediction = load_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
+        prediction = squat_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
         if not metric_units:
             prediction = utils.kg_to_lbs(prediction)
         st.write(f'Predicted squat: {round(prediction, 2)} {unit_label}')
@@ -195,10 +195,11 @@ def app():
         ######################
 
         # Reads in saved model
-        load_model = cPickle.load(open(f'Deadlift_model.pickle', 'rb'))
+        # deadlift_model = cPickle.load(open(f'Deadlift_model.pickle', 'rb'))
+        deadlift_model = load_model('Deadlift_model.pickle')
 
         # Apply model to make predictions
-        prediction = load_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
+        prediction = deadlift_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
         if not metric_units:
             prediction = utils.kg_to_lbs(prediction)
         st.write(f'Predicted deadlift: {round(prediction, 2)} {unit_label}')
