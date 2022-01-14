@@ -16,6 +16,8 @@ def app():
     unit_label = 'Lbs'
     # Sex
     male = True
+    m_sex = 1
+    f_sex = 0
 
     def lbs_to_kg(lbs):
         return lbs * 0.453592
@@ -73,8 +75,12 @@ def app():
     # Toggle global variable
     if user_sex == 'F':
         male = False
+        m_sex = 0
+        f_sex = 1
     else:
         male = True
+        m_sex = 1
+        f_sex = 0
 
     # st.sidebar.write(units)
     # st.sidebar.write(metric_units)
@@ -95,7 +101,7 @@ def app():
         st.write(f'Your age class is {user_age_class[0]}-{user_age_class[1]}')
 
     st.header('Let\'s Set Some Goals!')
-    st.text('Note: the estimation tools is most accurate for ages 18 through 40')
+    st.text('Note: the estimation tools are most accurate for ages 18 through 40')
 
     userLifts = st.container()
 
@@ -115,11 +121,13 @@ def app():
         squat_input = lbs_to_kg(squat_input)
         deadlift_input = lbs_to_kg(deadlift_input)
 
+
+
     predictBench = st.container()
 
     with predictBench:
         st.header('Scaled set stats')
-        stats = [age_input, weight_input, squat_input, deadlift_input, 0, 1]
+        stats = [age_input, weight_input, squat_input, deadlift_input, f_sex, m_sex]
         scaler = joblib.load(f'Bench_scaler')
         scaled_stats = scaler.transform(np.array(stats).reshape(1, -1))
         st.write(scaled_stats)
