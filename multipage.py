@@ -42,6 +42,8 @@ class MultiPage:
             format_func=lambda page: page['title']
         )
 
+        st.sidebar.write('Unit Conversions')
+
         lbs_to_kg = st.sidebar.number_input('Lbs to Kg')
         st.sidebar.write(f'{round(utils.lbs_to_kg(lbs_to_kg), 2)} Kg')
 

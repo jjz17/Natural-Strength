@@ -2,7 +2,9 @@ import _pickle as cPickle
 
 import joblib
 import numpy as np
+import pandas as pd
 import streamlit as st
+import os
 
 from pages import utils
 
@@ -53,10 +55,12 @@ def app():
     def load_model(model_file: str):
         return cPickle.load(open(model_file, 'rb'))
 
-
     def scale_stats(scaler, stats: list):
         return scaler.transform(np.array(stats).reshape(1, -1))
 
+    @st.cache
+    def load_record_data():
+        return pd.read_csv(f'data{os.path.sep}current_usapl_american_raw_records.csv')
 
     personalData = st.container()
 
@@ -139,17 +143,15 @@ def app():
         deadlift_input = utils.lbs_to_kg(deadlift_input)
 
     utils.insert_space()
-    st.text('Each max estimation is calculated based on your age, weight, sex, and performance in the other two lifts')
-
+    st.text('Estimations based on age, weight, sex, and performance in other two lifts')
 
     # Load in the models and scalers
-    bench_model = load_model('Bench_model.pickle')
-    bench_scaler = joblib.load(f'Bench_scaler')
-    squat_model = load_model('Squat_model.pickle')
-    squat_scaler = joblib.load(f'Squat_scaler')
-    deadlift_model = load_model('Deadlift_model.pickle')
-    deadlift_scaler = joblib.load(f'Deadlift_scaler')
-
+    bench_model = load_model('bench_model.pickle')
+    bench_scaler = joblib.load(f'bench_scaler')
+    squat_model = load_model('squat_model.pickle')
+    squat_scaler = joblib.load(f'squat_scaler')
+    deadlift_model = load_model('deadlift_model.pickle')
+    deadlift_scaler = joblib.load(f'deadlift_scaler')
 
     maxPredictions = st.container()
 
@@ -165,7 +167,7 @@ def app():
             st.write(f'Predicted bench max: {round(bench_pred, 2)} {unit_label}')
 
         with squat:
-            squat_stats = [age_input, weight_input, deadlift_input, bench_input, f_sex, m_sex]
+            squat_stats = [age_input, weight_input, bench_input, deadlift_input, f_sex, m_sex]
             squat_stats_scaled = scale_stats(squat_scaler, squat_stats)
 
             squat_pred = squat_model.predict(np.array(squat_stats_scaled).reshape(1, -1))[0]
@@ -174,7 +176,7 @@ def app():
             st.write(f'Predicted squat max: {round(squat_pred, 2)} {unit_label}')
 
         with deadlift:
-            deadlift_stats = [age_input, weight_input, squat_input, bench_input, f_sex, m_sex]
+            deadlift_stats = [age_input, weight_input, bench_input, squat_input, f_sex, m_sex]
             deadlift_stats_scaled = scale_stats(deadlift_scaler, deadlift_stats)
 
             deadlift_pred = deadlift_model.predict(np.array(deadlift_stats_scaled).reshape(1, -1))[0]
