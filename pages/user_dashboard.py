@@ -53,6 +53,11 @@ def app():
     def load_model(model_file: str):
         return cPickle.load(open(model_file, 'rb'))
 
+
+    def scale_stats(scaler, stats: list):
+        return scaler.transform(np.array(stats).reshape(1, -1))
+
+
     personalData = st.container()
 
     with personalData:
@@ -133,76 +138,49 @@ def app():
         squat_input = utils.lbs_to_kg(squat_input)
         deadlift_input = utils.lbs_to_kg(deadlift_input)
 
-    st.text('Each PR estimation is calculated based on your age, weight, sex, and performance in the other two lifts')
+    utils.insert_space()
+    st.text('Each max estimation is calculated based on your age, weight, sex, and performance in the other two lifts')
 
-    predictBench = st.container()
 
-    with predictBench:
-        # st.header('Scaled set stats')
-        stats = [age_input, weight_input, squat_input, deadlift_input, f_sex, m_sex]
-        scaler = joblib.load(f'Bench_scaler')
-        scaled_stats = scaler.transform(np.array(stats).reshape(1, -1))
-        # st.write(scaled_stats)
+    # Load in the models and scalers
+    bench_model = load_model('Bench_model.pickle')
+    bench_scaler = joblib.load(f'Bench_scaler')
+    squat_model = load_model('Squat_model.pickle')
+    squat_scaler = joblib.load(f'Squat_scaler')
+    deadlift_model = load_model('Deadlift_model.pickle')
+    deadlift_scaler = joblib.load(f'Deadlift_scaler')
 
-        ######################
-        # Pre-built model
-        ######################
 
-        # Reads in saved model
-        # bench_model = cPickle.load(open(f'Bench_model.pickle', 'rb'))
-        bench_model = load_model('Bench_model.pickle')
+    maxPredictions = st.container()
 
-        # Apply model to make predictions
-        prediction = bench_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
-        if not metric_units:
-            prediction = utils.kg_to_lbs(prediction)
-        st.write(f'Predicted bench: {round(prediction, 2)} {unit_label}')
+    with maxPredictions:
+        bench, squat, deadlift = st.columns(3)
+        with bench:
+            bench_stats = [age_input, weight_input, squat_input, deadlift_input, f_sex, m_sex]
+            bench_stats_scaled = scale_stats(bench_scaler, bench_stats)
 
-    predictSquat = st.container()
+            bench_pred = bench_model.predict(np.array(bench_stats_scaled).reshape(1, -1))[0]
+            if not metric_units:
+                bench_pred = utils.kg_to_lbs(bench_pred)
+            st.write(f'Predicted bench max: {round(bench_pred, 2)} {unit_label}')
 
-    with predictSquat:
-        # st.header('Scaled set stats')
-        stats = [age_input, weight_input, deadlift_input, bench_input, f_sex, m_sex]
-        scaler = joblib.load(f'Squat_scaler')
-        scaled_stats = scaler.transform(np.array(stats).reshape(1, -1))
-        # st.write(scaled_stats)
+        with squat:
+            squat_stats = [age_input, weight_input, deadlift_input, bench_input, f_sex, m_sex]
+            squat_stats_scaled = scale_stats(squat_scaler, squat_stats)
 
-        ######################
-        # Pre-built model
-        ######################
+            squat_pred = squat_model.predict(np.array(squat_stats_scaled).reshape(1, -1))[0]
+            if not metric_units:
+                squat_pred = utils.kg_to_lbs(squat_pred)
+            st.write(f'Predicted squat max: {round(squat_pred, 2)} {unit_label}')
 
-        # Reads in saved model
-        # squat_model = cPickle.load(open(f'Squat_model.pickle', 'rb'))
-        squat_model = load_model('Squat_model.pickle')
+        with deadlift:
+            deadlift_stats = [age_input, weight_input, squat_input, bench_input, f_sex, m_sex]
+            deadlift_stats_scaled = scale_stats(deadlift_scaler, deadlift_stats)
 
-        # Apply model to make predictions
-        prediction = squat_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
-        if not metric_units:
-            prediction = utils.kg_to_lbs(prediction)
-        st.write(f'Predicted squat: {round(prediction, 2)} {unit_label}')
-
-    predictDeadlift = st.container()
-
-    with predictDeadlift:
-        # st.header('Scaled set stats')
-        stats = [age_input, weight_input, squat_input, bench_input, f_sex, m_sex]
-        scaler = joblib.load(f'Deadlift_scaler')
-        scaled_stats = scaler.transform(np.array(stats).reshape(1, -1))
-        # st.write(scaled_stats)
-
-        ######################
-        # Pre-built model
-        ######################
-
-        # Reads in saved model
-        # deadlift_model = cPickle.load(open(f'Deadlift_model.pickle', 'rb'))
-        deadlift_model = load_model('Deadlift_model.pickle')
-
-        # Apply model to make predictions
-        prediction = deadlift_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
-        if not metric_units:
-            prediction = utils.kg_to_lbs(prediction)
-        st.write(f'Predicted deadlift: {round(prediction, 2)} {unit_label}')
+            deadlift_pred = deadlift_model.predict(np.array(deadlift_stats_scaled).reshape(1, -1))[0]
+            if not metric_units:
+                deadlift_pred = utils.kg_to_lbs(deadlift_pred)
+            st.write(f'Predicted deadlift max: {round(deadlift_pred, 2)} {unit_label}')
 
 # Link to highlight points in a graph
 # 'https://www.futurelearn.com/info/courses/data-visualisation-with-python-seaborn-and-scatter-plots/0/steps/193495'
