@@ -49,6 +49,10 @@ def app():
     #  '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79',
     #  '80-999']
 
+    @st.cache(allow_output_mutation=True)
+    def load_model(model_file: str):
+        return cPickle.load(open(model_file, 'rb'))
+
     personalData = st.container()
 
     with personalData:
@@ -146,10 +150,11 @@ def app():
         ######################
 
         # Reads in saved model
-        load_model = cPickle.load(open(f'Bench_model.pickle', 'rb'))
+        # bench_model = cPickle.load(open(f'Bench_model.pickle', 'rb'))
+        bench_model = load_model('Bench_model.pickle')
 
         # Apply model to make predictions
-        prediction = load_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
+        prediction = bench_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
         if not metric_units:
             prediction = utils.kg_to_lbs(prediction)
         st.write(f'Predicted bench: {round(prediction, 2)} {unit_label}')
