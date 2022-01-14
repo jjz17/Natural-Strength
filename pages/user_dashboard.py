@@ -4,6 +4,7 @@ import joblib
 import numpy as np
 import pandas as pd
 import streamlit as st
+from pages import utils
 
 
 # @st.cache
@@ -19,15 +20,9 @@ def app():
     m_sex = 1
     f_sex = 0
 
-    def lbs_to_kg(lbs):
-        return lbs * 0.453592
-
-    def kg_to_lbs(kg):
-        return kg * 2.20462
-
     def compute_weight_class(weight: float) -> float:
         if not metric_units:
-            weight = lbs_to_kg(weight)
+            weight = utils.lbs_to_kg(weight)
         if male:
             weight_classes = [52.0, 56.0, 60.0, 67.5, 75.0, 82.5, 90.0, 100.0, 110.0, 125.0, 140.0, 141.0]
         else:
@@ -128,10 +123,10 @@ def app():
 
     # Convert units if necessary
     if not metric_units:
-        weight_input = lbs_to_kg(weight_input)
-        bench_input = lbs_to_kg(bench_input)
-        squat_input = lbs_to_kg(squat_input)
-        deadlift_input = lbs_to_kg(deadlift_input)
+        weight_input = utils.lbs_to_kg(weight_input)
+        bench_input = utils.lbs_to_kg(bench_input)
+        squat_input = utils.lbs_to_kg(squat_input)
+        deadlift_input = utils.lbs_to_kg(deadlift_input)
 
 
 
@@ -154,7 +149,7 @@ def app():
         # Apply model to make predictions
         prediction = load_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
         if not metric_units:
-            prediction = kg_to_lbs(prediction)
+            prediction = utils.kg_to_lbs(prediction)
         st.write(f'Predicted bench: {round(prediction, 2)} {unit_label}')
 
     predictSquat = st.container()
@@ -176,7 +171,7 @@ def app():
         # Apply model to make predictions
         prediction = load_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
         if not metric_units:
-            prediction = kg_to_lbs(prediction)
+            prediction = utils.kg_to_lbs(prediction)
         st.write(f'Predicted squat: {round(prediction, 2)} {unit_label}')
 
     predictDeadlift = st.container()
@@ -198,7 +193,7 @@ def app():
         # Apply model to make predictions
         prediction = load_model.predict(np.array(scaled_stats).reshape(1, -1))[0]
         if not metric_units:
-            prediction = kg_to_lbs(prediction)
+            prediction = utils.kg_to_lbs(prediction)
         st.write(f'Predicted deadlift: {round(prediction, 2)} {unit_label}')
 
 # Link to highlight points in a graph

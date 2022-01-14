@@ -41,5 +41,9 @@ class MultiPage:
             format_func=lambda page: page['title']
         )
 
+        unit_conversion = st.sidebar.number_input('Lbs to Kg')
+        st.sidebar.write(unit_conversion)
+
+
         # run the app function
         page['function']()

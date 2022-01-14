@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
-from pages import utils as u
+from pages import utils
 import os
 
 # @st.cache
@@ -39,7 +39,7 @@ def app():
         st.text('USAPL athletes are tested and guaranteed to be natural athletes')
         st.write(record_data)
 
-    u.insert_space()
+    utils.insert_space()
 
     dataQuerying = st.container()
 

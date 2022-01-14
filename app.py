@@ -5,7 +5,7 @@ from PIL import  Image
 
 # Custom imports
 from multipage import MultiPage
-from pages import example, records, user_dashboard, about # import your pages here
+from pages import records, user_dashboard, about # import your pages here
 
 # Create an instance of the app
 app = MultiPage()
