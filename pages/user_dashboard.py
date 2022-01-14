@@ -2,8 +2,8 @@ import _pickle as cPickle
 
 import joblib
 import numpy as np
-import pandas as pd
 import streamlit as st
+
 from pages import utils
 
 
@@ -72,6 +72,7 @@ def app():
                 metric_units = False
             else:
                 metric_units = True
+            st.write(f'{units} selected')
 
         with sex_col:
 
@@ -85,21 +86,22 @@ def app():
                 male = True
                 m_sex = 1
                 f_sex = 0
+            st.write(f'{user_sex} selected')
 
         with weight_col:
 
             weight_input = st.number_input(
-                'Compute your weight class', min_value=0, max_value=1500)
-            # st.write(f'Your weight class is {compute_weight_class(weight_input)} Kg')
+                'Compute your weight class', min_value=0., max_value=1500.)
+            st.write(f'Weight class: {compute_weight_class(weight_input)} Kg')
 
         with age_col:
 
             age_input = st.number_input(
                 'Compute your age class', min_value=0, max_value=200)
             user_age_class = compute_age_class(age_input)
-            # st.write(f'Your age class is {user_age_class[0]}-{user_age_class[1]}')
+            st.write(f'Age class: {user_age_class[0]}-{user_age_class[1]}')
 
-    st.header('Let\'s Set Some Goals!')
+    st.header('Let\'s Set Some Goals')
     st.text('Note: the estimation tools are most accurate for ages 18 through 40')
 
     userLifts = st.container()
@@ -109,17 +111,16 @@ def app():
         bench_col, squat_col, deadlift_col = st.columns(3)
 
         with bench_col:
-            bench_input = st.number_input('Enter your bench', min_value=0, max_value=2000)
+            bench_input = st.number_input('Enter your bench', min_value=0., max_value=2000.)
             st.write(f'Your bench is {bench_input} {unit_label}')
 
         with squat_col:
-            squat_input = st.number_input('Enter your squat', min_value=0, max_value=2000)
+            squat_input = st.number_input('Enter your squat', min_value=0., max_value=2000.)
             st.write(f'Your squat is {squat_input} {unit_label}')
 
         with deadlift_col:
-            deadlift_input = st.number_input('Enter your deadlift', min_value=0, max_value=2000)
+            deadlift_input = st.number_input('Enter your deadlift', min_value=0., max_value=2000.)
             st.write(f'Your deadlift is {deadlift_input} {unit_label}')
-
 
     # Convert units if necessary
     if not metric_units:
@@ -128,7 +129,8 @@ def app():
         squat_input = utils.lbs_to_kg(squat_input)
         deadlift_input = utils.lbs_to_kg(deadlift_input)
 
-
+    st.text('Each PR estimation is calculated based on your age, weight, sex, and performance in the'
+            'other two lifts')
 
     predictBench = st.container()
 

@@ -9,6 +9,7 @@ through an object oriented framework.
 
 # Import necessary libraries
 import streamlit as st
+from pages import utils
 
 
 # Define the multipage class to manage the multiple apps in our program
@@ -41,8 +42,11 @@ class MultiPage:
             format_func=lambda page: page['title']
         )
 
-        unit_conversion = st.sidebar.number_input('Lbs to Kg')
-        st.sidebar.write(unit_conversion)
+        lbs_to_kg = st.sidebar.number_input('Lbs to Kg')
+        st.sidebar.write(utils.lbs_to_kg(lbs_to_kg))
+
+        kg_to_lbs = st.sidebar.number_input('Kg to Lbs')
+        st.sidebar.write(utils.kg_to_lbs(kg_to_lbs))
 
 
         # run the app function
