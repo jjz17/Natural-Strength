@@ -52,12 +52,6 @@ def app():
     #  '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79',
     #  '80-999']
 
-    def encode_and_bind(original_dataframe, feature_to_encode):
-        dummies = pd.get_dummies(original_dataframe[[feature_to_encode]])
-        res = pd.concat([original_dataframe, dummies], axis=1)
-        res = res.drop([feature_to_encode], axis=1)
-        return res
-
     personalData = st.container()
 
     with personalData:
@@ -101,6 +95,7 @@ def app():
         st.write(f'Your age class is {user_age_class[0]}-{user_age_class[1]}')
 
     st.header('Let\'s Set Some Goals!')
+    st.text('Note: the estimation tools is most accurate for ages 18 through 40')
 
     userLifts = st.container()
 
