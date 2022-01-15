@@ -1,11 +1,6 @@
-import os
-import streamlit as st
-import numpy as np
-from PIL import  Image
-
 # Custom imports
 from multipage import MultiPage
-from pages import records, user_dashboard, resources, about # import your pages here
+from pages import records, resources, about, user_dashboard  # import your pages here
 
 # Create an instance of the app
 app = MultiPage()

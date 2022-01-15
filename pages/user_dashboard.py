@@ -149,12 +149,12 @@ def app():
     st.text('Estimations based on age, weight, sex, and performance in other two lifts')
 
     # Load in the models and scalers
-    bench_model = load_model(f'bench_model.pickle')
-    bench_scaler = joblib.load(f'bench_scaler')
-    squat_model = load_model(f'squat_model.pickle')
-    squat_scaler = joblib.load(f'squat_scaler')
-    deadlift_model = load_model(f'deadlift_model.pickle')
-    deadlift_scaler = joblib.load(f'deadlift_scaler')
+    bench_model = load_model(f'models{os.path.sep}bench_model.pickle')
+    bench_scaler = joblib.load(f'models{os.path.sep}bench_scaler')
+    squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
+    squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
+    deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
+    deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
 
     maxPredictions = st.container()
 
@@ -197,16 +197,24 @@ def app():
     # plt.figure(figsize=(15, 8))
     # sns.countplot(x='type1', data=pokemon_df, hue='is_legendary')
 
-    with plot1:
-        fig = sns.displot(data=data, x='Age', y='TotalKg').figure
-        st.pyplot(fig)
-    with plot2:
-        st.subheader('Relationship between Age and Total Kg lifted')
-        # fig2 = sns.histplot(data=data['TotalKg']).figure
-        # st.pyplot(fig2)
 
-    fig3 = sns.relplot(data=data, x='Age', y='TotalKg', hue='Sex', col='Sex')
-    st.pyplot(fig3)
+
+
+
+    # with plot1:
+    #     fig = sns.displot(data=data, x='Age', y='TotalKg').figure
+    #     st.pyplot(fig)
+    # with plot2:
+    #     st.subheader('Relationship between Age and Total Kg lifted')
+    #     # fig2 = sns.histplot(data=data['TotalKg']).figure
+    #     # st.pyplot(fig2)
+    #
+    # fig3 = sns.relplot(data=data, x='Age', y='TotalKg', hue='Sex', col='Sex')
+    # st.pyplot(fig3)
+
+
+
+
 
     # st.header('Visualising relationship between numeric variables')
     # st.subheader('Pairplot analysis')
