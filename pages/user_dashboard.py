@@ -194,8 +194,8 @@ def app():
 
     plot1, plot2 = st.columns(2)
 
-    # fig, ax = plt.subplots()  # solved by add this line
-    # ax = sns.lineplot(data=pd.DataFrame(data), x="Demand", y="price")
+    # plt.figure(figsize=(15, 8))
+    # sns.countplot(x='type1', data=pokemon_df, hue='is_legendary')
 
     with plot1:
         fig = sns.displot(data=data, x='Age', y='TotalKg').figure
