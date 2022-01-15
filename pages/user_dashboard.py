@@ -1,10 +1,13 @@
 import _pickle as cPickle
+import os
 
 import joblib
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import numpy as np
 import pandas as pd
+import seaborn as sns
 import streamlit as st
-import os
 
 from pages import utils
 
@@ -59,8 +62,8 @@ def app():
         return scaler.transform(np.array(stats).reshape(1, -1))
 
     @st.cache
-    def load_record_data():
-        return pd.read_csv(f'data{os.path.sep}current_usapl_american_raw_records.csv')
+    def load_data():
+        return pd.read_csv(f'data{os.path.sep}model_training_data.csv')
 
     personalData = st.container()
 
@@ -183,6 +186,34 @@ def app():
             if not metric_units:
                 deadlift_pred = utils.kg_to_lbs(deadlift_pred)
             st.write(f'Predicted deadlift max: {round(deadlift_pred, 2)} {unit_label}')
+
+    utils.insert_space()
+    st.write('Model Training Data')
+    data = load_data()
+    st.write(data)
+
+    plot1, plot2 = st.columns(2)
+
+    # fig, ax = plt.subplots()  # solved by add this line
+    # ax = sns.lineplot(data=pd.DataFrame(data), x="Demand", y="price")
+
+    with plot1:
+        fig = sns.displot(data=data, x='Age', y='TotalKg').figure
+        st.pyplot(fig)
+    with plot2:
+        st.subheader('Relationship between Age and Total Kg lifted')
+        # fig2 = sns.histplot(data=data['TotalKg']).figure
+        # st.pyplot(fig2)
+
+    fig3 = sns.relplot(data=data, x='Age', y='TotalKg', hue='Sex', col='Sex')
+    st.pyplot(fig3)
+
+    # st.header('Visualising relationship between numeric variables')
+    # st.subheader('Pairplot analysis')
+    # g = sns.pairplot(data, vars=["Age", "TotalKg", "BodyweightKg"], dropna=True,
+    #                  hue='Sex', diag_kind="kde")
+    # g.map_lower(sns.regplot)
+    # st.pyplot(g)
 
 # Link to highlight points in a graph
 # 'https://www.futurelearn.com/info/courses/data-visualisation-with-python-seaborn-and-scatter-plots/0/steps/193495'
