@@ -149,11 +149,11 @@ def app():
     st.text('Estimations based on age, weight, sex, and performance in other two lifts')
 
     # Load in the models and scalers
-    bench_model = load_model('bench_model.pickle')
+    bench_model = load_model(f'bench_model.pickle')
     bench_scaler = joblib.load(f'bench_scaler')
-    squat_model = load_model('squat_model.pickle')
+    squat_model = load_model(f'squat_model.pickle')
     squat_scaler = joblib.load(f'squat_scaler')
-    deadlift_model = load_model('deadlift_model.pickle')
+    deadlift_model = load_model(f'deadlift_model.pickle')
     deadlift_scaler = joblib.load(f'deadlift_scaler')
 
     maxPredictions = st.container()
