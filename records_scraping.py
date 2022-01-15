@@ -1,13 +1,12 @@
-import numpy as np
-import pandas as pd
-import urllib.request as urllib
-from bs4 import BeautifulSoup
-import time
 import random
+import re
+import time
+import urllib.request as urllib
 from datetime import datetime
 
-
-import re
+import numpy as np
+import pandas as pd
+from bs4 import BeautifulSoup
 
 
 def get_soup(url):
@@ -125,6 +124,7 @@ def get_records_df():
         lambda x: datetime(1, 1, 1).date() if len(x) == 0 else datetime.strptime(x, '%m/%d/%Y').date())
 
     return df
+
 
 df = get_records_df()
 
