@@ -1,7 +1,7 @@
 from datetime import datetime
 
 f = open("test.txt","a")
-f.write(str(datetime.now()))
+f.write(f'\n{datetime.now()}')
 f.close()
 
 # /Documents/PersonalProjects/Natural-Strength-Building/cron_test.py
