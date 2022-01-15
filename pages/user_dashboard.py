@@ -68,8 +68,8 @@ def app():
     personalData = st.container()
 
     with personalData:
-        st.title('Natural Strength Building')
-        st.subheader('Progress With Real Raw Data')
+        # st.title('Natural Strength Building')
+        # st.subheader('Progress With Real Raw Data')
         st.header('Your Personal Metrics')
         st.markdown('**Enter your information**')
         # st.text('Below is the DataFrame')

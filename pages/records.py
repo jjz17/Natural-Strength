@@ -31,8 +31,8 @@ def app():
 
     with dataExploration:
         # st.write(f'{os.path.abspath(__file__)}')
-        st.title('Natural Strength Building')
-        st.subheader('Progress With Real Raw Data')
+        # st.title('Natural Strength Building')
+        # st.subheader('Progress With Real Raw Data')
         st.header('Dataset: American USAPL Raw Powerlifting Records')
         st.markdown('Dataset retrieved from: https://usapl.liftingdatabase.com/')
         st.markdown('**It contains the current Male and Female American Raw Powerlifting Records recorded by USAPL**')

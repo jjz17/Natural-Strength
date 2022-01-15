@@ -5,8 +5,8 @@ def app():
     resources = st.container()
 
     with resources:
-        st.title('Natural Strength Building')
-        st.subheader('Progress With Real Raw Data')
+        # st.title('Natural Strength Building')
+        # st.subheader('Progress With Real Raw Data')
         st.header('Resources')
         # st.markdown('**In the advent of social media, impressive lifts are around everywhere we look. However, '
         #             'not all of what we see is performed by natural athletes. We can easily mistake enhanced '
