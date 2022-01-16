@@ -1,11 +1,11 @@
 import random
 import re
 import time
-import urllib.request as urllib
 from datetime import datetime
 
 import numpy as np
 import pandas as pd
+import requests
 from bs4 import BeautifulSoup
 
 
@@ -21,10 +21,11 @@ def get_soup(url):
     """
 
     # Open the target category page
-    html = urllib.urlopen(url)
-
+    # html = urllib.urlopen(url)
+    html = requests.get(url)
     # Create a BeautifulSoup object after the HTML page is read
-    soup = BeautifulSoup(html.read())
+    # soup = BeautifulSoup(html.read())
+    soup = BeautifulSoup(html.content, "html.parser")
 
     # Close the urllib connection to avoid issues with the website
     html.close()
@@ -32,7 +33,7 @@ def get_soup(url):
     return soup
 
 
-def get_dict(sex: str = 'M'):
+def get_dict(sex='M'):
     url = ''
     min_class = 0
     max_class = 0
@@ -85,7 +86,7 @@ def get_records_df():
         target_url = info[1]
         sex = info[2]
         for url, w_class in info_dict.items():
-            page = f'{target_url}{url}'
+            page = str(target_url) + str(url)
             soup = get_soup(page)
             body = soup.find_all('tbody')[1]
             # print(body)
@@ -125,6 +126,10 @@ def get_records_df():
 
     return df
 
+
+# f = open("test2.txt", "a")
+# f.write('\nrecords: ' + str(datetime.now()))
+# f.close()
 
 df = get_records_df()
 
