@@ -1,6 +1,6 @@
 # Custom imports
 import streamlit as st
-from multipage import MultiPage
+from src.multipage import MultiPage
 from pages import records, resources, about, user_dashboard  # import your pages here
 
 # Create an instance of the app
