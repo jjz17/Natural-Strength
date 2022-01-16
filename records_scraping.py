@@ -1,6 +1,7 @@
 import random
 import re
 import time
+import os
 from datetime import datetime
 
 import numpy as np
@@ -133,4 +134,4 @@ def get_records_df():
 
 df = get_records_df()
 
-df.to_csv('current_usapl_american_raw_records.csv', index=False)
+df.to_csv(f'data{os.path.sep}current_usapl_american_raw_records.csv', index=False)
