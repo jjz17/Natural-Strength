@@ -61,9 +61,9 @@ def app():
     def scale_stats(scaler, stats: list):
         return scaler.transform(np.array(stats).reshape(1, -1))
 
-    @st.cache
-    def load_data():
-        return pd.read_csv(f'data{os.path.sep}model_training_data.csv')
+    # @st.cache
+    # def load_data():
+    #     return pd.read_csv(f'data{os.path.sep}model_training_data.csv')
 
     personalData = st.container()
 
@@ -187,7 +187,8 @@ def app():
 
     utils.insert_space()
     st.write('Model Training Data')
-    data = load_data()
+    # data = load_data()
+    data = utils.load_model_training_data()
     st.write(data)
 
     plot1, plot2 = st.columns(2)

@@ -6,9 +6,9 @@ import os
 
 # @st.cache
 def app():
-    @st.cache
-    def load_record_data():
-        return pd.read_csv(f'data{os.path.sep}current_usapl_american_raw_records.csv')
+    # @st.cache
+    # def load_record_data():
+    #     return pd.read_csv(f'data{os.path.sep}current_usapl_american_raw_records.csv')
 
     # function to generate select box options
     def generate_options(category: str):
@@ -24,7 +24,8 @@ def app():
                 df = df[df[query[0]] == query[1]]
         return df
 
-    record_data = load_record_data()
+    # record_data = load_record_data()
+    record_data = utils.load_record_data()
     numerics = record_data.select_dtypes('number').columns
 
     dataExploration = st.container()
