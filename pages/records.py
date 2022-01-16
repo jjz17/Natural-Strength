@@ -36,7 +36,7 @@ def app():
         st.markdown('Dataset retrieved from: https://usapl.liftingdatabase.com/')
         st.markdown('**It contains the current Male and Female American Raw Powerlifting Records recorded by USAPL**')
         st.text('USAPL athletes are tested and guaranteed to be natural athletes')
-        st.write(record_data)
+        # st.write(record_data)
 
     utils.insert_space()
 
