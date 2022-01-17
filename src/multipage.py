@@ -43,7 +43,7 @@ class MultiPage:
                                     format_func=lambda page: page['title']
                                     )
 
-        expander = st.sidebar.expander('Ex')
+        expander = st.sidebar.expander('Expander')
 
         with expander:
             st.selectbox('Yes', ['a', 'b'])
