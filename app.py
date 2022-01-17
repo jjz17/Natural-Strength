@@ -1,7 +1,7 @@
 # Custom imports
 import streamlit as st
 from src.multipage import MultiPage
-from pages import records, resources, about, user_dashboard  # import your pages here
+from pages import records, user_dashboard, data_insights, resources, about  # import your pages here
 
 # Create an instance of the app
 app = MultiPage()
@@ -21,6 +21,7 @@ st.markdown("""<hr style="height:10px;border:none;color:#333;background-color:#3
 # app.add_page('Upload Data', records.app)
 app.add_page('USAPL American Records', records.app)
 app.add_page('Personal Dashboard', user_dashboard.app)
+app.add_page('Model Data Visualizations', data_insights.app)
 app.add_page('Resources', resources.app)
 app.add_page('About Us', about.app)
 

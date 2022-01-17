@@ -86,7 +86,7 @@ def app():
                 metric_units = False
             else:
                 metric_units = True
-            st.write(f'{units} selected')
+            st.write(f'Units: {units}')
 
         with sex_col:
 
@@ -100,7 +100,7 @@ def app():
                 male = True
                 m_sex = 1
                 f_sex = 0
-            st.write(f'{user_sex} selected')
+            st.write(f'Sex: {user_sex}')
 
         with weight_col:
 
