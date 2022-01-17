@@ -34,16 +34,16 @@ def app():
         # st.write(f'{os.path.abspath(__file__)}')
         st.subheader('Current American USAPL Raw Powerlifting Records')
         st.markdown('Dataset retrieved from: https://usapl.liftingdatabase.com/')
-        st.markdown('**It contains the current Male and Female American Raw Powerlifting Records recorded by USAPL**')
-        st.text('USAPL athletes are tested and guaranteed to be natural athletes')
+        # st.markdown('**It contains the current Male and Female American Raw Powerlifting Records recorded by USAPL**')
+        # st.text('USAPL athletes are tested and guaranteed to be natural athletes')
         # st.write(record_data)
 
-    utils.insert_space()
+    # utils.insert_space()
 
     dataQuerying = st.container()
 
     with dataQuerying:
-        st.subheader('Query the Records')
+        # st.text('Query the Records')
 
         weight_col, lift_col, sex_col = st.columns(3)
 
