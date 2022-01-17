@@ -37,16 +37,18 @@ class MultiPage:
 
     def run(self):
         # Dropdown to select the page to run
-        st.sidebar.subheader('App Navigation')
+        # st.sidebar.subheader('App Navigation')
         page = st.sidebar.selectbox(label='App Navigation',
                                     options=self.pages,
                                     format_func=lambda page: page['title']
                                     )
 
-        expander1 = st.sidebar.expander('Lbs to Kg')
+        st.sidebar.text('Unit Conversion Tool')
+
+        expander1 = st.sidebar.expander('Lbs ➡️ Kg')
 
         with expander1:
-            lbs_to_kg = st.number_input('Lbs to Kg')
+            lbs_to_kg = st.number_input('Lbs ➡️ Kg')
             st.text(f'{round(utils.lbs_to_kg(lbs_to_kg), 2)} Kg')
 
         expander2 = st.sidebar.expander('Kg to Lbs')
