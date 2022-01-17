@@ -43,18 +43,25 @@ class MultiPage:
                                     format_func=lambda page: page['title']
                                     )
 
-        expander = st.sidebar.expander('Expander')
+        expander1 = st.sidebar.expander('Lbs to Kg')
 
-        with expander:
-            st.selectbox('Yes', ['a', 'b'])
+        with expander1:
+            lbs_to_kg = st.number_input('Lbs to Kg')
+            st.text(f'{round(utils.lbs_to_kg(lbs_to_kg), 2)} Kg')
 
-        st.sidebar.write('Unit Conversions')
+        expander2 = st.sidebar.expander('Kg to Lbs')
 
-        lbs_to_kg = st.sidebar.number_input('Lbs to Kg')
-        st.sidebar.text(f'{round(utils.lbs_to_kg(lbs_to_kg), 2)} Kg')
+        with expander2:
+            kg_to_lbs = st.number_input('Kg to Lbs')
+            st.text(f'{round(utils.kg_to_lbs(kg_to_lbs), 2)} Lbs')
 
-        kg_to_lbs = st.sidebar.number_input('Kg to Lbs')
-        st.sidebar.text(f'{round(utils.kg_to_lbs(kg_to_lbs), 2)} Lbs')
+        # st.sidebar.write('Unit Conversions')
+        #
+        # lbs_to_kg = st.sidebar.number_input('Lbs to Kg')
+        # st.sidebar.text(f'{round(utils.lbs_to_kg(lbs_to_kg), 2)} Kg')
+        #
+        # kg_to_lbs = st.sidebar.number_input('Kg to Lbs')
+        # st.sidebar.text(f'{round(utils.kg_to_lbs(kg_to_lbs), 2)} Lbs')
 
         # run the app function
         page['function']()
