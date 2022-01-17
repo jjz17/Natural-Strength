@@ -8,6 +8,10 @@ def insert_space():
     st.markdown('#')
 
 
+def insert_horizontal_separator():
+    st.markdown("""<hr style="height:10px;border:none;color:#333;background-color:#333;" /> """, unsafe_allow_html=True)
+
+
 def lbs_to_kg(lbs: float) -> float:
     return lbs * 0.453592
 
