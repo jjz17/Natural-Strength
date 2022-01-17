@@ -115,6 +115,8 @@ def app():
             user_age_class = compute_age_class(age_input)
             st.write(f'Age class: {user_age_class[0]}-{user_age_class[1]}')
 
+    utils.insert_horizontal_separator()
+
     st.header('Let\'s Set Some Goals')
     st.text('Note: the estimation tools are most accurate for ages 18 through 40')
 
