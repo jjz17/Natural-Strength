@@ -4,7 +4,10 @@ _**A tool to improve powerlifting through goal setting, estimates for  PRs, and 
 ## Resources
 https://towardsdatascience.com/creating-multipage-applications-using-streamlit-efficiently-b58a58134030
 
-[comment]: <> (## Introduction )
+## Introduction 
+https://barbend.com/social-media-training-impact/
+
+Discuss
 
 
 [comment]: <> (## Tool Description )
