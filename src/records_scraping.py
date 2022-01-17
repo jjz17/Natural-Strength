@@ -114,7 +114,8 @@ def get_records_df():
                     df = df.append(temp_dict, ignore_index=True)
             #         for info in infos:
             #       except  print(info.get_text().strip())
-            print('Running...')
+            # print('Running...')
+            print('Test')
             time.sleep(random.randint(2, 3))
 
     # Wrangling
@@ -134,4 +135,4 @@ def get_records_df():
 
 df = get_records_df()
 
-df.to_csv(f'data{os.path.sep}current_usapl_american_raw_records.csv', index=False)
+df.to_csv(f'..{os.path.sep}data{os.path.sep}current_usapl_american_raw_records.csv', index=False)
