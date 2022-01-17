@@ -9,6 +9,7 @@ through an object oriented framework.
 
 # Import necessary libraries
 import streamlit as st
+
 from pages import utils
 
 
@@ -36,20 +37,24 @@ class MultiPage:
 
     def run(self):
         # Dropdown to select the page to run
-        page = st.sidebar.selectbox(
-            'App Navigation',
-            self.pages,
-            format_func=lambda page: page['title']
-        )
+        st.sidebar.subheader('App Navigation')
+        page = st.sidebar.selectbox(label='App Navigation',
+                                    options=self.pages,
+                                    format_func=lambda page: page['title']
+                                    )
+
+        expander = st.sidebar.expander('Ex')
+
+        with expander:
+            st.selectbox('Yes', ['a', 'b'])
 
         st.sidebar.write('Unit Conversions')
 
         lbs_to_kg = st.sidebar.number_input('Lbs to Kg')
-        st.sidebar.write(f'{round(utils.lbs_to_kg(lbs_to_kg), 2)} Kg')
+        st.sidebar.text(f'{round(utils.lbs_to_kg(lbs_to_kg), 2)} Kg')
 
         kg_to_lbs = st.sidebar.number_input('Kg to Lbs')
-        st.sidebar.write(f'{round(utils.kg_to_lbs(kg_to_lbs), 2)} Lbs')
-
+        st.sidebar.text(f'{round(utils.kg_to_lbs(kg_to_lbs), 2)} Lbs')
 
         # run the app function
         page['function']()
