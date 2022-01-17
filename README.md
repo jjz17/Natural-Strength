@@ -1,4 +1,4 @@
-# Build Your Natural Strength
+# 🔨Build Your Natural Strength🔨
 _**A tool to improve powerlifting through goal setting, estimates for  PRs, and to stay up to date on the world's best natural lifters**_
 
 ## Resources
