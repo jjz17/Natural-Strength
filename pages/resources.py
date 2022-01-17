@@ -6,6 +6,8 @@ def app():
 
     with resources:
         st.header('Resources')
+        st.subheader('Official USAPL Website')
+        st.write('https://www.usapowerlifting.com/')
         # st.markdown('**In the advent of social media, impressive lifts are around everywhere we look. However, '
         #             'not all of what we see is performed by natural athletes. We can easily mistake enhanced '
         #             'performances as those performed  natural lifters, which can leave many of us discouraged in our '
