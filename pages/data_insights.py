@@ -1,4 +1,4 @@
 import streamlit as st
 
 def app():
-    pass
+    st.subheader('Data Visualizations')
