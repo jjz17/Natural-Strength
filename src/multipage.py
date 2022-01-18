@@ -48,10 +48,10 @@ class MultiPage:
         expander1 = st.sidebar.expander('Lbs ➡️ Kg')
 
         with expander1:
-            lbs_to_kg = st.number_input('Lbs ➡️ Kg')
+            lbs_to_kg = st.number_input('Lbs to Kg')
             st.text(f'{round(utils.lbs_to_kg(lbs_to_kg), 2)} Kg')
 
-        expander2 = st.sidebar.expander('Kg to Lbs')
+        expander2 = st.sidebar.expander('Kg ➡️ Lbs')
 
         with expander2:
             kg_to_lbs = st.number_input('Kg to Lbs')
