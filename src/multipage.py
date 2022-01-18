@@ -1,7 +1,6 @@
 # https://towardsdatascience.com/creating-multipage-applications-using-streamlit-efficiently-b58a58134030
 # CREDITS/REFERENCES
 
-
 """
 This file is the framework for generating multiple Streamlit applications
 through an object oriented framework.
@@ -56,14 +55,6 @@ class MultiPage:
         with expander2:
             kg_to_lbs = st.number_input('Kg to Lbs')
             st.text(f'{round(utils.kg_to_lbs(kg_to_lbs), 2)} Lbs')
-
-        # st.sidebar.write('Unit Conversions')
-        #
-        # lbs_to_kg = st.sidebar.number_input('Lbs to Kg')
-        # st.sidebar.text(f'{round(utils.lbs_to_kg(lbs_to_kg), 2)} Kg')
-        #
-        # kg_to_lbs = st.sidebar.number_input('Kg to Lbs')
-        # st.sidebar.text(f'{round(utils.kg_to_lbs(kg_to_lbs), 2)} Lbs')
 
         # run the app function
         page['function']()
