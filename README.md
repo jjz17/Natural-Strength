@@ -10,6 +10,9 @@ https://barbend.com/social-media-training-impact/
 
 Discuss
 
+## To Run
+cd into pythonlogin -> flask run
+
 
 [comment]: <> (## Tool Description )
 
