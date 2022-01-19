@@ -2,8 +2,13 @@
 _**A tool to improve powerlifting through goal setting, estimates for  PRs, and to stay up to date on the world's best natural lifters**_
 
 ## Resources
+
+### OOP multipage tutorial
 https://towardsdatascience.com/creating-multipage-applications-using-streamlit-efficiently-b58a58134030
+
+### flask login system tutorial
 https://codeshack.io/login-system-python-flask-mysql/#packages
+
 
 ## Introduction 
 https://barbend.com/social-media-training-impact/
