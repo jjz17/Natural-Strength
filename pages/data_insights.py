@@ -9,5 +9,5 @@ def app():
     data = utils.load_model_training_data()
 
     plt.figure(figsize=(9, 6))
-    g = sns.countplot(x='AgeClass', data=data)
-    st.pyplot()
+    fig = sns.countplot(x='AgeClass', data=data).figure
+    st.pyplot(fig)
