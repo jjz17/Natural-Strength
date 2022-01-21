@@ -3,6 +3,13 @@ _**A tool to improve powerlifting through goal setting, estimates for  PRs, and 
 
 ## Resources
 
+### Usapl classes
+https://www.usapowerlifting.com/lifters-corner/qualifying-totals/
+
+### Model building articles
+https://medium.com/@kevinossner/how-much-can-you-deadlift-96f84ca5f3ee
+https://www.kaggle.com/supermarkethobo/powerlifter-best-deadlift-regression/notebook
+
 ### OOP multipage tutorial
 https://towardsdatascience.com/creating-multipage-applications-using-streamlit-efficiently-b58a58134030
 
