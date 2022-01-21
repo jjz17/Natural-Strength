@@ -5,5 +5,9 @@ from pages import utils
 
 def app():
     st.subheader('Data Visualizations')
+
+    data = utils.load_model_training_data()
+
     plt.figure(figsize=(9, 6))
-    sns.countplot(x='AgeClass', data=data)
+    g = sns.countplot(x='AgeClass', data=data)
+    st.pyplot()
