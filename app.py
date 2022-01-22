@@ -18,7 +18,6 @@ st.markdown("""<hr style="height:10px;border:none;color:#333;background-color:#3
 # col2.title("Data Storyteller Application")
 
 # Add all your application here
-# app.add_page('Upload Data', records.app)
 app.add_page('USAPL American Records', records.app)
 app.add_page('Personal Dashboard', user_dashboard.app)
 app.add_page('Model Data Visualizations', data_insights.app)
