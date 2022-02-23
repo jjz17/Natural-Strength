@@ -8,3 +8,14 @@ def extract_pdf_text(file_path: str):
         for page_num in range(pdf.numPages):
             print(f'Page: {page_num}')
             page_obj = pdf.getPage(page_num)
+
+            try:
+                txt = page_obj.extractText()
+                print(''.center(100, '-'))
+            except:
+                pass
+            else:
+                f.write(f'Page {page_num + 1}')
+                print(''.center(100, '-'))
+                f.write(txt)
+        f.close()
