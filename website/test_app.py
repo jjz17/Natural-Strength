@@ -14,7 +14,7 @@ def index():
     flash('What is your height in inches?')
     return render_template('index2.html')
 
-@app.route('/predict', methods=['POST', 'GET'])
+@app.route('/convert', methods=['POST', 'GET'])
 def greeter():
     height_cm = round(int(request.form['height_input']) * 2.54, 2)
     message = f'Your height in cm is {height_cm}'
