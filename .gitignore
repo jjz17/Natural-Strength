@@ -1,3 +1,4 @@
 .ipynb_checkpoints
 /models
 src/cron_test.py
+venv/*

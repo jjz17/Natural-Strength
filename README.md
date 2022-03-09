@@ -23,7 +23,11 @@ https://barbend.com/social-media-training-impact/
 Discuss
 
 ## To Run
-cd into pythonlogin -> flask run
+cd into pythonlogin -> python main.py or flask run
+
+## Venv
+python3 -m venv venv
+source venv/bin/activate
 
 
 [comment]: <> (## Tool Description )
