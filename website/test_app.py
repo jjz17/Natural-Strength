@@ -1,17 +1,32 @@
 from flask import Flask, render_template, request, flash
 
 app = Flask(__name__)
-app.secret_key = "abc"
+app.secret_key = 'abc'
 
-@app.route("/hello")
+
+@app.route('/')
+def home():
+    return 'Home'
+
+
+@app.route('/hello')
 def index():
-	flash("what's your name?")
-	return render_template("index.html")
+    flash('what\'s your name?')
+    return render_template('index2.html')
 
-@app.route("/greet", methods=['POST', 'GET'])
+# @app.route('/greet', methods=['POST', 'GET'])
+# def greeter():
+# 	flash('Hi ' + str(request.form['name_input']) + ', great to see you!')
+# 	return render_template('index.html')
+
+
+@app.route('/predict', methods=['POST', 'GET'])
 def greeter():
-	flash("Hi " + str(request.form['name_input']) + ", great to see you!")
-	return render_template("index.html")
+    height = int(request.form['height_input'])
+    message = f'Your height in cm is {height}'
+    flash(message=message)
+    return render_template('index2.html')
+
 
 if __name__ == '__main__':
     app.run()
