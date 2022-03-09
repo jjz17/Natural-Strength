@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, render_template
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -18,9 +19,9 @@ def user_input():
     pass
 
 
-# @app.route('/practice')
-# def practice():
-#     return datetime.now()
+@app.route('/practice')
+def practice():
+    return str(datetime.now())
     # return render_template('practice.html', time=time)
 
 
