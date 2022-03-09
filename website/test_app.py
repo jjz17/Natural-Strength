@@ -11,13 +11,13 @@ def home():
 
 @app.route('/hello')
 def index():
-    flash('what\'s your name?')
+    flash('What is your height in inches?')
     return render_template('index2.html')
 
 @app.route('/predict', methods=['POST', 'GET'])
 def greeter():
-    height = int(request.form['height_input'])
-    message = f'Your height in cm is {height}'
+    height_cm = round(int(request.form['height_input']) * 2.54, 2)
+    message = f'Your height in cm is {height_cm}'
     flash(message=message)
     return render_template('index2.html')
 
