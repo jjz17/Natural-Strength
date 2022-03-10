@@ -195,7 +195,7 @@ def update():
             else:
                 # Account doesnt exists and the form data is valid, now update data into accounts table
                 cursor.execute(
-                    f'UPDATE accounts SET username = {username}, password = {password}, age = {age}, weight = {weight}, squat = {squat}, bench = {bench}, deadlift = {deadlift}, email = {email} WHERE id = {id}')
+                    f'UPDATE accounts SET username = \'{username}\', password = \'{password}\', age = {age}, weight = {weight}, squat = {squat}, bench = {bench}, deadlift = {deadlift}, email = \'{email}\' WHERE id = {id};')
                 mysql.connection.commit()
                 msg = 'You have successfully updated!'
         elif request.method == 'POST':
