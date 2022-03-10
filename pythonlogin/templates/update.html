@@ -1,10 +1,6 @@
-{% extends 'layout.html' %}
-
-{% block title %}Update Profile{% endblock %}
-
-{% block content %}
+{% extends 'layout.html' %} {% block title %}Update Profile{% endblock %} {% block content %}
 <h2>Update Profile</h2>
-<div>
+<div class="update">
     <form action="{{ url_for('update') }}" method="post" autocomplete="off">
         <label for="username">
             <i class="fas fa-user"></i>
