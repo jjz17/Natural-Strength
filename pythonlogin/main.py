@@ -149,11 +149,6 @@ def update():
     # Check if user is loggedin
     if 'loggedin' in session:
         id = session['id']
-        # We need all the account info for the user so we can display it on the profile page
-        # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        # cursor.execute('SELECT * FROM accounts WHERE id = %s',
-        #                (session['id']))
-        # account = cursor.fetchone()
 
         # Output message if something goes wrong...
         msg = ''
