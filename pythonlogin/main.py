@@ -144,7 +144,7 @@ def edit():
     pass
 
 
-@app.route('/update')
+@app.route('/update', methods=['GET', 'POST'])
 def update():
     # Check if user is loggedin
     if 'loggedin' in session:
