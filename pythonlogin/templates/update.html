@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+{% block title %}Update Profile{% endblock %}
+
+{% block content %}
+<h2>Update Profile</h2>
+<div>
+    <form action="{{ url_for('update') }}" method="post" autocomplete="off">
+        <label for="username">
+            <i class="fas fa-user"></i>
+        </label>
+        <input type="text" name="username" placeholder="Username" id="username" required>
+        <label for="password">
+            <i class="fas fa-lock"></i>
+        </label>
+        <input type="password" name="password" placeholder="Password" id="password" required>
+        <label for="age">Age</label>
+        <input type="number" name="age" placeholder="Age" id="age">
+        <label for="age">Weight</label>
+        <input type="number" name="weight" placeholder="Weight" id="weight">
+        <label for="age">Squat</label>
+        <input type="number" name="squat" placeholder="Squat" id="squat">
+        <label for="age">Bench</label>
+        <input type="number" name="bench" placeholder="Bench" id="bench">
+        <label for="age">Deadlift</label>
+        <input type="number" name="deadlift" placeholder="Deadlift" id="deadlift">
+        <label for="email">
+            <i class="fas fa-envelope"></i>
+        </label>
+        <input type="email" name="email" placeholder="Email" id="email" required>
+        <div class="msg">{{ msg }}</div>
+        <input type="submit" value="Update">
+    </form>
+</div>
+{% endblock %}
