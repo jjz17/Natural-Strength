@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Convert Height</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/test.css') }}">
+</head>
+<body>
+    <img src="https://www.si.com/.image/c_limit%2Ccs_srgb%2Cq_auto:good%2Cw_738/MTY4MTkwMjM2NjgwNzI2NDAx/manute-bol-muggsy-boguesjpg.webp">
+    <br>
+    <form action="convert" method="post">
+        {% for message in get_flashed_messages() %}
+             <p>{{ message }}</p>
+         {% endfor %}
+        <br>
+        <input type="text" name="height_input">
+        <br>
+        <input type="submit" value="CONVERT" id="convert">
+    </form>
+</body>
+</html>
