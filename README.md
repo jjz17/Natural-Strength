@@ -16,6 +16,9 @@ https://towardsdatascience.com/creating-multipage-applications-using-streamlit-e
 ### flask login system tutorial
 https://codeshack.io/login-system-python-flask-mysql/#packages
 
+### Matplotlib with Flask tutorial
+https://github.com/cerickson/flask-matplotlib-tutorial/blob/master/flaskplotlib/templates/index.html
+
 
 ## Introduction 
 https://barbend.com/social-media-training-impact/
