@@ -93,7 +93,8 @@ body {
 }
 
 .login form input[type="submit"],
-.register form input[type="submit"] {
+.register form input[type="submit"],
+.content form input[type="submit"] {
     width: 100%;
     padding: 15px;
     margin-top: 20px;
@@ -163,6 +164,9 @@ body.loggedin {
     width: 1000px;
     margin: 0 auto;
 }
+
+
+/* Update page */
 
 .content .update {
     width: 450px;
