@@ -40,7 +40,7 @@ def sql():
             "SELECT id FROM accounts ORDER BY RAND();"
         )
     )
-    return str(result.fetchone['id'])
+    return str(result.first()[0])
     return 'Hi'
 
 
