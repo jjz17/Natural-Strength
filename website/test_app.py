@@ -30,10 +30,7 @@ def sql():
     user = 'root'
     password = 'jiajia2002'
     database = 'pythonlogin'
-    engine = db.create_engine(f'mysql+pymysql://{user}:{password}@localhost:3306/{database}',
-                              # connect_args={"ssl": {"key": SQLALCHEMY_DATABASE_PEM}},
-                              # echo=True,
-                              )
+    engine = db.create_engine(f'mysql+pymysql://{user}:{password}@localhost:3306/{database}')
 
     result = engine.execute(
         text(
@@ -41,7 +38,6 @@ def sql():
         )
     )
     return str(result.first()[0])
-    return 'Hi'
 
 
 if __name__ == '__main__':
