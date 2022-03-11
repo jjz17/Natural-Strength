@@ -208,9 +208,9 @@ def update():
     return redirect(url_for('login'))
 
 
-@app.route('/<int:points>', methods=['GET'])
+@app.route('/plot/<int:points>', methods=['GET'])
 def plot(points):
-    title = 'Plot'
+    title = 'Randomly Generated Scatterplot'
     plot = plot_points(points)
     return render_template('plot.html', title=title, plot=plot)
 
