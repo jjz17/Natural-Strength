@@ -167,9 +167,9 @@ def update():
 
             # # Check if account exists using MySQL
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute(
-                f'SELECT * FROM accounts WHERE id = {id}')
-            account = cursor.fetchone()
+            # cursor.execute(
+            #     f'SELECT * FROM accounts WHERE id = {id}')
+            # account = cursor.fetchone()
 
             # Validation checks
             if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
@@ -198,11 +198,8 @@ def update():
             # Form is empty... (no POST data)
             msg = 'Please fill out the form!'
 
-        # Show registration form with message (if any)
-        # return render_template('register.html', msg=msg)
-
-        # Show the profile page with account info
-        return render_template('update.html', account=account, msg=msg)
+        # Show the update form with message (if any)
+        return render_template('update.html', msg=msg)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
