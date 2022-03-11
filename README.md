@@ -31,3 +31,6 @@ source venv/bin/activate
 
 ## To solve access denied error 403
 https://stackoverflow.com/questions/19071512/socket-error-errno-48-address-already-in-use
+
+sudo lsof -i:5000
+kill -9 (PID)
