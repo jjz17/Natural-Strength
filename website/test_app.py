@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, flash
+from matplotlib import dates
 import sqlalchemy as db
 from sqlalchemy import text
 import io
@@ -84,7 +85,14 @@ def plot_points(points):
     # print(users)
     ids = [user.id for user in users]
 
-    ax.scatter(ids, ids)
+    user_metrics = session.query(UserMetrics) \
+    .filter(UserMetrics.user_id == 1) \
+#     .all()
+
+    dates = [user_metric.date for user_metric in user_metrics]
+    weights = [user_metric.weight for user_metric in user_metrics]
+
+    ax.plot(dates, weights)
 
     ax.set_xlabel('x')
     ax.set_ylabel('y')

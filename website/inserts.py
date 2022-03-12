@@ -1,6 +1,7 @@
 # coding=utf-8
 
 # 1 - imports
+from datetime import datetime
 from datetime import date
 
 from user import User
@@ -17,7 +18,7 @@ session = Session()
 jz = User('JZ', 'a', date(2002, 7, 19), 'j@j.j')
 
 # 5 - add user metrics to users
-jz_met1 = UserMetrics(jz, 5, 5, 5, 5)
+jz_met1 = UserMetrics(jz, 5, 5, 5, 5, datetime.now())
 
 # 6 - persist data
 session.add(jz)

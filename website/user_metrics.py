@@ -18,9 +18,10 @@ class UserMetrics(Base):
     deadlift = Column(Float)
     date = Column(Date)
 
-    def __init__(self, user, weight, squat, bench, deadlift):
+    def __init__(self, user, weight, squat, bench, deadlift, date):
         self.user = user
         self.weight = weight
         self.squat = squat
         self.bench = bench
         self.deadlift = deadlift
+        self.date = date

@@ -32,3 +32,12 @@ CREATE TABLE IF NOT EXISTS `user_metrics` (
         ON UPDATE CASCADE
         ON DELETE CASCADE  
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+SET SQL_SAFE_UPDATES = 0;
+DELETE FROM user_metrics;
+SET SQL_SAFE_UPDATES = 1;
+ALTER TABLE `user_metrics` AUTO_INCREMENT = 1;
+INSERT INTO `user_metrics` (`user_id`, `weight`, `squat`, `bench`, `deadlift`, `date`) VALUES (1, 1, 1, 1, 1, '2022-3-12');
+INSERT INTO `user_metrics` (`user_id`, `weight`, `squat`, `bench`, `deadlift`, `date`) VALUES (1, 2, 1, 1, 1, '2022-3-11');
+INSERT INTO `user_metrics` (`user_id`, `weight`, `squat`, `bench`, `deadlift`, `date`) VALUES (1, 3, 1, 1, 1, '2022-3-10');
+INSERT INTO `user_metrics` (`user_id`, `weight`, `squat`, `bench`, `deadlift`, `date`) VALUES (1, 4, 1, 1, 1, '2022-3-9');
