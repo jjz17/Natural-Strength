@@ -216,12 +216,22 @@ def sql():
     database = 'pythonlogin'
     engine = db.create_engine(f'mysql+pymysql://{user}:{password}@localhost:3306/{database}')
 
+    # result = engine.execute(
+    #     text(
+    #         "SELECT id FROM accounts ORDER BY RAND();"
+    #     )
+    # )
+
     result = engine.execute(
         text(
-            "SELECT id FROM accounts ORDER BY RAND();"
+            "SELECT * FROM accounts;"
         )
     )
-    return str(result.first()[0])
+
+    result_as_list = result.fetchall()
+
+    # return str(result.first()[0])
+    return result_as_list[0]['username']
 
 
 @app.route('/plot/<int:points>', methods=['GET'])
