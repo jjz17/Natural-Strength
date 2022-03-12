@@ -19,6 +19,8 @@ https://codeshack.io/login-system-python-flask-mysql/#packages
 ### Matplotlib with Flask tutorial
 https://github.com/cerickson/flask-matplotlib-tutorial/blob/master/flaskplotlib/templates/index.html
 
+### Sqlalchemy ORM tutorial
+https://auth0.com/blog/sqlalchemy-orm-tutorial-for-python-developers/
 
 ## Introduction 
 https://barbend.com/social-media-training-impact/
