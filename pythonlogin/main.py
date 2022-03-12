@@ -9,6 +9,11 @@ import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 
+from user import User
+from base import Session
+from user_metrics import UserMetrics
+from datetime import date
+
 app = Flask(__name__)
 
 # Change this to your secret key (can be anything, it's for extra protection)
@@ -269,6 +274,67 @@ def plot_points(points):
     #clip off the xml headers from the image
     svg_img = '<svg' + img.getvalue().split('<svg')[1]
     
+    return svg_img
+
+@app.route('/test', methods=['GET'])
+def test():
+    title = 'Randomly Generated Scatterplot'
+    plot = plot_points2(2)
+    return render_template('plot.html', title=title, plot=plot)
+
+
+def plot_points2(points):
+    """Generate a plot with a varying number of randomly generated points
+    Args:
+    points (int): a number of points to plot
+    Returns: An svg plot with <points> data points
+    """
+    # data for plotting
+    data = np.random
+
+    data = np.random.rand(points, 2)
+
+    fig = Figure()
+    FigureCanvas(fig)
+
+    ax = fig.add_subplot(1, 1, 1)
+
+    # ax.scatter(data[:, 0], data[:, 1])
+
+    # 2 - extract a session
+    session = Session()
+
+    # 3 - extract all users
+    users = session.query(User).all()
+    # print(users)
+    ids = [user.id for user in users]
+
+    user_metrics = session.query(UserMetrics) \
+    .filter(UserMetrics.user_id == 1) \
+#     .all()
+
+    dates = [user_metric.date for user_metric in user_metrics]
+    weights = [user_metric.weight for user_metric in user_metrics]
+
+    ax.plot(dates, weights)
+
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_title(f'There are {points} data points!')
+    ax.grid(True)
+
+    # fig, (ax1, ax2) = plt.subplots(1, 2)
+    # fig.suptitle('Horizontally stacked subplots')
+    # x = data[:, 0]
+    # y = data[:, 1]
+    # ax1.plot(x, y)
+    # ax2.plot(x, -y)
+
+    img = io.StringIO()
+    fig.savefig(img, format='svg')
+    # clip off the xml headers from the image
+    svg_img = '<svg' + img.getvalue().split('<svg')[1]
+
     return svg_img
 
 
