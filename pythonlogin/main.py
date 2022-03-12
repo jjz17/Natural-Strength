@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
+import sqlalchemy as db
+from sqlalchemy import text
 import re
 import io
 import numpy as np
@@ -206,6 +208,20 @@ def update():
         return render_template('update.html', msg=msg)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+@app.route('/sql')
+def sql():
+    user = 'root'
+    password = 'jiajia2002'
+    database = 'pythonlogin'
+    engine = db.create_engine(f'mysql+pymysql://{user}:{password}@localhost:3306/{database}')
+
+    result = engine.execute(
+        text(
+            "SELECT id FROM accounts ORDER BY RAND();"
+        )
+    )
+    return str(result.first()[0])
 
 
 @app.route('/plot/<int:points>', methods=['GET'])
