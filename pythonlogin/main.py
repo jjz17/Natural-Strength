@@ -164,7 +164,7 @@ def update():
             # Create variables for easy access
             username = request.form['username']
             password = request.form['password']
-            age = request.form['age']
+            birth_date = request.form['birth_date']
             weight = request.form['weight']
             squat = request.form['squat']
             bench = request.form['bench']
@@ -184,8 +184,8 @@ def update():
                 msg = 'Username must contain only characters and numbers!'
             elif not username or not password or not email:
                 msg = 'Please fill out the form!'
-            elif not re.match(r'^\+?(0|[1-9]\d*)$', age):
-                msg = 'Age must be an int'
+            # elif not re.match(r'^\+?(0|[1-9]\d*)$', birth_date):
+                # msg = 'Birth date must be a valid date in the form MM/DD/YYYY'
             elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', weight):
                 msg = 'Weight must be a positive number'
             elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', squat):
@@ -197,7 +197,7 @@ def update():
             else:
                 # Account doesnt exists and the form data is valid, now update data into accounts table
                 cursor.execute(
-                    f'UPDATE accounts SET username = \'{username}\', password = \'{password}\', age = {age}, weight = {weight}, squat = {squat}, bench = {bench}, deadlift = {deadlift}, email = \'{email}\' WHERE id = {id};')
+                    f'UPDATE accounts SET username = \'{username}\', password = \'{password}\', birth_date = 1999-10-10, weight = {weight}, squat = {squat}, bench = {bench}, deadlift = {deadlift}, email = \'{email}\' WHERE id = {id};')
                 mysql.connection.commit()
                 msg = 'You have successfully updated!'
         elif request.method == 'POST':

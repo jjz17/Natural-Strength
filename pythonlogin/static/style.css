@@ -84,7 +84,8 @@ body {
 .content form input[type="password"],
 .content form input[type="text"],
 .content form input[type="email"],
-.content form input[type="number"] {
+.content form input[type="number"],
+.content form input[type="date"] {
     width: 310px;
     height: 50px;
     border: 1px solid #dee0e4;
