@@ -18,9 +18,13 @@ https://codeshack.io/login-system-python-flask-mysql/#packages
 
 ### Matplotlib with Flask tutorial
 https://github.com/cerickson/flask-matplotlib-tutorial/blob/master/flaskplotlib/templates/index.html
+https://stackoverflow.com/questions/50728328/python-how-to-show-matplotlib-in-flask
 
 ### Sqlalchemy ORM tutorial
 https://auth0.com/blog/sqlalchemy-orm-tutorial-for-python-developers/
+
+### Matplotlib subplots in one figure tutorial
+https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplots_demo.html
 
 ## Introduction 
 https://barbend.com/social-media-training-impact/
