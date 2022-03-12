@@ -39,7 +39,7 @@ def login():
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(
-            'SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password,))
+            'SELECT * FROM users WHERE username = %s AND password = %s', (username, password,))
         # Fetch one record and return result
         account = cursor.fetchone()
         # If account exists in accounts table in out database
@@ -86,7 +86,7 @@ def register():
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(
-            'SELECT * FROM accounts WHERE username = %s', (username,))
+            'SELECT * FROM users WHERE username = %s', (username,))
         account = cursor.fetchone()
         # If account exists show error and validation checks
         if account:
@@ -98,9 +98,9 @@ def register():
         elif not username or not password or not email:
             msg = 'Please fill out the form!'
         else:
-            # Account doesnt exists and the form data is valid, now insert new account into accounts table
+            # Account doesnt exists and the form data is valid, now insert new account into users table
             cursor.execute(
-                'INSERT INTO accounts (`username`, `password`, `email`) VALUES (%s, %s, %s)', (username, password, email,))
+                'INSERT INTO users (`username`, `password`, `email`) VALUES (%s, %s, %s)', (username, password, email,))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
@@ -130,7 +130,7 @@ def profile():
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE id = %s',
+        cursor.execute('SELECT * FROM users WHERE id = %s',
                        (session['id'],))
         account = cursor.fetchone()
         # Show the profile page with account info
@@ -196,8 +196,8 @@ def update():
                 msg = 'Deadlift must be a positive number'
             else:
                 # Account doesnt exists and the form data is valid, now update data into accounts table
-                cursor.execute(
-                    f'UPDATE accounts SET username = \'{username}\', password = \'{password}\', birth_date = 1999-10-10, weight = {weight}, squat = {squat}, bench = {bench}, deadlift = {deadlift}, email = \'{email}\' WHERE id = {id};')
+                # cursor.execute(
+                #     f'UPDATE accounts SET username = \'{username}\', password = \'{password}\', birth_date = 1999-10-10, weight = {weight}, squat = {squat}, bench = {bench}, deadlift = {deadlift}, email = \'{email}\' WHERE id = {id};')
                 mysql.connection.commit()
                 msg = 'You have successfully updated!'
         elif request.method == 'POST':
@@ -224,7 +224,7 @@ def sql():
 
     result = engine.execute(
         text(
-            "SELECT * FROM accounts;"
+            "SELECT * FROM users;"
         )
     )
 
