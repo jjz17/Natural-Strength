@@ -28,6 +28,7 @@ app.config['MYSQL_DB'] = 'pythonlogin'
 # Intialize MySQL
 mysql = MySQL(app)
 
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
@@ -46,15 +47,16 @@ def login():
         # account = cursor.fetchone()
 
         db_session = Session()
-        user = db_session.query(User) \
+        user_query = db_session.query(User) \
             .filter((User.username == username) & (User.password == password))
-
+        db_session.close()
         # If account exists in accounts table in out database
-        if user.count() == 1:
+        if user_query.count() == 1:
+            user = user_query[0]
             # Create session data, we can access this data in other routes
             session['loggedin'] = True
-            session['id'] = user[0].id
-            session['username'] = user[0].username
+            session['id'] = user.id
+            session['username'] = user.username
             # Redirect to home page
             return redirect(url_for('home'))
         else:
@@ -62,6 +64,7 @@ def login():
             msg = 'Incorrect username/password!'
     # Show the login form with message (if any)
     return render_template('index.html', msg=msg)
+
 
 @app.route('/logout')
 def logout():
@@ -72,23 +75,30 @@ def logout():
     # Redirect to login page
     return redirect(url_for('login'))
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     # Output message if something goes wrong...
     msg = ''
     # Check if "username", "password" and "email" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'birth_date' in request.form and 'email' in request.form:
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
+        birth_date = request.form['birth_date']
         email = request.form['email']
         # Check if account exists using MySQL
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute(
-            'SELECT * FROM users WHERE username = %s', (username,))
-        account = cursor.fetchone()
+        # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # cursor.execute(
+        #     'SELECT * FROM users WHERE username = %s', (username,))
+        # account = cursor.fetchone()
+
+        db_session = Session()
+        user_query = db_session.query(User) \
+            .filter(User.username == username)
+
         # If account exists show error and validation checks
-        if account:
+        if user_query.count() > 0:
             msg = 'Account already exists!'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Invalid email address!'
@@ -98,9 +108,13 @@ def register():
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into users table
-            cursor.execute(
-                'INSERT INTO users (`username`, `password`, `email`) VALUES (%s, %s, %s)', (username, password, email,))
-            mysql.connection.commit()
+            # cursor.execute(
+            #     'INSERT INTO users (`username`, `password`, `email`) VALUES (%s, %s, %s)', (username, password, email,))
+            # mysql.connection.commit()
+            user = User(username, password, birth_date, email)
+            db_session.add(user)
+            db_session.commit()
+            db_session.close()
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
         # Form is empty... (no POST data)
@@ -109,6 +123,8 @@ def register():
     return render_template('register.html', msg=msg)
 
 # Home page, only accessible for loggedin users
+
+
 @app.route('/home')
 def home():
     # Check if user is loggedin
@@ -119,6 +135,8 @@ def home():
     return redirect(url_for('login'))
 
 # Profile page, only accessible for loggedin users
+
+
 @app.route('/profile')
 def profile():
     # Check if user is loggedin
@@ -134,18 +152,16 @@ def profile():
     return redirect(url_for('login'))
 
 # Profile update page, only accessible for loggedin users
+
+
 @app.route('/update', methods=['GET', 'POST'])
 def update():
     # Check if user is loggedin
     if 'loggedin' in session:
         id = session['id']
 
-
-
         # Create a new session
         db_session = Session()
-
-
 
         # Output message if something goes wrong...
         msg = ''
@@ -207,12 +223,14 @@ def update():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+
 @app.route('/sql')
 def sql():
     user = 'root'
     password = 'jiajia2002'
     database = 'pythonlogin'
-    engine = db.create_engine(f'mysql+pymysql://{user}:{password}@localhost:3306/{database}')
+    engine = db.create_engine(
+        f'mysql+pymysql://{user}:{password}@localhost:3306/{database}')
 
     # result = engine.execute(
     #     text(
@@ -255,7 +273,7 @@ def plot_points(points):
 
     ax = fig.add_subplot(111)
 
-    ax.scatter(data[:,0], data[:,1])
+    ax.scatter(data[:, 0], data[:, 1])
 
     ax.set_xlabel('x')
     ax.set_ylabel('y')
@@ -264,10 +282,11 @@ def plot_points(points):
 
     img = io.StringIO()
     fig.savefig(img, format='svg')
-    #clip off the xml headers from the image
+    # clip off the xml headers from the image
     svg_img = '<svg' + img.getvalue().split('<svg')[1]
-    
+
     return svg_img
+
 
 @app.route('/chart/weight', methods=['GET'])
 def chart_weight():
@@ -297,8 +316,8 @@ def plot_points2(points):
     ids = [user.id for user in users]
 
     user_metrics = session.query(UserMetrics) \
-    .filter(UserMetrics.user_id == 1) \
-#     .all()
+        .filter(UserMetrics.user_id == 1) \
+        #     .all()
 
     dates = [user_metric.date for user_metric in user_metrics]
     weights = [user_metric.weight for user_metric in user_metrics]

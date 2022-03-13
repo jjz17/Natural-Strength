@@ -81,6 +81,7 @@ body {
 .register form input[type="password"],
 .register form input[type="text"],
 .register form input[type="email"],
+.register form input[type="date"],
 .content form input[type="password"],
 .content form input[type="text"],
 .content form input[type="email"],
