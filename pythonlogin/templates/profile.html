@@ -1,8 +1,4 @@
-{% extends 'layout.html' %}
-
-{% block title %}Profile{% endblock %}
-
-{% block content %}
+{% extends 'layout.html' %} {% block title %}Profile{% endblock %} {% block content %}
 <h2>Profile Page</h2>
 <div>
     <p>Your account details are below:</p>
@@ -16,6 +12,10 @@
             <td>{{ account['password'] }}</td>
         </tr>
         <tr>
+            <td>Birth Date:</td>
+            <td>{{ account['birth_date'] }}</td>
+        </tr>
+        <!-- <tr>
             <td>Age:</td>
             <td>{{ account['age'] }}</td>
         </tr>
@@ -34,7 +34,7 @@
         <tr>
             <td>Deadlift:</td>
             <td>{{ account['deadlift'] }}</td>
-        </tr>
+        </tr> -->
         <tr>
             <td>Email:</td>
             <td>{{ account['email'] }}</td>
