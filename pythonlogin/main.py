@@ -290,8 +290,8 @@ def plot_points(points):
     
     return svg_img
 
-@app.route('/test', methods=['GET'])
-def test():
+@app.route('/chart/weight', methods=['GET'])
+def chart_weight():
     title = 'Randomly Generated Scatterplot'
     plot = plot_points2(2)
     return render_template('plot.html', title=title, plot=plot)
@@ -303,17 +303,11 @@ def plot_points2(points):
     points (int): a number of points to plot
     Returns: An svg plot with <points> data points
     """
-    # data for plotting
-    data = np.random
-
-    data = np.random.rand(points, 2)
 
     fig = Figure()
     FigureCanvas(fig)
 
     ax = fig.add_subplot(1, 1, 1)
-
-    # ax.scatter(data[:, 0], data[:, 1])
 
     # 2 - extract a session
     session = Session()
