@@ -161,6 +161,13 @@ def update():
     if 'loggedin' in session:
         id = session['id']
 
+
+
+        # Create a new session
+        db_session = Session()
+
+
+
         # Output message if something goes wrong...
         msg = ''
         account = None
@@ -170,14 +177,14 @@ def update():
             username = request.form['username']
             password = request.form['password']
             birth_date = request.form['birth_date']
-            weight = request.form['weight']
-            squat = request.form['squat']
-            bench = request.form['bench']
-            deadlift = request.form['deadlift']
+            # weight = request.form['weight']
+            # squat = request.form['squat']
+            # bench = request.form['bench']
+            # deadlift = request.form['deadlift']
             email = request.form['email']
 
             # # Check if account exists using MySQL
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             # cursor.execute(
             #     f'SELECT * FROM accounts WHERE id = {id}')
             # account = cursor.fetchone()
@@ -191,19 +198,26 @@ def update():
                 msg = 'Please fill out the form!'
             # elif not re.match(r'^\+?(0|[1-9]\d*)$', birth_date):
                 # msg = 'Birth date must be a valid date in the form MM/DD/YYYY'
-            elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', weight):
-                msg = 'Weight must be a positive number'
-            elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', squat):
-                msg = 'Squat must be a positive number'
-            elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', bench):
-                msg = 'Bench must be a positive number'
-            elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', deadlift):
-                msg = 'Deadlift must be a positive number'
+            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', weight):
+            #     msg = 'Weight must be a positive number'
+            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', squat):
+            #     msg = 'Squat must be a positive number'
+            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', bench):
+            #     msg = 'Bench must be a positive number'
+            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', deadlift):
+            #     msg = 'Deadlift must be a positive number'
             else:
                 # Account doesnt exists and the form data is valid, now update data into accounts table
                 # cursor.execute(
                 #     f'UPDATE accounts SET username = \'{username}\', password = \'{password}\', birth_date = 1999-10-10, weight = {weight}, squat = {squat}, bench = {bench}, deadlift = {deadlift}, email = \'{email}\' WHERE id = {id};')
-                mysql.connection.commit()
+                # mysql.connection.commit()
+                user = db_session.query(User).get(id)
+                user.username = username
+                user.password = password
+                user.birth_date = birth_date
+                user.email = email
+                db_session.commit()
+                db_session.close()
                 msg = 'You have successfully updated!'
         elif request.method == 'POST':
             # Form is empty... (no POST data)
