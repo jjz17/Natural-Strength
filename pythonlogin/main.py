@@ -28,10 +28,6 @@ app.config['MYSQL_DB'] = 'pythonlogin'
 # Intialize MySQL
 mysql = MySQL(app)
 
-# http://localhost:5000/pythonlogin/ - this will be the login page, we need to use both GET and POST requests
-# @app.route('/pythonlogin/', methods=['GET', 'POST'])
-
-
 @app.route('/', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
@@ -61,10 +57,6 @@ def login():
     # Show the login form with message (if any)
     return render_template('index.html', msg=msg)
 
-# http://localhost:5000/pythonlogin/logout - this will be the logout page
-# @app.route('/pythonlogin/logout')
-
-
 @app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
@@ -73,10 +65,6 @@ def logout():
     session.pop('username', None)
     # Redirect to login page
     return redirect(url_for('login'))
-
-# http://localhost:5000/pythonlogin/register - this will be the registration page, we need to use both GET and POST requests
-# @app.route('/pythonlogin/register', methods=['GET', 'POST'])
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -114,9 +102,7 @@ def register():
     # Show registration form with message (if any)
     return render_template('register.html', msg=msg)
 
-# http://localhost:5000/pythonlogin/home - this will be the home page, only accessible for loggedin users
-
-
+# Home page, only accessible for loggedin users
 @app.route('/home')
 def home():
     # Check if user is loggedin
@@ -126,9 +112,7 @@ def home():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-# http://localhost:5000/pythonlogin/profile - this will be the profile page, only accessible for loggedin users
-
-
+# Profile page, only accessible for loggedin users
 @app.route('/profile')
 def profile():
     # Check if user is loggedin
@@ -143,8 +127,7 @@ def profile():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-# http://localhost:5000/pythonlogin/profile - this will be the profile edit page, only accessible for loggedin users
-
+# Profile update page, only accessible for loggedin users
 @app.route('/update', methods=['GET', 'POST'])
 def update():
     # Check if user is loggedin
