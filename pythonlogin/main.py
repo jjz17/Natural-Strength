@@ -145,16 +145,6 @@ def profile():
 
 # http://localhost:5000/pythonlogin/profile - this will be the profile edit page, only accessible for loggedin users
 
-
-@app.route('/edit')
-def edit():
-    # Check if user is loggedin
-    if 'loggedin' in session:
-        # Allow user to edit information and send it to the MySQL Database
-        pass
-    pass
-
-
 @app.route('/update', methods=['GET', 'POST'])
 def update():
     # Check if user is loggedin
