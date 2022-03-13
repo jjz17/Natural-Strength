@@ -1,6 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from flask_mysqldb import MySQL
-import MySQLdb.cursors
 import sqlalchemy as db
 from sqlalchemy import text
 import re
@@ -25,10 +23,6 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'jiajia2002'
 app.config['MYSQL_DB'] = 'pythonlogin'
 
-# Intialize MySQL
-mysql = MySQL(app)
-
-
 @app.route('/', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
@@ -39,18 +33,12 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        # Check if account exists using MySQL
-        # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        # cursor.execute(
-        #     'SELECT * FROM users WHERE username = %s AND password = %s', (username, password,))
-        # # Fetch one record and return result
-        # account = cursor.fetchone()
-
         db_session = Session()
+        # Check exists record with matching username and password
         user_query = db_session.query(User) \
             .filter((User.username == username) & (User.password == password))
         db_session.close()
-        # If account exists in accounts table in out database
+        # If user exists in users table in the database
         if user_query.count() == 1:
             user = user_query[0]
             # Create session data, we can access this data in other routes
@@ -60,7 +48,7 @@ def login():
             # Redirect to home page
             return redirect(url_for('home'))
         else:
-            # Account doesnt exist or username/password incorrect
+            # User doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
     # Show the login form with message (if any)
     return render_template('index.html', msg=msg)
@@ -87,19 +75,14 @@ def register():
         password = request.form['password']
         birth_date = request.form['birth_date']
         email = request.form['email']
-        # Check if account exists using MySQL
-        # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        # cursor.execute(
-        #     'SELECT * FROM users WHERE username = %s', (username,))
-        # account = cursor.fetchone()
-
+        
         db_session = Session()
         user_query = db_session.query(User) \
             .filter(User.username == username)
 
-        # If account exists show error and validation checks
+        # If user exists show error and validation checks
         if user_query.count() > 0:
-            msg = 'Account already exists!'
+            msg = 'User already exists!'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Invalid email address!'
         elif not re.match(r'[A-Za-z0-9]+', username):
@@ -107,10 +90,6 @@ def register():
         elif not username or not password or not email:
             msg = 'Please fill out the form!'
         else:
-            # Account doesnt exists and the form data is valid, now insert new account into users table
-            # cursor.execute(
-            #     'INSERT INTO users (`username`, `password`, `email`) VALUES (%s, %s, %s)', (username, password, email,))
-            # mysql.connection.commit()
             user = User(username, password, birth_date, email)
             db_session.add(user)
             db_session.commit()
@@ -141,11 +120,14 @@ def home():
 def profile():
     # Check if user is loggedin
     if 'loggedin' in session:
-        # We need all the account info for the user so we can display it on the profile page
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM users WHERE id = %s',
-                       (session['id'],))
-        account = cursor.fetchone()
+        # We need all the user's info so we can display it on the profile page
+
+        db_session = Session()
+        # Select the current user's records in the databse
+        account_query = db_session.query(User) \
+            .filter(User.id == session['id'])
+        db_session.close()
+        account = account_query[0]
         # Show the profile page with account info
         return render_template('profile.html', account=account)
     # User is not loggedin redirect to login page
