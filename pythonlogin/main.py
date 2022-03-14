@@ -124,12 +124,12 @@ def profile():
 
         db_session = Session()
         # Select the current user's records in the databse
-        account_query = db_session.query(User) \
+        user_query = db_session.query(User) \
             .filter(User.id == session['id'])
         db_session.close()
-        account = account_query[0]
-        # Show the profile page with account info
-        return render_template('profile.html', account=account)
+        user = user_query[0]
+        # Show the profile page with user info
+        return render_template('profile.html', user=user)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -147,7 +147,7 @@ def update():
 
         # Output message if something goes wrong...
         msg = ''
-        account = None
+        user = None
         # Check if "username", "password" and "email" POST requests exist (user submitted form)
         if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
             # Create variables for easy access
@@ -160,11 +160,11 @@ def update():
             # deadlift = request.form['deadlift']
             email = request.form['email']
 
-            # # Check if account exists using MySQL
+            # # Check if user exists using MySQL
             # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             # cursor.execute(
-            #     f'SELECT * FROM accounts WHERE id = {id}')
-            # account = cursor.fetchone()
+            #     f'SELECT * FROM users WHERE id = {id}')
+            # user = cursor.fetchone()
 
             # Validation checks
             if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
@@ -184,9 +184,9 @@ def update():
             # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', deadlift):
             #     msg = 'Deadlift must be a positive number'
             else:
-                # Account doesnt exists and the form data is valid, now update data into accounts table
+                # User doesnt exist and the form data is valid, now update data into users table
                 # cursor.execute(
-                #     f'UPDATE accounts SET username = \'{username}\', password = \'{password}\', birth_date = 1999-10-10, weight = {weight}, squat = {squat}, bench = {bench}, deadlift = {deadlift}, email = \'{email}\' WHERE id = {id};')
+                #     f'UPDATE users SET username = \'{username}\', password = \'{password}\', birth_date = 1999-10-10, weight = {weight}, squat = {squat}, bench = {bench}, deadlift = {deadlift}, email = \'{email}\' WHERE id = {id};')
                 # mysql.connection.commit()
                 user = db_session.query(User).get(id)
                 user.username = username
@@ -216,7 +216,7 @@ def sql():
 
     # result = engine.execute(
     #     text(
-    #         "SELECT id FROM accounts ORDER BY RAND();"
+    #         "SELECT id FROM users ORDER BY RAND();"
     #     )
     # )
 
