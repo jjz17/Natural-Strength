@@ -25,6 +25,10 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'jiajia2002'
 app.config['MYSQL_DB'] = 'pythonlogin'
 
+# Avoid multithreading MatPlotLib GUI error
+plt.switch_backend('Agg') 
+
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
@@ -272,11 +276,8 @@ def chart_metric(metric):
     return render_template('plot.html', title=title, plot=plot)
 
 def plot_metric(metric):
-    fig = Figure()
+    fig, ax = plt.subplots(1, 1, figsize=(15,8))
     FigureCanvas(fig)
-
-    ax1 = fig.add_subplot(1, 2, 1)
-    ax2 = fig.add_subplot(1, 2, 2)
 
     db_session = Session()
 
@@ -287,21 +288,14 @@ def plot_metric(metric):
     dates = [user_metric.date for user_metric in user_metrics]
     metric_list = [getattr(user_metric, metric) for user_metric in user_metrics]
 
-    ax1.plot(dates, metric_list)
+    ax.plot(dates, metric_list)
 
-    ax1.set_xlabel('Time')
-    ax1.set_ylabel(metric.title())
+    ax.set_xlabel('Time')
+    ax.set_ylabel(metric.title())
     # ax.set_title(f'There are {points} data points!')
-    ax1.grid(True)
+    ax.grid(True)
 
-    ax2.plot(dates, metric_list)
-
-    ax2.set_xlabel('Time')
-    ax2.set_ylabel(metric.title())
-    # ax.set_title(f'There are {points} data points!')
-    ax2.grid(True)
-
-    # plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right')
+    plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right')
 
     # fig, (ax1, ax2) = plt.subplots(1, 2)
     # fig.suptitle('Horizontally stacked subplots')
@@ -326,7 +320,6 @@ def test_metric(metric):
 
 def plot_metric2(metric):
     db_session = Session()
-    plt.switch_backend('Agg') 
     fig, axes = plt.subplots(1, 2, figsize=(15, 8), dpi=200)
     # fig, axes = plt.subplots(1, 2)
     FigureCanvas(fig)
