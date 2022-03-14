@@ -273,7 +273,8 @@ def plot_metric(metric):
     fig = Figure()
     FigureCanvas(fig)
 
-    ax = fig.add_subplot(1, 1, 1)
+    ax1 = fig.add_subplot(1, 2, 1)
+    ax2 = fig.add_subplot(1, 2, 2)
 
     db_session = Session()
 
@@ -283,12 +284,19 @@ def plot_metric(metric):
     dates = [user_metric.date for user_metric in user_metrics]
     metric_list = [getattr(user_metric, metric) for user_metric in user_metrics]
 
-    ax.plot(dates, metric_list)
+    ax1.plot(dates, metric_list)
 
-    ax.set_xlabel('Time')
-    ax.set_ylabel(metric.title())
+    ax1.set_xlabel('Time')
+    ax1.set_ylabel(metric.title())
     # ax.set_title(f'There are {points} data points!')
-    ax.grid(True)
+    ax1.grid(True)
+
+    ax2.plot(dates, metric_list)
+
+    ax2.set_xlabel('Time')
+    ax2.set_ylabel(metric.title())
+    # ax.set_title(f'There are {points} data points!')
+    ax2.grid(True)
 
     # fig, (ax1, ax2) = plt.subplots(1, 2)
     # fig.suptitle('Horizontally stacked subplots')
