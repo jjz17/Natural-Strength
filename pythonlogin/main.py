@@ -214,12 +214,6 @@ def sql():
     engine = db.create_engine(
         f'mysql+pymysql://{user}:{password}@localhost:3306/{database}')
 
-    # result = engine.execute(
-    #     text(
-    #         "SELECT id FROM users ORDER BY RAND();"
-    #     )
-    # )
-
     result = engine.execute(
         text(
             "SELECT * FROM users;"
@@ -228,7 +222,6 @@ def sql():
 
     result_as_list = result.fetchall()
 
-    # return str(result.first()[0])
     return result_as_list[0]['username']
 
 
@@ -324,6 +317,12 @@ def plot_points2(points):
     svg_img = '<svg' + img.getvalue().split('<svg')[1]
 
     return svg_img
+
+@app.route('/chart/<metric>', methods=['GET'])
+def chart_metric(metric):
+    title = f'Your Custom {metric.title()} Plot'
+    plot = plot_points2(2)
+    return render_template('plot.html', title=title, plot=plot)
 
 
 if __name__ == '__main__':
