@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 import numpy as np
 import sqlalchemy as db
 from sqlalchemy import text
@@ -280,7 +281,8 @@ def plot_metric(metric):
     db_session = Session()
 
     user_metrics = db_session.query(UserMetrics) \
-        .filter(UserMetrics.user_id == session['id'])
+        .filter(UserMetrics.user_id == session['id']) \
+            .order_by(UserMetrics.date.asc())
 
     dates = [user_metric.date for user_metric in user_metrics]
     metric_list = [getattr(user_metric, metric) for user_metric in user_metrics]
@@ -298,6 +300,54 @@ def plot_metric(metric):
     ax2.set_ylabel(metric.title())
     # ax.set_title(f'There are {points} data points!')
     ax2.grid(True)
+
+    # plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right')
+
+    # fig, (ax1, ax2) = plt.subplots(1, 2)
+    # fig.suptitle('Horizontally stacked subplots')
+    # x = data[:, 0]
+    # y = data[:, 1]
+    # ax1.plot(x, y)
+    # ax2.plot(x, -y)
+
+    img = io.StringIO()
+    fig.savefig(img, format='svg')
+    # clip off the xml headers from the image
+    svg_img = '<svg' + img.getvalue().split('<svg')[1]
+
+    return svg_img
+
+# Displays the plot of the requested user metric
+@app.route('/test/<metric>', methods=['GET'])
+def test_metric(metric):
+    title = f'Your Custom {metric.title()} Plot'
+    plot = plot_metric2(metric)
+    return render_template('plot.html', title=title, plot=plot)
+
+def plot_metric2(metric):
+    db_session = Session()
+    plt.switch_backend('Agg') 
+    fig, axes = plt.subplots(1, 2, figsize=(15, 8), dpi=200)
+    # fig, axes = plt.subplots(1, 2)
+    FigureCanvas(fig)
+    for i in range(len(axes.flatten())):
+        ax = axes.flatten()[i]
+
+        user_metrics = db_session.query(UserMetrics) \
+            .filter(UserMetrics.user_id == session['id']) \
+                .order_by(UserMetrics.date.asc())
+
+        dates = [user_metric.date for user_metric in user_metrics]
+        metric_list = [getattr(user_metric, metric) for user_metric in user_metrics]
+
+        ax.plot(dates, metric_list)
+
+        ax.set_xlabel('Time')
+        ax.set_ylabel(metric.title())
+    # ax.set_title(f'There are {points} data points!')
+        ax.grid(True)
+
+        plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right')
 
     # fig, (ax1, ax2) = plt.subplots(1, 2)
     # fig.suptitle('Horizontally stacked subplots')
