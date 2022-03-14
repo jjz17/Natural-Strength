@@ -1,16 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-import sqlalchemy as db
-from sqlalchemy import text
-import re
-import io
-import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
+import numpy as np
+import sqlalchemy as db
+from sqlalchemy import text
 
-from user import User
-from base import Session
-from user_metrics import UserMetrics
+import re
+import io
 from datetime import date
+
+from base import Session
+from user import User
+from user_metrics import UserMetrics
 
 app = Flask(__name__)
 

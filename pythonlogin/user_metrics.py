@@ -1,9 +1,8 @@
 # coding=utf-8
 
+from base import Base
 from sqlalchemy import Column, Integer, Float, Date, ForeignKey
 from sqlalchemy.orm import relationship
-
-from base import Base
 
 
 class UserMetrics(Base):
