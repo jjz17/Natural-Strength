@@ -262,6 +262,7 @@ def plot_points(points):
 
     return svg_img
 
+# Displays the plot of the requested user metric
 @app.route('/chart/<metric>', methods=['GET'])
 def chart_metric(metric):
     title = f'Your Custom {metric.title()} Plot'
@@ -303,6 +304,7 @@ def plot_metric(metric):
 
     return svg_img
 
+# Run the python script in order to start the webapp
 if __name__ == '__main__':
     app.run()
     # app.run(host='0.0.0.0', port=5000)
