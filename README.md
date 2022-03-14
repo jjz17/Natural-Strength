@@ -26,6 +26,9 @@ https://auth0.com/blog/sqlalchemy-orm-tutorial-for-python-developers/
 ### Matplotlib subplots in one figure tutorial
 https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplots_demo.html
 
+### Interactive plots with Chart.js
+https://github.com/Princekrampah/FlaskExpenseTracker
+
 ## Introduction 
 https://barbend.com/social-media-training-impact/
 
