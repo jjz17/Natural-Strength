@@ -11,6 +11,7 @@ import io
 from datetime import date
 
 from base import Session
+import forms
 from user import User
 from user_metrics import UserMetrics
 
