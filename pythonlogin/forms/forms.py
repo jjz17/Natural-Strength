@@ -1,7 +1,11 @@
-from ast import Sub
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, DataRequired
+from markupsafe import Markup
+from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
+
+class InlineButtonWidget(object):
+    def __init__(self, class_=None):
+        self.class_ = class_
 
 # Name Form
 class NamerForm(FlaskForm):

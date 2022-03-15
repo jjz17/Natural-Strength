@@ -27,7 +27,7 @@ app.config['MYSQL_PASSWORD'] = 'jiajia2002'
 app.config['MYSQL_DB'] = 'pythonlogin'
 
 # Avoid multithreading MatPlotLib GUI error
-plt.switch_backend('Agg') 
+plt.switch_backend('Agg')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -82,7 +82,7 @@ def register():
         password = request.form['password']
         birth_date = request.form['birth_date']
         email = request.form['email']
-        
+
         db_session = Session()
         user_query = db_session.query(User) \
             .filter(User.username == username)
@@ -108,9 +108,8 @@ def register():
     # Show registration form with message (if any)
     return render_template('register.html', msg=msg)
 
+
 # Home page, only accessible for loggedin users
-
-
 @app.route('/home')
 def home():
     # Check if user is loggedin
@@ -120,9 +119,8 @@ def home():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+
 # Profile page, only accessible for loggedin users
-
-
 @app.route('/profile')
 def profile():
     # Check if user is loggedin
@@ -140,9 +138,8 @@ def profile():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+
 # Profile update page, only accessible for loggedin users
-
-
 @app.route('/update', methods=['GET', 'POST'])
 def update():
     # Check if user is loggedin
@@ -167,12 +164,6 @@ def update():
             # deadlift = request.form['deadlift']
             email = request.form['email']
 
-            # # Check if user exists using MySQL
-            # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            # cursor.execute(
-            #     f'SELECT * FROM users WHERE id = {id}')
-            # user = cursor.fetchone()
-
             # Validation checks
             if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
                 msg = 'Invalid email address!'
@@ -191,10 +182,7 @@ def update():
             # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', deadlift):
             #     msg = 'Deadlift must be a positive number'
             else:
-                # User doesnt exist and the form data is valid, now update data into users table
-                # cursor.execute(
-                #     f'UPDATE users SET username = \'{username}\', password = \'{password}\', birth_date = 1999-10-10, weight = {weight}, squat = {squat}, bench = {bench}, deadlift = {deadlift}, email = \'{email}\' WHERE id = {id};')
-                # mysql.connection.commit()
+             # User doesn't exist and the form data is valid, now update data into users table
                 user = db_session.query(User).get(id)
                 user.username = username
                 user.password = password
@@ -213,23 +201,63 @@ def update():
     return redirect(url_for('login'))
 
 
-@app.route('/sql')
-def sql():
-    user = 'root'
-    password = 'jiajia2002'
-    database = 'pythonlogin'
-    engine = db.create_engine(
-        f'mysql+pymysql://{user}:{password}@localhost:3306/{database}')
+# Metrics insert page, only accessible for loggedin users
+@app.route('/metrics', methods=['GET', 'POST'])
+def metrics():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        id = session['id']
 
-    result = engine.execute(
-        text(
-            "SELECT * FROM users;"
-        )
-    )
+        # Create a new session
+        db_session = Session()
 
-    result_as_list = result.fetchall()
+        # Output message if something goes wrong...
+        msg = ''
+        user = None
+        # Check if "username", "password" and "email" POST requests exist (user submitted form)
+        if request.method == 'POST' and 'weight' in request.form and 'squat' in request.form and 'bench' in request.form and 'deadlift' in request.form:
+            # Create variables for easy access
+            weight = request.form['weight']
+            squat = request.form['squat']
+            bench = request.form['bench']
+            deadlift = request.form['deadlift']
+            date = request.form['date']
 
-    return result_as_list[0]['username']
+            # Validation checks
+            if not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', weight):
+                msg = 'Weight must be a positive number'
+            elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', squat):
+                msg = 'Squat must be a positive number'
+            elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', bench):
+                msg = 'Bench must be a positive number'
+            elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', deadlift):
+                msg = 'Deadlift must be a positive number'
+            else:
+             # User doesn't exist and the form data is valid, now update data into users table
+                user = db_session.query(User).get(id)
+                metrics = UserMetrics(user, weight, squat, bench, deadlift, date)
+                db_session.add(metrics)
+                db_session.commit()
+                db_session.close()
+                msg = 'You have successfully inserted your data!'
+        elif request.method == 'POST':
+            # Form is empty... (no POST data)
+            msg = 'Please fill out the form!'
+
+        # Show the update form with message (if any)
+        return render_template('metrics.html', msg=msg)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+
+@app.route('/wtforms', methods=['GET', 'POST'])
+def wtforms():
+    name = None
+    form = forms.NamerForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        form.name.data = ''
+    return render_template('wtforms.html', name=name, form=form)
 
 
 @app.route('/plot/<int:points>', methods=['GET'])
@@ -269,6 +297,7 @@ def plot_points(points):
 
     return svg_img
 
+
 # Displays the plot of the requested user metric
 @app.route('/chart/<metric>', methods=['GET'])
 def chart_metric(metric):
@@ -276,18 +305,20 @@ def chart_metric(metric):
     plot = plot_metric(metric)
     return render_template('plot.html', title=title, plot=plot)
 
+
 def plot_metric(metric):
-    fig, ax = plt.subplots(1, 1, figsize=(15,8))
+    fig, ax = plt.subplots(1, 1, figsize=(15, 8))
     FigureCanvas(fig)
 
     db_session = Session()
 
     user_metrics = db_session.query(UserMetrics) \
         .filter(UserMetrics.user_id == session['id']) \
-            .order_by(UserMetrics.date.asc())
+        .order_by(UserMetrics.date.asc())
 
     dates = [user_metric.date for user_metric in user_metrics]
-    metric_list = [getattr(user_metric, metric) for user_metric in user_metrics]
+    metric_list = [getattr(user_metric, metric)
+                   for user_metric in user_metrics]
 
     ax.plot(dates, metric_list)
 
@@ -312,12 +343,14 @@ def plot_metric(metric):
 
     return svg_img
 
+
 # Displays the plot of the requested user metric
 @app.route('/test/<metric>', methods=['GET'])
 def test_metric(metric):
     title = f'Your Custom {metric.title()} Plot'
     plot = plot_metric2(metric)
     return render_template('plot.html', title=title, plot=plot)
+
 
 def plot_metric2(metric):
     db_session = Session()
@@ -329,10 +362,11 @@ def plot_metric2(metric):
 
         user_metrics = db_session.query(UserMetrics) \
             .filter(UserMetrics.user_id == session['id']) \
-                .order_by(UserMetrics.date.asc())
+            .order_by(UserMetrics.date.asc())
 
         dates = [user_metric.date for user_metric in user_metrics]
-        metric_list = [getattr(user_metric, metric) for user_metric in user_metrics]
+        metric_list = [getattr(user_metric, metric)
+                       for user_metric in user_metrics]
 
         ax.plot(dates, metric_list)
 
@@ -341,7 +375,8 @@ def plot_metric2(metric):
     # ax.set_title(f'There are {points} data points!')
         ax.grid(True)
 
-        plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right')
+        plt.setp(ax.get_xticklabels(), rotation=30,
+                 horizontalalignment='right')
 
     # fig, (ax1, ax2) = plt.subplots(1, 2)
     # fig.suptitle('Horizontally stacked subplots')
@@ -356,6 +391,7 @@ def plot_metric2(metric):
     svg_img = '<svg' + img.getvalue().split('<svg')[1]
 
     return svg_img
+
 
 # Run the python script in order to start the webapp
 if __name__ == '__main__':
