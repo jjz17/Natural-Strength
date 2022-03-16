@@ -307,7 +307,7 @@ def chart_metric(metric):
 
 
 def plot_metric(metric):
-    fig, ax = plt.subplots(1, 1, figsize=(15, 8))
+    fig, ax = plt.subplots(1, 1, figsize=(12, 6))
     FigureCanvas(fig)
 
     db_session = Session()
