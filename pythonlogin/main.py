@@ -328,6 +328,8 @@ def plot_metric(metric):
     ax.grid(True)
 
     plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right')
+    # Make room for x and y labels
+    plt.tight_layout()
 
     # fig, (ax1, ax2) = plt.subplots(1, 2)
     # fig.suptitle('Horizontally stacked subplots')
