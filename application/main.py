@@ -3,8 +3,6 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import numpy as np
-import sqlalchemy as db
-from sqlalchemy import text
 
 import re
 import io
@@ -16,6 +14,7 @@ from application.base import Session
 from application.user import User
 from application.user_metrics import UserMetrics
 
+# Uncomment to run app through this file (main.py)
 # app = Flask(__name__)
 
 # Change this to your secret key (can be anything, it's for extra protection)
@@ -395,8 +394,7 @@ def plot_metric2(metric):
 
     return svg_img
 
-
-# Run the python script in order to start the webapp
+# Uncomment to run app through this file (main.py)
 # if __name__ == '__main__':
 #     app.run()
     # app.run(host='0.0.0.0', port=5000)
