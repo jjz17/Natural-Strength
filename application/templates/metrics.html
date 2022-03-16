@@ -1,0 +1,29 @@
+{% extends 'layout.html' %} {% block title %}Upload Metrics{% endblock %} {% block content %}
+<h2>Upload Metrics</h2>
+<div class="update">
+    <form action="{{ url_for('metrics') }}" method="post" autocomplete="off">
+        <label for="weight">
+            <i class="fas fa-weight-hanging"></i>
+        </label>
+        <input type="number" name="weight" placeholder="Weight" id="weight" required>
+        <label for="squat">
+            <i class="fas fa-dumbbell"></i>
+        </label>
+        <input type="number" name="squat" placeholder="Squat" id="squat" required>
+        <label for="bench">
+            <i class="fas fa-dumbbell"></i>
+        </label>
+        <input type="number" name="bench" placeholder="Bench" id="bench" required>
+        <label for="deadlift">
+            <i class="fas fa-dumbbell"></i>
+        </label>
+        <input type="number" name="deadlift" placeholder="Deadlift" id="deadlift" required>
+        <label for="date">
+            <i class="fas fa-calendar"></i>
+        </label>
+        <input type="date" name="date" placeholder="Date" id="date" required>
+        <div class="msg">{{ msg }}</div>
+        <input type="submit" value="Metrics">
+    </form>
+</div>
+{% endblock %}
