@@ -43,5 +43,13 @@
 </div>
 <div>
     <a href="{{ url_for('update') }}"><i class="fas fa-pen"></i>Update Profile</a>
+    <form action="{{ url_for('profile') }}" method="post">
+        <p>Please select your preferred units:</p>
+        <input type="radio" id="standard" name="units" value="STANDARD"><label for="standard">Standard</label>
+        <br>
+        <input type="radio" id="metric" name="units" value="METRIC"><label for="metric">Metric</label>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
 </div>
 {% endblock %}

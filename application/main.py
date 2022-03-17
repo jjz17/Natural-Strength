@@ -20,12 +20,6 @@ from application.user_metrics import UserMetrics
 # Change this to your secret key (can be anything, it's for extra protection)
 app.secret_key = 'your secret key'
 
-# Enter your database connection details below
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'jiajia2002'
-app.config['MYSQL_DB'] = 'pythonlogin'
-
 # Avoid multithreading MatPlotLib GUI error
 plt.switch_backend('Agg')
 
@@ -52,6 +46,7 @@ def login():
             session['loggedin'] = True
             session['id'] = user.id
             session['username'] = user.username
+            session['units'] = 'STANDARD'
             # Redirect to home page
             return redirect(url_for('home'))
         else:
@@ -64,9 +59,10 @@ def login():
 @app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
-    session.pop('loggedin', None)
-    session.pop('id', None)
-    session.pop('username', None)
+    # session.pop('loggedin', None)
+    # session.pop('id', None)
+    # session.pop('username', None)
+    session.clear()
     # Redirect to login page
     return redirect(url_for('login'))
 
@@ -121,7 +117,9 @@ def home():
 
 
 # Profile page, only accessible for loggedin users
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
+# @app.route('/profile/', defaults={'units': ''})
+# @app.route('/profile/<units>', methods=['GET', 'POST'])
 def profile():
     # Check if user is loggedin
     if 'loggedin' in session:
@@ -133,10 +131,19 @@ def profile():
             .filter(User.id == session['id'])
         db_session.close()
         user = user_query[0]
+
+        if request.method == 'POST' and 'units' in request.form:
+            # Create variables for easy access
+            units = request.form['units']
+            session['units'] = units
         # Show the profile page with user info
         return render_template('profile.html', user=user)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+@app.route('/test')
+def test():
+    return session['units']
 
 
 # Profile update page, only accessible for loggedin users
@@ -260,44 +267,6 @@ def wtforms():
     return render_template('wtforms.html', name=name, form=form)
 
 
-@app.route('/plot/<int:points>', methods=['GET'])
-def plot(points):
-    title = 'Randomly Generated Scatterplot'
-    plot = plot_points(points)
-    return render_template('plot.html', title=title, plot=plot)
-
-
-def plot_points(points):
-    """Generate a plot with a varying number of randomly generated points
-    Args:
-    points (int): a number of points to plot
-    Returns: An svg plot with <points> data points
-    """
-    # data for plotting
-    data = np.random
-
-    data = np.random.rand(points, 2)
-
-    fig = Figure()
-    FigureCanvas(fig)
-
-    ax = fig.add_subplot(111)
-
-    ax.scatter(data[:, 0], data[:, 1])
-
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_title(f'There are {points} data points!')
-    ax.grid(True)
-
-    img = io.StringIO()
-    fig.savefig(img, format='svg')
-    # clip off the xml headers from the image
-    svg_img = '<svg' + img.getvalue().split('<svg')[1]
-
-    return svg_img
-
-
 # Displays the plot of the requested user metric
 @app.route('/chart/<metric>', methods=['GET'])
 def chart_metric(metric):
@@ -346,39 +315,35 @@ def plot_metric(metric):
     return svg_img
 
 
-# Displays the plot of the requested user metric
-@app.route('/test/<metric>', methods=['GET'])
-def test_metric(metric):
-    title = f'Your Custom {metric.title()} Plot'
-    plot = plot_metric2(metric)
+@app.route('/plot/<int:points>', methods=['GET'])
+def plot(points):
+    title = 'Randomly Generated Scatterplot'
+    plot = plot_points(points)
     return render_template('plot.html', title=title, plot=plot)
 
 
-def plot_metric2(metric):
-    db_session = Session()
-    fig, axes = plt.subplots(1, 2, figsize=(15, 8), dpi=200)
-    # fig, axes = plt.subplots(1, 2)
+def plot_points(points):
+    """Generate a plot with a varying number of randomly generated points
+    Args:
+    points (int): a number of points to plot
+    Returns: An svg plot with <points> data points
+    """
+    # data for plotting
+    data = np.random
+
+    data = np.random.rand(points, 2)
+
+    fig = Figure()
     FigureCanvas(fig)
-    for i in range(len(axes.flatten())):
-        ax = axes.flatten()[i]
 
-        user_metrics = db_session.query(UserMetrics) \
-            .filter(UserMetrics.user_id == session['id']) \
-            .order_by(UserMetrics.date.asc())
+    ax = fig.add_subplot(111)
 
-        dates = [user_metric.date for user_metric in user_metrics]
-        metric_list = [getattr(user_metric, metric)
-                       for user_metric in user_metrics]
+    ax.scatter(data[:, 0], data[:, 1])
 
-        ax.plot(dates, metric_list)
-
-        ax.set_xlabel('Time')
-        ax.set_ylabel(metric.title())
-    # ax.set_title(f'There are {points} data points!')
-        ax.grid(True)
-
-        plt.setp(ax.get_xticklabels(), rotation=30,
-                 horizontalalignment='right')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_title(f'There are {points} data points!')
+    ax.grid(True)
 
     img = io.StringIO()
     fig.savefig(img, format='svg')
@@ -386,6 +351,7 @@ def plot_metric2(metric):
     svg_img = '<svg' + img.getvalue().split('<svg')[1]
 
     return svg_img
+
 
 # Uncomment to run app through this file (main.py)
 # if __name__ == '__main__':
