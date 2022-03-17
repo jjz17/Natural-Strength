@@ -380,13 +380,6 @@ def plot_metric2(metric):
         plt.setp(ax.get_xticklabels(), rotation=30,
                  horizontalalignment='right')
 
-    # fig, (ax1, ax2) = plt.subplots(1, 2)
-    # fig.suptitle('Horizontally stacked subplots')
-    # x = data[:, 0]
-    # y = data[:, 1]
-    # ax1.plot(x, y)
-    # ax2.plot(x, -y)
-
     img = io.StringIO()
     fig.savefig(img, format='svg')
     # clip off the xml headers from the image
