@@ -23,6 +23,12 @@ app.secret_key = 'your secret key'
 # Avoid multithreading MatPlotLib GUI error
 plt.switch_backend('Agg')
 
+def lbs_to_kg(lbs):
+    return round(lbs * 0.453592, 2)
+
+def kg_to_lbs(kg):
+    return round(kg * 2.20462, 2)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
