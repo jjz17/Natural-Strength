@@ -52,6 +52,7 @@ def login():
             session['loggedin'] = True
             session['id'] = user.id
             session['username'] = user.username
+            # Toggles between STANDARD and METRIC
             session['units'] = 'STANDARD'
             # Redirect to home page
             return redirect(url_for('home'))
@@ -236,6 +237,13 @@ def metrics():
             deadlift = request.form['deadlift']
             date = request.form['date']
 
+            # Convert metrics to be inserted
+            if session['units'] == 'METRIC':
+                weight = kg_to_lbs(weight)
+                squat = kg_to_lbs(squat)
+                bench = kg_to_lbs(bench)
+                deadlift = kg_to_lbs(deadlift)
+
             # Validation checks
             if not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', weight):
                 msg = 'Weight must be a positive number'
@@ -295,6 +303,10 @@ def plot_metric(metric):
     metric_list = [getattr(user_metric, metric)
                    for user_metric in user_metrics]
 
+    # Convert metrics data to metric units to plot
+    if session['units'] == 'METRIC':
+        metric_list = [lbs_to_kg(metric) for metric in metric_list]
+
     ax.plot(dates, metric_list)
 
     ax.set_xlabel('Time')
@@ -302,7 +314,9 @@ def plot_metric(metric):
     # ax.set_title(f'There are {points} data points!')
     ax.grid(True)
 
+    # Rotate x-axis labels to fit on chart
     plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right')
+
     # Make room for x and y labels
     plt.tight_layout()
 
