@@ -20,6 +20,9 @@ https://codeshack.io/login-system-python-flask-mysql/#packages
 https://github.com/cerickson/flask-matplotlib-tutorial/blob/master/flaskplotlib/templates/index.html
 https://stackoverflow.com/questions/50728328/python-how-to-show-matplotlib-in-flask
 
+### Flask routing
+https://hackersandslackers.com/flask-routes/
+
 ### Sqlalchemy ORM tutorial
 https://auth0.com/blog/sqlalchemy-orm-tutorial-for-python-developers/
 
