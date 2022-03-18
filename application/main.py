@@ -24,10 +24,10 @@ app.secret_key = 'your secret key'
 plt.switch_backend('Agg')
 
 def lbs_to_kg(lbs):
-    return round(lbs * 0.453592, 2)
+    return round(float(lbs) * 0.453592, 2)
 
 def kg_to_lbs(kg):
-    return round(kg * 2.20462, 2)
+    return round(float(kg) * 2.20462, 2)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -245,22 +245,33 @@ def metrics():
                 deadlift = kg_to_lbs(deadlift)
 
             # Validation checks
-            if not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', weight):
-                msg = 'Weight must be a positive number'
-            elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', squat):
-                msg = 'Squat must be a positive number'
-            elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', bench):
-                msg = 'Bench must be a positive number'
-            elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', deadlift):
-                msg = 'Deadlift must be a positive number'
+            # if not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', weight):
+            #     msg = 'Weight must be a positive number'
+            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', squat):
+            #     msg = 'Squat must be a positive number'
+            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', bench):
+            #     msg = 'Bench must be a positive number'
+            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', deadlift):
+            #     msg = 'Deadlift must be a positive number'
+            # else:
+            user = db_session.query(User).get(id)
+            metrics_query = db_session.query(UserMetrics) \
+                .filter((UserMetrics.date == date) & (UserMetrics.user == user))
+            
+            # If entry exists for this day, update it
+            if metrics_query.count() == 1:
+                metrics = metrics_query[0]
+                metrics.weight = weight
+                metrics.squat = squat
+                metrics.bench = bench
+                metrics.deadlift = deadlift
+            # Else insert new metrics record
             else:
-             # User doesn't exist and the form data is valid, now update data into users table
-                user = db_session.query(User).get(id)
                 metrics = UserMetrics(user, weight, squat, bench, deadlift, date)
                 db_session.add(metrics)
-                db_session.commit()
-                db_session.close()
-                msg = 'You have successfully inserted your data!'
+            db_session.commit()
+            db_session.close()
+            msg = 'You have successfully inserted your data!'
         elif request.method == 'POST':
             # Form is empty... (no POST data)
             msg = 'Please fill out the form!'
