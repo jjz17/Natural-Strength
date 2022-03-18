@@ -32,6 +32,9 @@ https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplots_demo.ht
 ### Interactive plots with Chart.js
 https://github.com/Princekrampah/FlaskExpenseTracker
 
+### Dropdown menu tutorial
+https://www.w3schools.com/howto/howto_css_dropdown.asp
+
 ## Introduction 
 https://barbend.com/social-media-training-impact/
 
