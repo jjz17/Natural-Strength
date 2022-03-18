@@ -137,12 +137,7 @@ def home():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        # return render_template('home.html', username=session['username'])
-        # bench_stats = [age_input, weight_input, squat_input, deadlift_input, f_sex, m_sex]
-        bench_stats = [1, 1, 1, 1, 1, 0]
-        bench_stats_scaled = scale_stats(bench_scaler, bench_stats)
-        bench_pred = bench_model.predict(np.array(bench_stats_scaled).reshape(1, -1))[0]
-        return f'{bench_pred}'
+        return render_template('home.html', username=session['username'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -171,6 +166,7 @@ def profile():
         return render_template('profile.html', user=user)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
 
 @app.route('/test')
 def test():
@@ -300,8 +296,14 @@ def metrics():
             # Form is empty... (no POST data)
             msg = 'Please fill out the form!'
 
+        # bench_stats = [age_input, weight_input, squat_input, deadlift_input, f_sex, m_sex]
+        bench_stats = [1, 1, 1, 1, 1, 0]
+        bench_stats_scaled = scale_stats(bench_scaler, bench_stats)
+        bench_pred = bench_model.predict(np.array(bench_stats_scaled).reshape(1, -1))[0]
+        # bench_pred = f'{bench_pred}'
+
         # Show the update form with message (if any)
-        return render_template('metrics.html', msg=msg)
+        return render_template('metrics.html', msg=msg, bench_pred = bench_pred)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
