@@ -1,12 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+import joblib
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import numpy as np
 
-import re
-import io
 from datetime import date
+import io
+import os
+import _pickle as cPickle
+import re
+
 
 from application import app
 from application import forms
@@ -23,11 +27,26 @@ app.secret_key = 'your secret key'
 # Avoid multithreading MatPlotLib GUI error
 plt.switch_backend('Agg')
 
+# Helper functions
 def lbs_to_kg(lbs):
     return round(float(lbs) * 0.453592, 2)
 
 def kg_to_lbs(kg):
     return round(float(kg) * 2.20462, 2)
+
+def load_model(model_file: str):
+    return cPickle.load(open(model_file, 'rb'))
+
+def scale_stats(scaler, stats: list):
+    return scaler.transform(np.array(stats).reshape(1, -1))
+
+# Load in the models and scalers
+bench_model = load_model(f'models{os.path.sep}bench_model.pickle')
+bench_scaler = joblib.load(f'models{os.path.sep}bench_scaler')
+squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
+squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
+deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
+deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
 
 
 @app.route('/', methods=['GET', 'POST'])
