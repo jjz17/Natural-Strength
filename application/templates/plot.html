@@ -11,6 +11,16 @@
 {% extends 'layout.html' %} {% block title %}Metric Charts{% endblock %} {% block content %}
 <h2>Metric Charts</h2>
 
+<div class="dropdown">
+    <button class="dropbtn">Dropdown</button>
+    <div class="dropdown-content">
+        <a href="{{ url_for('chart_metric', metric='weight') }}"><i class="fas fa-chart-line"></i>Charts</a>
+        <a href="{{ url_for('chart_metric', metric='squat') }}"><i class="fas fa-chart-line"></i>Charts</a>
+        <a href="{{ url_for('chart_metric', metric='bench') }}"><i class="fas fa-chart-line"></i>Charts</a>
+        <a href="{{ url_for('chart_metric', metric='deadlift') }}"><i class="fas fa-chart-line"></i>Charts</a>
+    </div>
+</div>
+
 <body>
     <!-- <h1>{{ title|title }}</h1> -->
     {{ plot|safe }}
