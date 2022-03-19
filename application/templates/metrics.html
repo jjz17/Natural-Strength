@@ -1,7 +1,7 @@
 {% extends 'layout.html' %} {% block title %}Upload Metrics{% endblock %} {% block content %}
 <h2>Upload Metrics</h2>
 <div class="update">
-    <form action="{{ url_for('metrics') }}" method="post" autocomplete="off">
+    <form action="{{ url_for('metrics', metric='none') }}" method="post" autocomplete="off">
         <label for="weight">
             <i class="fas fa-weight-hanging"></i>
         </label>
@@ -25,6 +25,14 @@
         <div class="msg">{{ msg }}</div>
         <input type="submit" value="Upload">
     </form>
+</div>
+<div class="dropdown">
+    <button class="dropbtn">Dropdown</button>
+    <div class="dropdown-content">
+        <a href="{{ url_for('metrics', metric='squat') }}"><i class="fas fa-chart-line"></i>Squat</a>
+        <a href="{{ url_for('metrics', metric='bench') }}"><i class="fas fa-chart-line"></i>Bench</a>
+        <a href="{{ url_for('metrics', metric='deadlift') }}"><i class="fas fa-chart-line"></i>Deadlift</a>
+    </div>
 </div>
 <div>
     {{ bench_pred }}

@@ -236,8 +236,9 @@ def update():
 
 
 # Metrics insert page, only accessible for loggedin users
-@app.route('/metrics', methods=['GET', 'POST'])
-def metrics():
+# @app.route('/metrics', methods=['GET', 'POST'])
+@app.route('/metrics/<metric>', methods=['GET', 'POST'])
+def metrics(metric):
     # Check if user is loggedin
     if 'loggedin' in session:
         id = session['id']
