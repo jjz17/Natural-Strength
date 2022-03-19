@@ -5,7 +5,8 @@ from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import numpy as np
 
-from datetime import date
+from datetime import date, datetime
+from dateutil.relativedelta import relativedelta
 import io
 import os
 import _pickle as cPickle
@@ -17,6 +18,8 @@ from application import forms
 from application.base import Session
 from application.user import User
 from application.user_metrics import UserMetrics
+
+today = date.today()
 
 # Uncomment to run app through this file (main.py)
 # app = Flask(__name__)
@@ -298,8 +301,27 @@ def metrics(metric):
             msg = 'Please fill out the form!'
 
         pred = ''
+        difference_in_years = None
+        stats = None
         # Check if metric prediction is requested
         if metric != 'none':
+            stats = db_session.query(UserMetrics) \
+                .order_by(UserMetrics.date.desc())
+            if stats.count() > 0:
+                stats = stats[0]
+                difference_in_years = relativedelta(today, stats.date).years
+                print(today)
+
+                if metric == 'squat':
+                    pass
+                elif metric == 'bench':
+                    pass
+                elif metric == 'deadlift':
+                    pass
+                else:
+                    pass
+            else:
+                pred = 'No data'
 
         # bench_stats = [age_input, weight_input, squat_input, deadlift_input, f_sex, m_sex]
             bench_stats = [1, 1, 1, 1, 1, 0]
@@ -308,7 +330,8 @@ def metrics(metric):
         # bench_pred = f'{bench_pred}'
 
         # Show the update form with message (if any)
-        return render_template('metrics.html', msg=msg, pred=pred)
+        # return render_template('metrics.html', msg=msg, pred=pred)
+        return f'{today}'
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
