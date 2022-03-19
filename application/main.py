@@ -297,14 +297,18 @@ def metrics(metric):
             # Form is empty... (no POST data)
             msg = 'Please fill out the form!'
 
+        pred = ''
+        # Check if metric prediction is requested
+        if metric != 'none':
+
         # bench_stats = [age_input, weight_input, squat_input, deadlift_input, f_sex, m_sex]
-        bench_stats = [1, 1, 1, 1, 1, 0]
-        bench_stats_scaled = scale_stats(bench_scaler, bench_stats)
-        bench_pred = bench_model.predict(np.array(bench_stats_scaled).reshape(1, -1))[0]
+            bench_stats = [1, 1, 1, 1, 1, 0]
+            bench_stats_scaled = scale_stats(bench_scaler, bench_stats)
+            pred = bench_model.predict(np.array(bench_stats_scaled).reshape(1, -1))[0]
         # bench_pred = f'{bench_pred}'
 
         # Show the update form with message (if any)
-        return render_template('metrics.html', msg=msg, bench_pred = bench_pred)
+        return render_template('metrics.html', msg=msg, pred=pred)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
