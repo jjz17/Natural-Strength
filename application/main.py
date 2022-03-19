@@ -52,10 +52,10 @@ def scale_stats(scaler, stats: list):
 # # Load in the models and scalers
 bench_model = load_model(f'models{os.path.sep}bench_model.pickle')
 bench_scaler = joblib.load(f'models{os.path.sep}bench_scaler')
-# squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
-# squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
-# deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
-# deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
+squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
+squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
+deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
+deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -258,7 +258,7 @@ def metrics(metric):
 
         # Output message if something goes wrong...
         msg = ''
-        user = None
+        user = db_session.query(User).get(id)
         # Check if "username", "password" and "email" POST requests exist (user submitted form)
         if request.method == 'POST' and 'weight' in request.form and 'squat' in request.form and 'bench' in request.form and 'deadlift' in request.form:
             # Create variables for easy access
@@ -285,7 +285,6 @@ def metrics(metric):
             # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', deadlift):
             #     msg = 'Deadlift must be a positive number'
             # else:
-            user = db_session.query(User).get(id)
             metrics_query = db_session.query(UserMetrics) \
                 .filter((UserMetrics.date == date) & (UserMetrics.user == user))
 
@@ -317,30 +316,42 @@ def metrics(metric):
                 .order_by(UserMetrics.date.desc())
             if stats.count() > 0:
                 stats = stats[0]
-                difference_in_years = relativedelta(today, stats.date).years
-                print(today)
+
+                # Parse out stats
+                weight = stats.weight
+                squat = stats.squat
+                bench = stats.bench
+                deadlift = stats.deadlift
+
+                # Calculate user age
+                age = relativedelta(today, user.birth_date).years
+
+                # Determine user sex
+                male = 0
+                female = 0
+                if user.sex == 0:
+                    male = 1
+                elif user.sex == 1:
+                    female = 1
+                else:
+                    pass
 
                 if metric == 'squat':
-                    pass
+                    input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
+                    pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
                 elif metric == 'bench':
-                    pass
+                    input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
+                    pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
                 elif metric == 'deadlift':
-                    pass
+                    input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
+                    pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
                 else:
                     pass
             else:
                 pred = 'No data'
 
-        # bench_stats = [age_input, weight_input, squat_input, deadlift_input, f_sex, m_sex]
-            bench_stats = [1, 1, 1, 1, 1, 0]
-            bench_stats_scaled = scale_stats(bench_scaler, bench_stats)
-            pred = bench_model.predict(
-                np.array(bench_stats_scaled).reshape(1, -1))[0]
-        # bench_pred = f'{bench_pred}'
-
         # Show the update form with message (if any)
-        # return render_template('metrics.html', msg=msg, pred=pred)
-        return f'{difference_in_years}'
+        return render_template('metrics.html', msg=msg, pred=pred)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
