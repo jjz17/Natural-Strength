@@ -31,17 +31,23 @@ app.secret_key = 'your secret key'
 plt.switch_backend('Agg')
 
 # Helper functions
+
+
 def lbs_to_kg(lbs):
     return round(float(lbs) * 0.453592, 2)
+
 
 def kg_to_lbs(kg):
     return round(float(kg) * 2.20462, 2)
 
+
 def load_model(model_file: str):
     return cPickle.load(open(model_file, 'rb'))
 
+
 def scale_stats(scaler, stats: list):
     return scaler.transform(np.array(stats).reshape(1, -1))
+
 
 # Load in the models and scalers
 bench_model = load_model(f'models{os.path.sep}bench_model.pickle')
@@ -101,12 +107,13 @@ def register():
     # Output message if something goes wrong...
     msg = ''
     # Check if "username", "password" and "email" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'birth_date' in request.form and 'email' in request.form:
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'birth_date' in request.form and 'email' in request.form and 'sex' in request.form:
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
         birth_date = request.form['birth_date']
         email = request.form['email']
+        sex = request.form['sex']
 
         db_session = Session()
         user_query = db_session.query(User) \
@@ -281,7 +288,7 @@ def metrics(metric):
             user = db_session.query(User).get(id)
             metrics_query = db_session.query(UserMetrics) \
                 .filter((UserMetrics.date == date) & (UserMetrics.user == user))
-            
+
             # If entry exists for this day, update it
             if metrics_query.count() == 1:
                 metrics = metrics_query[0]
@@ -291,7 +298,8 @@ def metrics(metric):
                 metrics.deadlift = deadlift
             # Else insert new metrics record
             else:
-                metrics = UserMetrics(user, weight, squat, bench, deadlift, date)
+                metrics = UserMetrics(
+                    user, weight, squat, bench, deadlift, date)
                 db_session.add(metrics)
             db_session.commit()
             db_session.close()
@@ -326,7 +334,8 @@ def metrics(metric):
         # bench_stats = [age_input, weight_input, squat_input, deadlift_input, f_sex, m_sex]
             bench_stats = [1, 1, 1, 1, 1, 0]
             bench_stats_scaled = scale_stats(bench_scaler, bench_stats)
-            pred = bench_model.predict(np.array(bench_stats_scaled).reshape(1, -1))[0]
+            pred = bench_model.predict(
+                np.array(bench_stats_scaled).reshape(1, -1))[0]
         # bench_pred = f'{bench_pred}'
 
         # Show the update form with message (if any)
