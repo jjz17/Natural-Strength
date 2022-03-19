@@ -49,13 +49,13 @@ def scale_stats(scaler, stats: list):
     return scaler.transform(np.array(stats).reshape(1, -1))
 
 
-# Load in the models and scalers
+# # Load in the models and scalers
 bench_model = load_model(f'models{os.path.sep}bench_model.pickle')
 bench_scaler = joblib.load(f'models{os.path.sep}bench_scaler')
-squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
-squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
-deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
-deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
+# squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
+# squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
+# deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
+# deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -129,7 +129,7 @@ def register():
         elif not username or not password or not email:
             msg = 'Please fill out the form!'
         else:
-            user = User(username, password, birth_date, email)
+            user = User(username, password, birth_date, email, sex)
             db_session.add(user)
             db_session.commit()
             db_session.close()
@@ -340,7 +340,7 @@ def metrics(metric):
 
         # Show the update form with message (if any)
         # return render_template('metrics.html', msg=msg, pred=pred)
-        return f'{today}'
+        return f'{difference_in_years}'
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 

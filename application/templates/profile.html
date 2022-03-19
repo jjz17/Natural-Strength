@@ -39,6 +39,26 @@
             <td>Email:</td>
             <td>{{ user.email }}</td>
         </tr>
+
+        {% if user.sex == 0%}
+        <tr>
+            <td>Sex:</td>
+            <td>Male</td>
+        </tr>
+
+        {% elif user.sex == 1 %}
+        <tr>
+            <td>Sex:</td>
+            <td>Female</td>
+        </tr>
+
+        {% else %}
+        <tr>
+            <td>Sex:</td>
+            <td>N/A</td>
+        </tr>
+
+        {% endif %}
     </table>
 </div>
 <div>
