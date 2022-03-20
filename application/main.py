@@ -19,8 +19,6 @@ from application.base import Session
 from application.user import User
 from application.user_metrics import UserMetrics
 
-today = date.today()
-
 # Uncomment to run app through this file (main.py)
 # app = Flask(__name__)
 
@@ -264,7 +262,7 @@ def metrics(metric):
             squat = request.form['squat']
             bench = request.form['bench']
             deadlift = request.form['deadlift']
-            date = request.form['date']
+            entry_date = request.form['date']
 
             # Convert metrics to be inserted
             if session['units'] == 'METRIC':
@@ -296,7 +294,7 @@ def metrics(metric):
             # Else insert new metrics record
             else:
                 metrics = UserMetrics(
-                    user, weight, squat, bench, deadlift, date)
+                    user, weight, squat, bench, deadlift, entry_date)
                 db_session.add(metrics)
             db_session.commit()
             db_session.close()
@@ -306,7 +304,6 @@ def metrics(metric):
             msg = 'Please fill out the form!'
 
         pred = ''
-        difference_in_years = None
         stats = None
         # Check if metric prediction is requested
         if metric != 'none':
@@ -321,7 +318,15 @@ def metrics(metric):
                 bench = stats.bench
                 deadlift = stats.deadlift
 
+                # Convert metrics data to kg for models
+                # if session['units'] == 'STANDARD':
+                weight = lbs_to_kg(weight)
+                squat = lbs_to_kg(squat)
+                bench = lbs_to_kg(bench)
+                deadlift = lbs_to_kg(deadlift)
+
                 # Calculate user age
+                today = date.today()
                 age = relativedelta(today, user.birth_date).years
 
                 # Determine user sex
@@ -344,7 +349,13 @@ def metrics(metric):
                     input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
                     pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
                 else:
-                    pass
+                    pred = 'Invalid lift'
+                
+                # Convert prediction to lbs if necessary
+                if session['units'] == 'STANDARD' and type(pred) == np.float64:
+                # if session['units'] == 'STANDARD':
+                    pred = kg_to_lbs(pred)
+                    # pred = type(pred)
             else:
                 pred = 'No data'
 
