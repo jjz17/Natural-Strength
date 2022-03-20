@@ -30,8 +30,9 @@ app.secret_key = 'your secret key'
 # Avoid multithreading MatPlotLib GUI error
 plt.switch_backend('Agg')
 
-# Helper functions
-
+'''
+Helper Functions
+'''
 
 def lbs_to_kg(lbs):
     return round(float(lbs) * 0.453592, 2)
@@ -94,9 +95,6 @@ def login():
 @app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
-    # session.pop('loggedin', None)
-    # session.pop('id', None)
-    # session.pop('username', None)
     session.clear()
     # Redirect to login page
     return redirect(url_for('login'))
