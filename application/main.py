@@ -49,12 +49,12 @@ def scale_stats(scaler, stats: list):
 
 
 # # Load in the models and scalers
-bench_model = load_model(f'models{os.path.sep}bench_model.pickle')
-bench_scaler = joblib.load(f'models{os.path.sep}bench_scaler')
-squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
-squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
-deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
-deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
+# bench_model = load_model(f'models{os.path.sep}bench_model.pickle')
+# bench_scaler = joblib.load(f'models{os.path.sep}bench_scaler')
+# squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
+# squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
+# deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
+# deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -193,10 +193,6 @@ def update():
             username = request.form['username']
             password = request.form['password']
             birth_date = request.form['birth_date']
-            # weight = request.form['weight']
-            # squat = request.form['squat']
-            # bench = request.form['bench']
-            # deadlift = request.form['deadlift']
             email = request.form['email']
 
             # Validation checks
@@ -208,14 +204,6 @@ def update():
                 msg = 'Please fill out the form!'
             # elif not re.match(r'^\+?(0|[1-9]\d*)$', birth_date):
                 # msg = 'Birth date must be a valid date in the form MM/DD/YYYY'
-            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', weight):
-            #     msg = 'Weight must be a positive number'
-            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', squat):
-            #     msg = 'Squat must be a positive number'
-            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', bench):
-            #     msg = 'Bench must be a positive number'
-            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', deadlift):
-            #     msg = 'Deadlift must be a positive number'
             else:
              # User doesn't exist and the form data is valid, now update data into users table
                 user = db_session.query(User).get(id)
@@ -389,7 +377,12 @@ def plot_metric(metric):
     ax.plot(dates, metric_list)
 
     ax.set_xlabel('Time')
-    ax.set_ylabel(metric.title())
+
+    if session['units'] == 'STANDARD':
+        unit = 'Lbs'
+    else:
+        unit = 'Kg'
+    ax.set_ylabel(f'{metric.title()} ({unit})')
     # ax.set_title(f'There are {points} data points!')
     ax.grid(True)
 
