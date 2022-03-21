@@ -1,5 +1,29 @@
-# 🔨Build Your Natural Strength🔨
+# 🔨Consolidate Your Natural Strength🔨
 _**Natural Strength Consolidated is an interactive website that promotes the sport of powerlifting. It offers a suite of progress tracking, data visualization, and ML-powered goal-setting tools to encourage and motivate users to reach their maximum potential. There are also regular updates on events in current international natural powerlifting news**_
+
+## Problem Statement/Motivation
+https://barbend.com/social-media-training-impact/
+
+## To Run
+cd into pythonlogin -> python main.py or flask run
+python run.py
+
+## Venv
+#### Create virtual environment
+python3 -m venv venv
+#### Activate virtual environment
+source venv/bin/activate
+
+## To solve access denied error 403
+https://stackoverflow.com/questions/19071512/socket-error-errno-48-address-already-in-use
+#### Command line script
+sudo lsof -i:5000
+kill -9 (PID)
+
+
+
+
+
 
 ## Resources
 
@@ -34,22 +58,3 @@ https://github.com/Princekrampah/FlaskExpenseTracker
 
 ### Dropdown menu tutorial
 https://www.w3schools.com/howto/howto_css_dropdown.asp
-
-## Introduction 
-https://barbend.com/social-media-training-impact/
-
-Discuss
-
-## To Run
-cd into pythonlogin -> python main.py or flask run
-python run.py
-
-## Venv
-python3 -m venv venv
-source venv/bin/activate
-
-## To solve access denied error 403
-https://stackoverflow.com/questions/19071512/socket-error-errno-48-address-already-in-use
-
-sudo lsof -i:5000
-kill -9 (PID)
