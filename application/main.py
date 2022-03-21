@@ -174,11 +174,6 @@ def profile():
     return redirect(url_for('login'))
 
 
-@app.route('/test')
-def test():
-    return session['units']
-
-
 # Profile update page, only accessible for loggedin users
 @app.route('/update', methods=['GET', 'POST'])
 def update():
@@ -365,16 +360,6 @@ def metrics(metric):
     return redirect(url_for('login'))
 
 
-@app.route('/wtforms', methods=['GET', 'POST'])
-def wtforms():
-    name = None
-    form = forms.NamerForm()
-    if form.validate_on_submit():
-        name = form.name.data
-        form.name.data = ''
-    return render_template('wtforms.html', name=name, form=form)
-
-
 # Displays the plot of the requested user metric
 @app.route('/chart/<metric>', methods=['GET'])
 def chart_metric(metric):
@@ -414,19 +399,25 @@ def plot_metric(metric):
     # Make room for x and y labels
     plt.tight_layout()
 
-    # fig, (ax1, ax2) = plt.subplots(1, 2)
-    # fig.suptitle('Horizontally stacked subplots')
-    # x = data[:, 0]
-    # y = data[:, 1]
-    # ax1.plot(x, y)
-    # ax2.plot(x, -y)
-
     img = io.StringIO()
     fig.savefig(img, format='svg')
     # clip off the xml headers from the image
     svg_img = '<svg' + img.getvalue().split('<svg')[1]
 
     return svg_img
+
+'''
+--------------------Experiemental pages------------------------
+'''
+
+@app.route('/wtforms', methods=['GET', 'POST'])
+def wtforms():
+    name = None
+    form = forms.NamerForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        form.name.data = ''
+    return render_template('wtforms.html', name=name, form=form)
 
 
 @app.route('/plot/<int:points>', methods=['GET'])
