@@ -42,6 +42,7 @@ Discuss
 
 ## To Run
 cd into pythonlogin -> python main.py or flask run
+python run.py
 
 ## Venv
 python3 -m venv venv
