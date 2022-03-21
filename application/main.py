@@ -352,10 +352,10 @@ def metrics(metric):
                     pred = 'Invalid lift'
                 
                 # Convert prediction to lbs if necessary
-                if session['units'] == 'STANDARD' and type(pred) == np.float64:
-                # if session['units'] == 'STANDARD':
-                    pred = kg_to_lbs(pred)
-                    # pred = type(pred)
+                if type(pred) == np.float64:
+                    pred = round(pred, 2)
+                    if session['units'] == 'STANDARD':
+                        pred = kg_to_lbs(pred)
             else:
                 pred = 'No data'
 
