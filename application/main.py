@@ -143,7 +143,7 @@ def home():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        return render_template('home.html', username=session['username'])
+        return render_template('home.html', username=session['username'].title())
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -376,7 +376,7 @@ def plot_metric(metric):
 
     ax.plot(dates, metric_list)
 
-    ax.set_xlabel('Time')
+    ax.set_xlabel('Date')
 
     if session['units'] == 'STANDARD':
         unit = 'Lbs'
