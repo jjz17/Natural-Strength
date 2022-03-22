@@ -1,8 +1,11 @@
-{% extends 'layout.html' %}
-
-{% block title %}Home{% endblock %}
-
-{% block content %}
+{% extends 'layout.html' %} {% block title %}Home{% endblock %} {% block content %}
 <h2>Home Page</h2>
 <p>Welcome back, {{ username }}!</p>
-{% endblock %}
+{% if no_metrics_for_today %}
+<p>
+    Would you like to upload your metrics for today?
+</p>
+{% else %}
+<p>
+    You have uploaded metrics for today! Way to go!
+</p>{% endif %}{% endblock %}

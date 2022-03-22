@@ -142,8 +142,19 @@ def register():
 def home():
     # Check if user is loggedin
     if 'loggedin' in session:
-        # User is loggedin show them the home page
-        return render_template('home.html', username=session['username'].title())
+        db_session = Session()
+        user_metric = db_session.query(UserMetrics) \
+        .filter(UserMetrics.user_id == session['id']) \
+        .order_by(UserMetrics.date.desc()) \
+        .first()
+
+        no_metrics_for_today = True
+        # Check if the most recent metrics are for today
+        if user_metric.date == date.today():
+            no_metrics_for_today = False
+
+        # return str(user_metric.date)
+        return render_template('home.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -205,7 +216,7 @@ def update():
             # elif not re.match(r'^\+?(0|[1-9]\d*)$', birth_date):
                 # msg = 'Birth date must be a valid date in the form MM/DD/YYYY'
             else:
-             # User doesn't exist and the form data is valid, now update data into users table
+             # Update data into users table
                 user = db_session.query(User).get(id)
                 user.username = username
                 user.password = password
@@ -264,8 +275,10 @@ def metrics(metric):
             # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', deadlift):
             #     msg = 'Deadlift must be a positive number'
             # else:
+
+            today = date.today()
             metrics_query = db_session.query(UserMetrics) \
-                .filter((UserMetrics.date == date) & (UserMetrics.user == user))
+                .filter((UserMetrics.date == today) & (UserMetrics.user == user))
 
             # If entry exists for this day, update it
             if metrics_query.count() == 1:
@@ -309,7 +322,6 @@ def metrics(metric):
                 deadlift = lbs_to_kg(deadlift)
 
                 # Calculate user age
-                today = date.today()
                 age = relativedelta(today, user.birth_date).years
 
                 # Determine user sex
