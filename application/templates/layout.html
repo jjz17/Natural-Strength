@@ -12,7 +12,7 @@
 <body class="loggedin">
     <nav class="navtop">
         <div>
-            <h1>Natural Strength Consolidated</h1>
+            <h1><a href="{{ url_for('home') }}">Natural Strength Consolidated</a></h1>
             <a href="{{ url_for('home') }}"><i class="fas fa-home"></i>Home</a>
             <a href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i>Profile</a>
             <a href="{{ url_for('metrics', metric='none') }}"><i class="fas fa-pen"></i>Metrics</a>
