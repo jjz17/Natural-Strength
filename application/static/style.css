@@ -121,6 +121,10 @@ body {
     border: 0;
 }
 
+.second {
+    background-color: grey;
+}
+
 .navtop div {
     display: flex;
     margin: 0 auto;
