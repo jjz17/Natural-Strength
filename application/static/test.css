@@ -1,0 +1,91 @@
+* {
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "segoe ui", roboto, oxygen, ubuntu, cantarell, "fira sans", "droid sans", "helvetica neue", Arial, sans-serif;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background-color: slategray;
+    margin: 0;
+}
+
+.login,
+.register {
+    width: 400px;
+    background-color: whitesmoke;
+    box-shadow: 0 0 100px 0 rgba(0, 0, 0, 0.3);
+    margin: 100px auto;
+}
+
+.login h1,
+.register h1 {
+    text-align: center;
+    color: slategray;
+    font-size: 30px;
+    padding: 20px 0 20px 0;
+    border-bottom: 3px solid slategray;
+}
+
+.login .links,
+.register .links {
+    display: flex;
+    padding: 0 15px;
+}
+
+.login .links a,
+.register .links a {
+    color: slategray;
+    text-decoration: none;
+    display: inline-flex;
+    padding: 0 10px 10px 10px;
+    font-weight: bold;
+}
+
+
+/* Changes login/register text color when hovering */
+
+.login .links a:hover,
+.register .links a:hover {
+    color: lightgray;
+}
+
+
+/* Adds bottom border to login/register buttons when selected */
+
+.login .links a.active,
+.register .links a.active {
+    border-bottom: 3px solid #3274d6;
+    color: #3274d6;
+}
+
+.login form,
+.register form,
+.content form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.login form label,
+.register form label,
+.content form label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: #3274d6;
+    color: #ffffff;
+}
+
+.login form input,
+.register form input {
+    width: 310px;
+    height: 50px;
+    border: 3px solid #dee0e4;
+    margin-bottom: 20px;
+    padding: 0 15px;
+}
