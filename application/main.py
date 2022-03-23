@@ -147,14 +147,16 @@ def home():
         .filter(UserMetrics.user_id == session['id']) \
         .order_by(UserMetrics.date.desc()) \
         .first()
+        db_session.close()
 
         no_metrics_for_today = True
         # Check if the most recent metrics are for today
-        if user_metric.date == date.today():
-            no_metrics_for_today = False
+        if user_metric != None:
+            if user_metric.date == date.today():
+                no_metrics_for_today = False
 
         # return str(user_metric.date)
-        return render_template('home.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today)
+        return render_template('home.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 

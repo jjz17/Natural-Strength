@@ -8,4 +8,7 @@
 {% else %}
 <p>
     You have uploaded metrics for today! Way to go!
-</p>{% endif %}{% endblock %}
+</p>{% endif %} {% if last_record != None %}
+<p>
+    Current weight: {{ last_record.weight }}
+</p>{% endif %} {% endblock %}
