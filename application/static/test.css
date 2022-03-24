@@ -112,3 +112,17 @@ form input[type="submit"] {
     background-color: #2868c7;
     transition: background-color 0.2s;
 }
+
+.navtop {
+    height: 60px;
+    width: 100%;
+    border: 0;
+}
+
+.navtop.first {
+    background-color: #2f3947;
+}
+
+.navtop.second {
+    background-color: grey;
+}
