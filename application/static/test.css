@@ -84,12 +84,37 @@ body {
     color: #ffffff;
 }
 
+
+/* Styling for labels of radio button selections */
+
+.login form label.radio,
+.register form label.radio,
+.content form label.radio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: black;
+    color: #ffffff;
+}
+
 .login form input,
 .register form input,
 .content form input {
     width: 310px;
     height: 50px;
     border: 3px solid #dee0e4;
+    margin-bottom: 20px;
+    padding: 0 15px;
+}
+
+.login form input[type="radio"],
+.register form input[type="radio"],
+.content form input[type="radio"] {
+    width: 30px;
+    height: 50px;
+    border: 3px solid black;
     margin-bottom: 20px;
     padding: 0 15px;
 }
