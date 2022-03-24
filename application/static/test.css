@@ -85,7 +85,7 @@ body {
 }
 
 
-/* Styling for labels of radio button selections */
+/* Styling for labels of radio button labels */
 
 .login form label.radio,
 .register form label.radio,
@@ -93,7 +93,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50px;
+    width: 65.5px;
     height: 50px;
     background-color: black;
     color: #ffffff;
@@ -113,7 +113,7 @@ body {
 .register form input[type="radio"],
 .content form input[type="radio"] {
     width: 30px;
-    height: 50px;
+    height: 45px;
     border: 3px solid black;
     margin-bottom: 20px;
     padding: 0 15px;
@@ -145,7 +145,7 @@ form input[type="submit"] {
     border: 0;
 }
 
-.navtop.first {
+.navtop.first div {
     background-color: #2f3947;
 }
 
@@ -155,8 +155,8 @@ form input[type="submit"] {
 
 .navtop div {
     display: flex;
-    margin: 0 auto;
-    width: 1000px;
+    /* margin: 0 auto; */
+    /* width: 1000px; */
     height: 100%;
 }
 
@@ -164,6 +164,7 @@ form input[type="submit"] {
 .navtop div a {
     display: inline-flex;
     align-items: center;
+    /* align-content: center; */
 }
 
 
@@ -198,6 +199,7 @@ form input[type="submit"] {
 
 body.loggedin {
     background-color: #f3f4f7;
+    text-align: center;
 }
 
 .content {
