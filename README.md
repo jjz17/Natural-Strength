@@ -1,6 +1,11 @@
 # 🔨Consolidate Your Natural Strength🔨
 _**Natural Strength Consolidated is an interactive website that promotes the sport of powerlifting. It offers a suite of progress tracking, data visualization, and ML-powered goal setting tools to encourage and motivate users to reach their maximum potential. There are also regular updates on events in current international natural powerlifting news**_
 
+## Technologies:
+Machine Learning
+Full-stack development
+MySQL Backend Database
+
 ## Problem Statement/Motivation
 https://barbend.com/social-media-training-impact/
 
