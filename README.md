@@ -3,14 +3,16 @@ _**Natural Strength Consolidated is an interactive website that promotes the spo
 
 ## Technologies:
 Machine Learning
-Full-stack development
+Full-Stack Development
 MySQL Backend Database
+Bootstrap Styling
 
 ## Problem Statement/Motivation
 https://barbend.com/social-media-training-impact/
 
-## To Run
+## To Run Test App
 cd into pythonlogin -> python main.py or flask run
+## To Run Main App
 python run.py
 
 ## Venv

@@ -56,6 +56,9 @@ def scale_stats(scaler, stats: list):
 # deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
 # deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
 
+# Global variable
+today = date.today()
+
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -278,7 +281,6 @@ def metrics(metric):
             #     msg = 'Deadlift must be a positive number'
             # else:
 
-            today = date.today()
             metrics_query = db_session.query(UserMetrics) \
                 .filter((UserMetrics.date == today) & (UserMetrics.user == user))
 
