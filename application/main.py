@@ -419,6 +419,11 @@ def plot_metric(metric):
 --------------------Experiemental pages------------------------
 '''
 
+@app.route('/boot')
+def boot():
+    return render_template('signin.html')
+
+
 @app.route('/wtforms', methods=['GET', 'POST'])
 def wtforms():
     name = None
