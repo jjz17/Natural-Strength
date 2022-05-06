@@ -90,7 +90,8 @@ def login():
             # User doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
     # Show the login form with message (if any)
-    return render_template('index.html', msg=msg)
+    # return render_template('index.html', msg=msg)
+    return render_template('signin.html', msg=msg)
 
 
 @app.route('/logout')
@@ -137,7 +138,8 @@ def register():
         # Form is empty... (no POST data)
         msg = 'Please fill out the form!'
     # Show registration form with message (if any)
-    return render_template('register.html', msg=msg)
+    # return render_template('register.html', msg=msg)
+    return render_template('regist.html', msg=msg)
 
 
 # Home page, only accessible for loggedin users
