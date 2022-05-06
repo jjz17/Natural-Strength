@@ -423,7 +423,7 @@ def plot_metric(metric):
 
 @app.route('/boot')
 def boot():
-    return render_template('dashboard-layout.html')
+    return render_template('chart.html')
 
 
 @app.route('/wtforms', methods=['GET', 'POST'])
