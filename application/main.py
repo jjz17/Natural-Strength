@@ -188,7 +188,8 @@ def profile():
             units = request.form['units']
             session['units'] = units
         # Show the profile page with user info
-        return render_template('profile.html', user=user)
+        # return render_template('profile.html', user=user)
+        return render_template('profilepage.html', user=user)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
