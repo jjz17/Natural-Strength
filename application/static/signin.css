@@ -1,0 +1,71 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f5f5f5;
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.form-signin .checkbox {
+    font-weight: 400;
+}
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.checkbox {
+    margin-top: 10px;
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    padding: 0 15px;
+}
+
+.links a {
+    color: slategray;
+    text-decoration: none;
+    display: inline-flex;
+    padding: 0 10px 10px 10px;
+    font-weight: bold;
+}
+
+
+/* Changes login/register text color when hovering */
+
+.links a:hover {
+    color: lightgray;
+}
+
+
+/* Adds bottom border to login/register buttons when selected */
+
+.links a.active {
+    border-bottom: 3px solid #3274d6;
+    color: #3274d6;
+}

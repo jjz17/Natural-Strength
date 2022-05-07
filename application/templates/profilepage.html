@@ -1,0 +1,83 @@
+{% extends 'dashboard-layout.html' %} {% block title %}Home{% endblock %} {% block sidebar %}
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ url_for('home') }}">
+        <span data-feather="home"></span> Dashboard
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" href="{{ url_for( 'profile') }}">
+        <span data-feather="users"></span> Profile
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for( 'metrics', metric='none') }}">
+        <span data-feather="file"></span> Metrics
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for( 'chart_metric', metric='weight' ) }}">
+        <span data-feather="bar-chart-2"></span> Charts
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">
+        <span data-feather="layers"></span> Integrations
+    </a>
+</li>{% endblock %} {% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Dashboard</h1>
+</div>
+
+<div>
+    <p>Your account details are below:</p>
+    <table>
+        <tr>
+            <td>Username:</td>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>{{ user.password }}</td>
+        </tr>
+        <tr>
+            <td>Birth Date:</td>
+            <td>{{ user.birth_date }}</td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>{{ user.email }}</td>
+        </tr>
+
+        {% if user.sex == 0%}
+        <tr>
+            <td>Sex:</td>
+            <td>Male</td>
+        </tr>
+
+        {% elif user.sex == 1 %}
+        <tr>
+            <td>Sex:</td>
+            <td>Female</td>
+        </tr>
+
+        {% else %}
+        <tr>
+            <td>Sex:</td>
+            <td>N/A</td>
+        </tr>
+
+        {% endif %}
+    </table>
+</div>
+
+
+<h2>Section title</h2>
+<div class="table-responsive">
+</div>
+<div class="row">
+    <div class="col">a</div>
+    <div class="col">b</div>
+    <div class="col">c</div>
+    <div class="col">c</div>
+</div>
+{% endblock %}

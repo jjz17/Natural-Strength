@@ -91,7 +91,7 @@ def login():
             msg = 'Incorrect username/password!'
     # Show the login form with message (if any)
     # return render_template('index.html', msg=msg)
-    return render_template('signin.html', msg=msg)
+    return render_template('loginpage.html', msg=msg)
 
 
 @app.route('/logout')
@@ -139,7 +139,7 @@ def register():
         msg = 'Please fill out the form!'
     # Show registration form with message (if any)
     # return render_template('register.html', msg=msg)
-    return render_template('regist.html', msg=msg)
+    return render_template('registerpage.html', msg=msg)
 
 
 # Home page, only accessible for loggedin users
@@ -363,7 +363,8 @@ def metrics(metric):
                 pred = 'No data'
 
         # Show the update form with message (if any)
-        return render_template('metrics.html', msg=msg, pred=pred)
+        # return render_template('metrics.html', msg=msg, pred=pred)
+        return render_template('metricspage.html', msg=msg, pred=pred)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -373,7 +374,8 @@ def metrics(metric):
 def chart_metric(metric):
     title = f'Your Custom {metric.title()} Plot'
     plot = plot_metric(metric)
-    return render_template('plot.html', title=title, plot=plot)
+    # return render_template('plot.html', title=title, plot=plot)
+    return render_template('chart.html', title=title, plot=plot)
 
 
 def plot_metric(metric):
