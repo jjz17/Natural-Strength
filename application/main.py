@@ -161,7 +161,8 @@ def home():
                 no_metrics_for_today = False
 
         # return str(user_metric.date)
-        return render_template('home.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric)
+        # return render_template('home.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric)
+        return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
