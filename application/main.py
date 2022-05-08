@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import joblib
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -367,6 +367,11 @@ def metrics(metric):
         return render_template('metricspage.html', msg=msg, pred=pred)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+
+@app.route('/data/<metric>', methods=['GET'])
+def data(metric):
+    return jsonify({'results': None})
 
 
 # Displays the plot of the requested user metric
