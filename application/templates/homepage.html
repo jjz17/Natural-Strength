@@ -40,14 +40,14 @@ This week
 
 
 <h2>Welcome back, {{ username }}!</h2>
-<div class="table-responsive">
+<!-- <div class="table-responsive">
 </div>
 <div class="row">
     <div class="col">a</div>
     <div class="col">b</div>
     <div class="col">c</div>
     <div class="col">c</div>
-</div>
+</div> -->
 
 {% if no_metrics_for_today %}
 <p>
@@ -62,6 +62,21 @@ This week
 </p>{% endif %}
 
 <div class="card-group">
+    <div class="card">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            {% if no_metrics_for_today %}
+            <h5 class="card-title">Would you like to upload your metrics for today?</h5>
+            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+
+            {% else %}
+            <h5 class="card-title">You have uploaded metrics for today! Way to go!</h5>
+            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            {% endif %}
+        </div>
+    </div>
     <div class="card">
         <img src="..." class="card-img-top" alt="...">
         <div class="card-body">
