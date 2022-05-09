@@ -38,51 +38,42 @@
     <h1 class="h2">Metrics</h1>
 </div>
 
-<form action="{{ url_for('metrics', metric='none') }}" method="post" autocomplete="off">
-    <label for="weight">
-        <i class="fas fa-weight-hanging"></i>
-    </label>
-    <input type="number" min="0" step="0.01" name="weight" placeholder="Weight" id="weight" required>
-    <label for="squat">
-        <i class="fas fa-dumbbell"></i>
-    </label>
-    <input type="number" min="0" step="0.01" name="squat" placeholder="Squat" id="squat" required>
-    <label for="bench">
-        <i class="fas fa-dumbbell"></i>
-    </label>
-    <input type="number" min="0" step="0.01" name="bench" placeholder="Bench" id="bench" required>
-    <label for="deadlift">
-        <i class="fas fa-dumbbell"></i>
-    </label>
-    <input type="number" min="0" step="0.01" name="deadlift" placeholder="Deadlift" id="deadlift" required>
-    <label for="date">
-        <i class="fas fa-calendar"></i>
-    </label>
-    <input type="date" name="date" placeholder="Date" id="date" required>
-    <div class="msg">{{ msg }}</div>
-    <input type="submit" value="Upload">
-</form>
+<div class="card-group mb-3">
 
-<form action="{{ url_for('login') }}" method="post">
-    <h1 class="h3 mb-3 fw-normal">Please log in</h1>
+    <div class="card">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-header">Upload Metrics:</div>
+        <!-- <div class="card-body">
+            <h5 class="card-title"></h5>
+        </div> -->
+        <form action="{{ url_for('metrics', metric='none') }}" method="post" autocomplete="off">
+            <div class="form-floating">
+                <input type="number" min="0" step="0.01" name="weight" class="form-control" placeholder="Weight" id="floatingInput" required>
+                <label for="floatingInput">Weight</label>
+            </div>
+            <div class="form-floating">
+                <input type="number" min="0" step="0.01" name="squat" class="form-control" placeholder="Squat" id="squat" required>
+                <label for="floatingPassword">Squat</label>
+            </div>
+            <div class="form-floating">
+                <input type="number" min="0" step="0.01" name="bench" class="form-control" placeholder="Bench" id="bench" required>
+                <label for="floatingPassword">Bench</label>
+            </div>
+            <div class="form-floating">
+                <input type="number" min="0" step="0.01" name="deadlift" class="form-control" placeholder="Deadlift" id="deadlift" required>
+                <label for="floatingPassword">Deadlift</label>
+            </div>
+            <div class="form-floating">
+                <input type="date" name="date" class="form-control" placeholder="Date" id="date" required>
+                <label for="floatingPassword">Date</label>
+            </div>
+            <div class="msg">{{ msg }}</div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Upload</button>
+        </form>
+        <!-- <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div> -->
+    </div>
+</div>
 
-    <div class="form-floating">
-        <input type="text" name="username" class="form-control" id="floatingInput" placeholder="Username" required>
-        <label for="floatingInput">Username</label>
-    </div>
-    <div class="form-floating">
-        <input type="text" name="password" class="form-control" id="floatingPassword" placeholder="Password" required>
-        <label for="floatingPassword">Password</label>
-    </div>
-
-    <div class="checkbox mb-3">
-        <label>
-<input type="checkbox" value="remember-me"> Remember me
-</label>
-    </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Log in</button>
-    <h3>{{ msg }}</h3>
-    <p class="mt-5 mb-3 text-muted">&copy; 2021-2022</p>
-</form>
-<!-- <h2>Section title</h2> -->
 {% endblock %}
