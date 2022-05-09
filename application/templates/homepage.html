@@ -21,6 +21,16 @@
 </li>
 <li class="nav-item">
     <a class="nav-link" href="#">
+        <span data-feather="layers"></span> Settings
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">
+        <span data-feather="layers"></span> About Us
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">
         <span data-feather="layers"></span> Integrations
     </a>
 </li>{% endblock %} {% block content %}
@@ -41,10 +51,10 @@ This week
 
 <h2>Welcome back, {{ username }}!</h2>
 
-{% if last_record != None %}
+<!-- {% if last_record != None %}
 <p>
     Current weight: {{ last_record.weight }}
-</p>{% endif %}
+</p>{% endif %} -->
 
 <div class="card-group mb-3">
     <div class="card">
@@ -61,6 +71,22 @@ This week
             <!-- <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p> -->
         </div>
         {% endif %}
+        <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div>
+    </div>
+</div>
+
+<h2 class="mb-3">Bodyweight</h2>
+
+<div class="card-group mb-3">
+    <div class="card">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <!-- <div class="card-header">Metric Upload Status:</div> -->
+        <div class="card-body">
+            <h5 class="card-title">Current: {{ last_record.weight }}</h5>
+            <!-- <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p> -->
+        </div>
         <div class="card-footer">
             <small class="text-muted">Last updated 3 mins ago</small>
         </div>
@@ -105,7 +131,7 @@ This week
     </div>
 </div>
 
-<div class="card-deck">
+<!-- <div class="card-deck">
     <div class="card">
         <img src="..." class="card-img-top" alt="...">
         <div class="card-body">
@@ -164,7 +190,7 @@ This week
             <small class="text-muted">Last updated 3 mins ago</small>
         </div>
     </div>
-</div>
+</div> -->
 
 
 {% endblock %}

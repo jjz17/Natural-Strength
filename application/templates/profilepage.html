@@ -21,63 +21,49 @@
 </li>
 <li class="nav-item">
     <a class="nav-link" href="#">
+        <span data-feather="layers"></span> Settings
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">
+        <span data-feather="layers"></span> About Us
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">
         <span data-feather="layers"></span> Integrations
     </a>
 </li>{% endblock %} {% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Dashboard</h1>
+    <h1 class="h2">Profile</h1>
 </div>
 
-<div>
-    <p>Your account details are below:</p>
-    <table>
-        <tr>
-            <td>Username:</td>
-            <td>{{ user.username }}</td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td>{{ user.password }}</td>
-        </tr>
-        <tr>
-            <td>Birth Date:</td>
-            <td>{{ user.birth_date }}</td>
-        </tr>
-        <tr>
-            <td>Email:</td>
-            <td>{{ user.email }}</td>
-        </tr>
-
-        {% if user.sex == 0%}
-        <tr>
-            <td>Sex:</td>
-            <td>Male</td>
-        </tr>
-
-        {% elif user.sex == 1 %}
-        <tr>
-            <td>Sex:</td>
-            <td>Female</td>
-        </tr>
-
-        {% else %}
-        <tr>
-            <td>Sex:</td>
-            <td>N/A</td>
-        </tr>
-
-        {% endif %}
-    </table>
+<div class="card-group mb-3">
+    <div class="card">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-header">Account Details:</div>
+        <div class="card-body">
+            <!-- <h5 class="card-title"></h5> -->
+            <p class="card-text">
+                <strong>Username</strong>: {{user.username}}</p>
+            <p class="card-text">
+                <strong>Password</strong>: {{user.password}}</p>
+            <p class="card-text">
+                <strong>Birth Date</strong>: {{user.birth_date}}</p>
+            <p class="card-text">
+                <strong>Email</strong>: {{user.email}}</p>
+            {% if user.sex == 0%}
+            <p class="card-text">
+                <strong>Sex</strong>: Male</p>
+            {% else %}
+            <p class="card-text">
+                <strong>Sex</strong>: Female</p>
+            {% endif %}
+        </div>
+        <!-- <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div> -->
+    </div>
 </div>
 
-
-<h2>Section title</h2>
-<div class="table-responsive">
-</div>
-<div class="row">
-    <div class="col">a</div>
-    <div class="col">b</div>
-    <div class="col">c</div>
-    <div class="col">c</div>
-</div>
 {% endblock %}
