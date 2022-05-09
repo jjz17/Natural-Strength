@@ -40,14 +40,6 @@ This week
 
 
 <h2>Welcome back, {{ username }}!</h2>
-<!-- <div class="table-responsive">
-</div>
-<div class="row">
-    <div class="col">a</div>
-    <div class="col">b</div>
-    <div class="col">c</div>
-    <div class="col">c</div>
-</div> -->
 
 {% if last_record != None %}
 <p>
@@ -57,14 +49,13 @@ This week
 <div class="card-group mb-3">
     <div class="card">
         <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-header">Metric Upload Status:</div>
         {% if no_metrics_for_today %}
         <div class="card-body bg-danger">
-            <h3 class="card-title">Metric Upload Status:</h3>
             <h5 class="card-title">Would you like to upload your metrics for today?</h5>
-            <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p>
+            <!-- <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p> -->
         </div>
         {% else %}
-        <div class="card-header">Metric Upload Status:</div>
         <div class="card-body bg-success">
             <h5 class="card-title">You have uploaded metrics for today, keep it up!</h5>
             <!-- <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p> -->
