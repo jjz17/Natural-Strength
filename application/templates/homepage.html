@@ -49,14 +49,7 @@ This week
     <div class="col">c</div>
 </div> -->
 
-{% if no_metrics_for_today %}
-<p>
-    Would you like to upload your metrics for today?
-</p>
-{% else %}
-<p>
-    You have uploaded metrics for today! Way to go!
-</p>{% endif %} {% if last_record != None %}
+{% if last_record != None %}
 <p>
     Current weight: {{ last_record.weight }}
 </p>{% endif %}
@@ -71,10 +64,10 @@ This week
             <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p>
         </div>
         {% else %}
+        <div class="card-header">Metric Upload Status:</div>
         <div class="card-body bg-success">
-            <h3 class="card-title">Metric Upload Status:</h3>
             <h5 class="card-title">You have uploaded metrics for today, keep it up!</h5>
-            <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p>
+            <!-- <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p> -->
         </div>
         {% endif %}
         <div class="card-footer">
