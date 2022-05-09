@@ -48,6 +48,29 @@ This week
     </div>
 </div>
 
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+      Dropdown button
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+    </ul>
+</div>
+
+<!-- <div class="dropdown">
+    <button class="dropbtn">Metric Selection</button>
+    <div class="dropdown-content">
+        <a href="{{ url_for('chart_metric', metric='weight') }}"><i class="fas fa-chart-line"></i>Weight</a>
+        <a href="{{ url_for('chart_metric', metric='squat') }}"><i class="fas fa-chart-line"></i>Squat</a>
+        <a href="{{ url_for('chart_metric', metric='bench') }}"><i class="fas fa-chart-line"></i>Bench</a>
+        <a href="{{ url_for('chart_metric', metric='deadlift') }}"><i class="fas fa-chart-line"></i>Deadlift</a>
+    </div>
+</div> -->
+
+{{ plot|safe }}
+
 <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
 <h2>Section title</h2>
@@ -179,4 +202,4 @@ This week
     </table>
 </div>
 
-{{ plot|safe }} {% endblock %}
+{% endblock %}
