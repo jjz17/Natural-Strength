@@ -175,7 +175,7 @@ def home():
 
         # return str(user_metric.date)
         # return render_template('home.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric)
-        return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric, ms=max_squat, mb=max_bench, md=max_deadlift)
+        return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric, ms=max_squat[0], mb=max_bench[0], md=max_deadlift[0])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 

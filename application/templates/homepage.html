@@ -40,9 +40,6 @@ This week
 
 
 <h2>Welcome back, {{ username }}!</h2>
-<h2>
-    {{ms}} {{mb}} {{md}}
-</h2>
 <!-- <div class="table-responsive">
 </div>
 <div class="row">
@@ -87,7 +84,7 @@ This week
         <div class="card-body">
             <h5 class="card-title">Squat</h5>
             <p class="card-text">Current: {{ last_record.squat }}</p>
-            <p class="card-text">All Time PR: </p>
+            <p class="card-text">All Time PR: {{ms}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated 3 mins ago</small>
@@ -98,7 +95,7 @@ This week
         <div class="card-body">
             <h5 class="card-title">Bench</h5>
             <p class="card-text">Current: {{ last_record.bench }}</p>
-            <p class="card-text">All Time PR: </p>
+            <p class="card-text">All Time PR: {{mb}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated 3 mins ago</small>
@@ -109,7 +106,7 @@ This week
         <div class="card-body">
             <h5 class="card-title">Deadlift</h5>
             <p class="card-text">Current: {{ last_record.deadlift }}</p>
-            <p class="card-text">All Time PR: </p>
+            <p class="card-text">All Time PR: {{md}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated 3 mins ago</small>
