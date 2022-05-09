@@ -63,21 +63,25 @@ This week
 
 <div class="card-group">
     <div class="card">
-        <img src="..." class="card-img-top" alt="...">
-        <div class="card-body">
-            {% if no_metrics_for_today %}
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        {% if no_metrics_for_today %}
+        <div class="card-body bg-danger">
+            <h3 class="card-title">Metric Upload Status:</h3>
             <h5 class="card-title">Would you like to upload your metrics for today?</h5>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-
-            {% else %}
-            <h5 class="card-title">You have uploaded metrics for today! Way to go!</h5>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            {% endif %}
+            <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p>
+        </div>
+        {% else %}
+        <div class="card-body bg-success">
+            <h3 class="card-title">Metric Upload Status:</h3>
+            <h5 class="card-title">You have uploaded metrics for today, keep it up!</h5>
+            <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p>
+        </div>
+        {% endif %}
+        <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
         </div>
     </div>
-    <div class="card">
+    <!-- <div class="card">
         <img src="..." class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title">Card title</h5>
@@ -100,7 +104,7 @@ This week
             <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
             <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <div class="card-group">
