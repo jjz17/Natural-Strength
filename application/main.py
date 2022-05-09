@@ -4,6 +4,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import numpy as np
+from sqlalchemy import func 
 
 from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
@@ -11,7 +12,6 @@ import io
 import os
 import _pickle as cPickle
 import re
-
 
 from application import app
 from application import forms
@@ -152,6 +152,19 @@ def home():
         .filter(UserMetrics.user_id == session['id']) \
         .order_by(UserMetrics.date.desc()) \
         .first()
+
+        max_squat = db_session.query(func.max(UserMetrics.squat)) \
+            .filter(UserMetrics.user_id == session['id']) \
+                .first()
+
+        max_bench = db_session.query(func.max(UserMetrics.bench)) \
+            .filter(UserMetrics.user_id == session['id']) \
+                .first()
+
+        max_deadlift = db_session.query(func.max(UserMetrics.deadlift)) \
+            .filter(UserMetrics.user_id == session['id']) \
+                .first()
+
         db_session.close()
 
         no_metrics_for_today = True
@@ -162,7 +175,7 @@ def home():
 
         # return str(user_metric.date)
         # return render_template('home.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric)
-        return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric)
+        return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric, ms=max_squat, mb=max_bench, md=max_deadlift)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
