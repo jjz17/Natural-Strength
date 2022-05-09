@@ -74,6 +74,25 @@
             <small class="text-muted">Last updated 3 mins ago</small>
         </div> -->
     </div>
+
+    <div class="card">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-header">Upload Metrics:</div>
+        <!-- <div class="card-body">
+            <h5 class="card-title"></h5>
+        </div> -->
+        <!-- <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div> -->
+        <form action="{{ url_for('metrics', metric='none') }}" method="post">
+            <p>Please select your preferred units:</p>
+            <input type="radio" id="standard" name="units" value="STANDARD"><label for="standard">Standard</label>
+            <br>
+            <input type="radio" id="metric" name="units" value="METRIC"><label for="metric">Metric</label>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 </div>
 
 {% endblock %}

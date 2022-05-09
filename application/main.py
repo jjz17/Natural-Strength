@@ -196,10 +196,6 @@ def profile():
         db_session.close()
         user = user_query[0]
 
-        if request.method == 'POST' and 'units' in request.form:
-            # Create variables for easy access
-            units = request.form['units']
-            session['units'] = units
         # Show the profile page with user info
         # return render_template('profile.html', user=user)
         return render_template('profilepage.html', user=user)
@@ -264,6 +260,11 @@ def metrics(metric):
     # Check if user is loggedin
     if 'loggedin' in session:
         id = session['id']
+
+        if request.method == 'POST' and 'units' in request.form:
+            # Create variables for easy access
+            units = request.form['units']
+            session['units'] = units
 
         # Create a new session
         db_session = Session()
