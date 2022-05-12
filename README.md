@@ -28,7 +28,8 @@ sudo lsof -i:5000
 kill -9 (PID)
 
 
-
+## Ideas
+Add news pages
 
 
 
