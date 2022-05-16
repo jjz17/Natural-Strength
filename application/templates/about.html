@@ -1,0 +1,36 @@
+{% extends 'dashboard-layout.html' %} {% block title %}Home{% endblock %} {% block sidebar %}
+<li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">
+        <span data-feather="home"></span> Dashboard
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for( 'profile') }}">
+        <span data-feather="user"></span> Profile
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for( 'metrics', metric='none') }}">
+        <span data-feather="file"></span> Metrics
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for( 'chart_metric', metric='weight' ) }}">
+        <span data-feather="bar-chart-2"></span> Charts
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">
+        <span data-feather="inbox"></span> News
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">
+        <span data-feather="settings"></span> Settings
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">
+        <span data-feather="info"></span> About Us
+    </a>
+</li>{% endblock %} {% block content %}{% endblock %}

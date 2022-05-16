@@ -448,12 +448,12 @@ def news():
 
 @app.route('/settings')
 def settings():
-    pass
+    return render_template('settings.html')
 
 
 @app.route('/about')
 def about():
-    pass
+    return render_template('about.html')
 
 
 '''
