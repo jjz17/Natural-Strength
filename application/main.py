@@ -440,6 +440,22 @@ def plot_metric(metric):
 
     return svg_img
 
+
+@app.route('/news')
+def news():
+    return render_template('news.html')
+
+
+@app.route('/settings')
+def settings():
+    pass
+
+
+@app.route('/about')
+def about():
+    pass
+
+
 '''
 --------------------Experiemental pages------------------------
 '''
