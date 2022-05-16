@@ -441,6 +441,11 @@ def plot_metric(metric):
     return svg_img
 
 
+@app.route('/goals')
+def goals():
+    return render_template('goals.html')
+
+
 @app.route('/news')
 def news():
     return render_template('news.html')
