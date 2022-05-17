@@ -92,14 +92,16 @@
                         </li>
                     </ul> -->
 
-                    <form action="{{ url_for('metrics', metric='none') }}" method="post">
-                        <p>Please select your preferred units:</p>
-                        <input type="radio" id="standard" name="units" value="STANDARD"><label for="standard">Standard</label>
-                        <br>
-                        <input type="radio" id="metric" name="units" value="METRIC"><label for="metric">Metric</label>
-                        <br>
-                        <input type="submit" value="Submit">
-                    </form>
+                    <div class="mt-3 ms-3">
+                        <form action="{{ url_for('metrics', metric='none') }}" method="post">
+                            <p>Select your preferred units:</p>
+                            <input type="radio" id="standard" name="units" value="STANDARD"><label for="standard">Standard</label>
+                            <br>
+                            <input type="radio" id="metric" name="units" value="METRIC"><label for="metric">Metric</label>
+                            <br>
+                            <input type="submit" value="Submit">
+                        </form>
+                    </div>
                 </div>
             </nav>
 
