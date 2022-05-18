@@ -441,9 +441,77 @@ def plot_metric(metric):
     return svg_img
 
 
-@app.route('/goals')
-def goals():
-    return render_template('goals.html')
+@app.route('/goals/<metric>', methods=['GET', 'POST'])
+def goals(metric):
+
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        id = session['id']
+
+        # Create a new session
+        db_session = Session()
+
+        # Output message if something goes wrong...
+        msg = ''
+        user = db_session.query(User).get(id)
+
+        pred = ''
+        stats = None
+        # Check if metric prediction is requested
+        if metric != 'none':
+            stats = db_session.query(UserMetrics) \
+                .order_by(UserMetrics.date.desc())
+            if stats.count() > 0:
+                stats = stats[0]
+
+                # Parse out stats
+                weight = stats.weight
+                squat = stats.squat
+                bench = stats.bench
+                deadlift = stats.deadlift
+
+                # Convert metrics data to kg for models
+                # if session['units'] == 'STANDARD':
+                weight = lbs_to_kg(weight)
+                squat = lbs_to_kg(squat)
+                bench = lbs_to_kg(bench)
+                deadlift = lbs_to_kg(deadlift)
+
+                # Calculate user age
+                age = relativedelta(today, user.birth_date).years
+
+                # Determine user sex
+                male = 0
+                female = 0
+                if user.sex == 0:
+                    male = 1
+                elif user.sex == 1:
+                    female = 1
+                else:
+                    pass
+
+                if metric == 'squat':
+                    input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
+                    pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
+                elif metric == 'bench':
+                    input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
+                    pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
+                elif metric == 'deadlift':
+                    input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
+                    pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
+                else:
+                    pred = 'Invalid lift'
+                
+                # Convert prediction to lbs if necessary
+                if type(pred) == np.float64:
+                    pred = round(pred, 2)
+                    if session['units'] == 'STANDARD':
+                        pred = kg_to_lbs(pred)
+            else:
+                pred = 'No data'
+        return render_template('goals.html', metric=metric, pred=pred)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 
 @app.route('/news')

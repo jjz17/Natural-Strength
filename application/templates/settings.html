@@ -20,7 +20,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="{{ url_for( 'goals' ) }}">
+    <a class="nav-link" href="{{ url_for( 'goals', metric='none' ) }}">
         <span data-feather="check-square"></span> Goals
     </a>
 </li>
@@ -38,4 +38,7 @@
     <a class="nav-link" href="{{ url_for( 'about') }}">
         <span data-feather="info"></span> About Us
     </a>
-</li>{% endblock %} {% block content %}{% endblock %}
+</li>{% endblock %} {% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Settings</h1>
+</div>{% endblock %}

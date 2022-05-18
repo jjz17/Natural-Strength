@@ -20,7 +20,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="{{ url_for( 'goals' ) }}">
+    <a class="nav-link" href="{{ url_for( 'goals', metric='none' ) }}">
         <span data-feather="check-square"></span> Goals
     </a>
 </li>
@@ -39,6 +39,10 @@
         <span data-feather="info"></span> About Us
     </a>
 </li>{% endblock %} {% block content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">News</h1>
+</div>
 
 <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
