@@ -42,25 +42,38 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Settings</h1>
 </div>
-<div class="update">
-    <form action="{{ url_for('update') }}" method="post" autocomplete="off">
-        <label for="username">
-        <i class="fas fa-user"></i>
-    </label>
-        <input type="text" name="username" placeholder="Username" id="username" required>
-        <label for="password">
-        <i class="fas fa-lock"></i>
-    </label>
-        <input type="password" name="password" placeholder="Password" id="password" required>
-        <label for="birth_date">
-        <i class="fas fa-calendar"></i>
-    </label>
-        <input type="date" name="birth_date" placeholder="Birth Date" id="birth_date" required>
-        <label for="email">
-        <i class="fas fa-envelope"></i>
-    </label>
-        <input type="email" name="email" placeholder="Email" id="email" required>
-        <div class="msg">{{ msg }}</div>
-        <input type="submit" value="Update">
-    </form>
-</div>{% endblock %}
+
+<div class="card-group mb-3">
+
+    <div class="card">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-header">Update Profile:</div>
+        <!-- <div class="card-body">
+            <h5 class="card-title"></h5>
+        </div> -->
+
+        <form action="{{ url_for('settings') }}" method="post" autocomplete="off">
+            <div class="form-floating">
+                <input type="text" name="username" class="form-control" placeholder="Username" id="floatingInput" required>
+                <label for="floatingInput">Username</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" name="password" class="form-control" placeholder="Password" id="floatingPassword" required>
+                <label for="floatingPassword">Password</label>
+            </div>
+            <div class="form-floating">
+                <input type="date" name="birth_date" class="form-control" placeholder="Birth Date" id="floatingInput" required>
+                <label for="floatingInput">Birth Date</label>
+            </div>
+            <div class="form-floating">
+                <input type="email" name="email" class="form-control" placeholder="Email" id="floatingInput" required>
+                <label for="floatingInput">Email</label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Update</button>
+        </form>
+        <!-- <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div> -->
+    </div>
+</div>
+{% endblock %}
