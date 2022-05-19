@@ -17,7 +17,7 @@ from application import app
 from application import forms
 from application.base import Session
 from application.user import User
-from application.user_metrics import UserMetrics
+from application.user_metrics import UserMetrics, DummyUserMetrics
 
 # Uncomment to run app through this file (main.py)
 # app = Flask(__name__)
@@ -46,6 +46,9 @@ def load_model(model_file: str):
 
 def scale_stats(scaler, stats: list):
     return scaler.transform(np.array(stats).reshape(1, -1))
+
+def metrics_lbs_to_kg(user_metric):
+    return DummyUserMetrics(lbs_to_kg(user_metric.weight), lbs_to_kg(user_metric.squat), lbs_to_kg(user_metric.bench), lbs_to_kg(user_metric.deadlift), user_metric.date)
 
 
 # # Load in the models and scalers
@@ -155,15 +158,15 @@ def home():
 
         max_squat = db_session.query(func.max(UserMetrics.squat)) \
             .filter(UserMetrics.user_id == session['id']) \
-                .first()
+                .first()[0]
 
         max_bench = db_session.query(func.max(UserMetrics.bench)) \
             .filter(UserMetrics.user_id == session['id']) \
-                .first()
+                .first()[0]
 
         max_deadlift = db_session.query(func.max(UserMetrics.deadlift)) \
             .filter(UserMetrics.user_id == session['id']) \
-                .first()
+                .first()[0]
 
         db_session.close()
 
@@ -173,9 +176,17 @@ def home():
             if user_metric.date == date.today():
                 no_metrics_for_today = False
 
+            if session['units'] == 'STANDARD':
+                unit = 'Lbs'
+            else:
+                unit = 'Kg'
+                user_metric = metrics_lbs_to_kg(user_metric)
+                max_squat = lbs_to_kg(max_squat)
+                max_bench= lbs_to_kg(max_bench)
+                max_deadlift = lbs_to_kg(max_deadlift)
         # return str(user_metric.date)
         # return render_template('home.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric)
-        return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric, ms=max_squat[0], mb=max_bench[0], md=max_deadlift[0])
+        return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric, ms=max_squat, mb=max_bench, md=max_deadlift, unit=unit)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -412,15 +423,24 @@ def goals(metric):
 
         max_squat = db_session.query(func.max(UserMetrics.squat)) \
             .filter(UserMetrics.user_id == session['id']) \
-                .first()
+                .first()[0]
 
         max_bench = db_session.query(func.max(UserMetrics.bench)) \
             .filter(UserMetrics.user_id == session['id']) \
-                .first()
+                .first()[0]
 
         max_deadlift = db_session.query(func.max(UserMetrics.deadlift)) \
             .filter(UserMetrics.user_id == session['id']) \
-                .first()
+                .first()[0]
+
+        if session['units'] == 'STANDARD':
+            unit = 'Lbs'
+        else:
+            unit = 'Kg'
+            user_metric = metrics_lbs_to_kg(user_metric)
+            max_squat = lbs_to_kg(max_squat)
+            max_bench= lbs_to_kg(max_bench)
+            max_deadlift = lbs_to_kg(max_deadlift)
 
         # Output message if something goes wrong...
         msg = ''
@@ -480,7 +500,7 @@ def goals(metric):
                         pred = kg_to_lbs(pred)
             else:
                 pred = 'No data'
-        return render_template('goals.html', metric=metric, pred=pred, last_record=user_metric, ms=max_squat[0], mb=max_bench[0], md=max_deadlift[0])
+        return render_template('goals.html', metric=metric, pred=pred, last_record=user_metric, ms=max_squat, mb=max_bench, md=max_deadlift, unit=unit)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 

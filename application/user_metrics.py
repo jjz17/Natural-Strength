@@ -24,3 +24,13 @@ class UserMetrics(Base):
         self.bench = bench
         self.deadlift = deadlift
         self.date = date
+
+
+class DummyUserMetrics():
+
+    def __init__(self, weight, squat, bench, deadlift, date):
+        self.weight = weight
+        self.squat = squat
+        self.bench = bench
+        self.deadlift = deadlift
+        self.date = date
