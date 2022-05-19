@@ -62,7 +62,7 @@
         <!-- <img src="..." class="card-img-top" alt="..."> -->
         <!-- <div class="card-header">Metric Upload Status:</div> -->
         <div class="card-body">
-            <h5 class="card-title">Current: {{ metric }}</h5>
+            <h5 class="card-title">Prediction for {{ metric }}: {{pred}}</h5>
             <!-- <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p> -->
         </div>
         <div class="card-footer">
@@ -78,33 +78,33 @@
         <!-- <img src="..." class="card-img-top" alt="..."> -->
         <div class="card-body">
             <h5 class="card-title">Squat</h5>
-            <p class="card-text">Current: {{ pred }}</p>
-            <p class="card-text">All Time PR: {{pred}}</p>
+            <p class="card-text">Current: {{ last_record.squat }}</p>
+            <p class="card-text">All Time PR: {{ms}}</p>
         </div>
         <div class="card-footer">
-            <small class="text-muted">Last updated 3 mins ago</small>
+            <small class="text-muted">Last updated {{last_record.date}}</small>
         </div>
     </div>
     <div class="card">
         <!-- <img src="..." class="card-img-top" alt="..."> -->
         <div class="card-body">
             <h5 class="card-title">Bench</h5>
-            <p class="card-text">Current: {{ pred }}</p>
-            <p class="card-text">All Time PR: {{pred}}</p>
+            <p class="card-text">Current: {{ last_record.bench }}</p>
+            <p class="card-text">All Time PR: {{mb}}</p>
         </div>
         <div class="card-footer">
-            <small class="text-muted">Last updated 3 mins ago</small>
+            <small class="text-muted">Last updated {{last_record.date}}</small>
         </div>
     </div>
     <div class="card">
         <!-- <img src="..." class="card-img-top" alt="..."> -->
         <div class="card-body">
             <h5 class="card-title">Deadlift</h5>
-            <p class="card-text">Current: {{ pred }}</p>
-            <p class="card-text">All Time PR: {{pred}}</p>
+            <p class="card-text">Current: {{ last_record.deadlift }}</p>
+            <p class="card-text">All Time PR: {{md}}</p>
         </div>
         <div class="card-footer">
-            <small class="text-muted">Last updated 3 mins ago</small>
+            <small class="text-muted">Last updated {{last_record.date}}</small>
         </div>
     </div>
 </div>

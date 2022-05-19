@@ -49,12 +49,12 @@ def scale_stats(scaler, stats: list):
 
 
 # # Load in the models and scalers
-# bench_model = load_model(f'models{os.path.sep}bench_model.pickle')
-# bench_scaler = joblib.load(f'models{os.path.sep}bench_scaler')
-# squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
-# squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
-# deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
-# deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
+bench_model = load_model(f'models{os.path.sep}bench_model.pickle')
+bench_scaler = joblib.load(f'models{os.path.sep}bench_scaler')
+squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
+squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
+deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
+deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
 
 # Global variable
 today = date.today()
@@ -196,9 +196,12 @@ def profile():
         db_session.close()
         user = user_query[0]
 
+        # Calculate user age
+        age = relativedelta(today, user.birth_date).years
+
         # Show the profile page with user info
         # return render_template('profile.html', user=user)
-        return render_template('profilepage.html', user=user)
+        return render_template('profilepage.html', user=user, age=age)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -402,6 +405,23 @@ def goals(metric):
         # Create a new session
         db_session = Session()
 
+        user_metric = db_session.query(UserMetrics) \
+        .filter(UserMetrics.user_id == session['id']) \
+        .order_by(UserMetrics.date.desc()) \
+        .first()
+
+        max_squat = db_session.query(func.max(UserMetrics.squat)) \
+            .filter(UserMetrics.user_id == session['id']) \
+                .first()
+
+        max_bench = db_session.query(func.max(UserMetrics.bench)) \
+            .filter(UserMetrics.user_id == session['id']) \
+                .first()
+
+        max_deadlift = db_session.query(func.max(UserMetrics.deadlift)) \
+            .filter(UserMetrics.user_id == session['id']) \
+                .first()
+
         # Output message if something goes wrong...
         msg = ''
         user = db_session.query(User).get(id)
@@ -441,17 +461,17 @@ def goals(metric):
                 else:
                     pass
 
-                # if metric == 'squat':
-                #     input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
-                #     pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
-                # elif metric == 'bench':
-                #     input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
-                #     pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
-                # elif metric == 'deadlift':
-                #     input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
-                #     pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
-                # else:
-                #     pred = 'Invalid lift'
+                if metric == 'squat':
+                    input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
+                    pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
+                elif metric == 'bench':
+                    input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
+                    pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
+                elif metric == 'deadlift':
+                    input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
+                    pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
+                else:
+                    pred = 'Invalid lift'
                 
                 # Convert prediction to lbs if necessary
                 if type(pred) == np.float64:
@@ -460,7 +480,7 @@ def goals(metric):
                         pred = kg_to_lbs(pred)
             else:
                 pred = 'No data'
-        return render_template('goals.html', metric=metric, pred=pred)
+        return render_template('goals.html', metric=metric, pred=pred, last_record=user_metric, ms=max_squat[0], mb=max_bench[0], md=max_deadlift[0])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
