@@ -490,17 +490,17 @@ def goals(metric):
                 else:
                     pass
 
-                if metric == 'squat':
-                    input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
-                    pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
-                elif metric == 'bench':
-                    input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
-                    pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
-                elif metric == 'deadlift':
-                    input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
-                    pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
-                else:
-                    pred = 'Invalid lift'
+                # if metric == 'squat':
+                #     input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
+                #     pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
+                # elif metric == 'bench':
+                #     input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
+                #     pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
+                # elif metric == 'deadlift':
+                #     input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
+                #     pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
+                # else:
+                #     pred = 'Invalid lift'
                 
                 # Convert prediction to lbs if necessary
                 if type(pred) == np.float64:

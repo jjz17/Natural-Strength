@@ -48,11 +48,63 @@
       Metric Selection
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-        <li><a class="dropdown-item" href="{{ url_for('goals', metric='weight') }}">Weight</a></li>
         <li><a class="dropdown-item" href="{{ url_for('goals', metric='squat') }}">Squat</a></li>
         <li><a class="dropdown-item" href="{{ url_for('goals', metric='bench') }}">Bench</a></li>
         <li><a class="dropdown-item" href="{{ url_for('goals', metric='deadlift') }}">Deadlift</a></li>
     </ul>
 </div>
 
-<p>{{metric}} {{pred}}</p>{% endblock %}
+
+<h2 class="mb-3">Metric</h2>
+
+<div class="card-group mb-3">
+    <div class="card">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <!-- <div class="card-header">Metric Upload Status:</div> -->
+        <div class="card-body">
+            <h5 class="card-title">Current: {{ metric }}</h5>
+            <!-- <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p> -->
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div>
+    </div>
+</div>
+
+<h2 class="mb-3">Lifts</h2>
+
+<div class="card-group">
+    <div class="card">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+            <h5 class="card-title">Squat</h5>
+            <p class="card-text">Current: {{ pred }}</p>
+            <p class="card-text">All Time PR: {{pred}}</p>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div>
+    </div>
+    <div class="card">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+            <h5 class="card-title">Bench</h5>
+            <p class="card-text">Current: {{ pred }}</p>
+            <p class="card-text">All Time PR: {{pred}}</p>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div>
+    </div>
+    <div class="card">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+            <h5 class="card-title">Deadlift</h5>
+            <p class="card-text">Current: {{ pred }}</p>
+            <p class="card-text">All Time PR: {{pred}}</p>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div>
+    </div>
+</div>{% endblock %}
