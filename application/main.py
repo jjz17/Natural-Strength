@@ -203,56 +203,6 @@ def profile():
     return redirect(url_for('login'))
 
 
-# Profile update page, only accessible for loggedin users
-@app.route('/update', methods=['GET', 'POST'])
-def update():
-    # Check if user is loggedin
-    if 'loggedin' in session:
-        id = session['id']
-
-        # Create a new session
-        db_session = Session()
-
-        # Output message if something goes wrong...
-        msg = ''
-        user = None
-        # Check if "username", "password" and "email" POST requests exist (user submitted form)
-        if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
-            # Create variables for easy access
-            username = request.form['username']
-            password = request.form['password']
-            birth_date = request.form['birth_date']
-            email = request.form['email']
-
-            # Validation checks
-            if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-                msg = 'Invalid email address!'
-            elif not re.match(r'[A-Za-z0-9]+', username):
-                msg = 'Username must contain only characters and numbers!'
-            elif not username or not password or not email:
-                msg = 'Please fill out the form!'
-            # elif not re.match(r'^\+?(0|[1-9]\d*)$', birth_date):
-                # msg = 'Birth date must be a valid date in the form MM/DD/YYYY'
-            else:
-             # Update data into users table
-                user = db_session.query(User).get(id)
-                user.username = username
-                user.password = password
-                user.birth_date = birth_date
-                user.email = email
-                db_session.commit()
-                db_session.close()
-                msg = 'You have successfully updated!'
-        elif request.method == 'POST':
-            # Form is empty... (no POST data)
-            msg = 'Please fill out the form!'
-
-        # Show the update form with message (if any)
-        return render_template('update.html', msg=msg)
-    # User is not loggedin redirect to login page
-    return redirect(url_for('login'))
-
-
 # Metrics insert page, only accessible for loggedin users
 # @app.route('/metrics', methods=['GET', 'POST'])
 @app.route('/metrics/<metric>', methods=['GET', 'POST'])
@@ -260,11 +210,6 @@ def metrics(metric):
     # Check if user is loggedin
     if 'loggedin' in session:
         id = session['id']
-
-        if request.method == 'POST' and 'units' in request.form:
-            # Create variables for easy access
-            units = request.form['units']
-            session['units'] = units
 
         # Create a new session
         db_session = Session()
@@ -389,8 +334,14 @@ def data(metric):
 
 
 # Displays the plot of the requested user metric
-@app.route('/chart/<metric>', methods=['GET'])
+@app.route('/chart/<metric>', methods=['GET', 'POST'])
 def chart_metric(metric):
+
+    if request.method == 'POST' and 'units' in request.form:
+        # Create variables for easy access
+        units = request.form['units']
+        session['units'] = units
+
     title = f'Your Custom {metric.title()} Plot'
     plot = plot_metric(metric)
     # return render_template('plot.html', title=title, plot=plot)
@@ -519,9 +470,53 @@ def news():
     return render_template('news.html')
 
 
-@app.route('/settings')
+@app.route('/settings', methods=['GET', 'POST'])
 def settings():
-    return render_template('settings.html')
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        id = session['id']
+
+        # Create a new session
+        db_session = Session()
+
+        # Output message if something goes wrong...
+        msg = ''
+        user = None
+        # Check if "username", "password" and "email" POST requests exist (user submitted form)
+        if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+            # Create variables for easy access
+            username = request.form['username']
+            password = request.form['password']
+            birth_date = request.form['birth_date']
+            email = request.form['email']
+
+            # Validation checks
+            if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+                msg = 'Invalid email address!'
+            elif not re.match(r'[A-Za-z0-9]+', username):
+                msg = 'Username must contain only characters and numbers!'
+            elif not username or not password or not email:
+                msg = 'Please fill out the form!'
+            # elif not re.match(r'^\+?(0|[1-9]\d*)$', birth_date):
+                # msg = 'Birth date must be a valid date in the form MM/DD/YYYY'
+            else:
+             # Update data into users table
+                user = db_session.query(User).get(id)
+                user.username = username
+                user.password = password
+                user.birth_date = birth_date
+                user.email = email
+                db_session.commit()
+                db_session.close()
+                msg = 'You have successfully updated!'
+        elif request.method == 'POST':
+            # Form is empty... (no POST data)
+            msg = 'Please fill out the form!'
+
+        # Show the update form with message (if any)
+        return render_template('settings.html', msg=msg)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 
 @app.route('/about')
