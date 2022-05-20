@@ -59,7 +59,7 @@ def handle_unit_conversion(input_unit_kg: True, output_unit_kg: False, user_metr
     return {'user_metric': user_metric, 'data': data, 'units': units}
 
 def generate_null_metrics():
-    return {'user_metric': DummyUserMetrics(None,None,None,None,None), 'data': None, 'units': None}
+    return {'user_metric': DummyUserMetrics(None,None,None,None,None), 'data': None, 'units': ''}
 
 
 def load_model(model_file: str):
@@ -244,8 +244,8 @@ def profile():
 
 # Metrics insert page, only accessible for loggedin users
 # @app.route('/metrics', methods=['GET', 'POST'])
-@app.route('/metrics/<metric>', methods=['GET', 'POST'])
-def metrics(metric):
+@app.route('/metrics', methods=['GET', 'POST'])
+def metrics():
     # Check if user is loggedin
     if 'loggedin' in session:
         id = session['id']
@@ -302,68 +302,28 @@ def metrics(metric):
                 metrics = UserMetrics(
                     user, weight, squat, bench, deadlift, entry_date)
                 db_session.add(metrics)
-            db_session.commit()
-            db_session.close()
             msg = 'You have successfully inserted your data!'
+        elif request.method == 'POST' and ('delete_last' in request.form or 'delete_all' in request.form):
+            if 'delete_last' in request.form:
+                user_metric = db_session.query(UserMetrics) \
+                    .filter(UserMetrics.user_id == session['id']) \
+                    .order_by(UserMetrics.date.desc()) \
+                    .first()
+                if user_metric == None:
+                    msg = 'No records remaining'
+                else:
+                    db_session.delete(user_metric)
+                    msg = 'Last record deleted'
+            else:
+                db_session.query(UserMetrics) \
+                    .filter(UserMetrics.user_id == session['id']).delete()
+                msg = 'All records deleted'
         elif request.method == 'POST':
             # Form is empty... (no POST data)
             msg = 'Please fill out the form!'
 
-        # pred = ''
-        # stats = None
-        # # Check if metric prediction is requested
-        # if metric != 'none':
-        #     stats = db_session.query(UserMetrics) \
-        #         .order_by(UserMetrics.date.desc())
-        #     if stats.count() > 0:
-        #         stats = stats[0]
-
-        #         # Parse out stats
-        #         weight = stats.weight
-        #         squat = stats.squat
-        #         bench = stats.bench
-        #         deadlift = stats.deadlift
-
-        #         # Convert metrics data to kg for models
-        #         # if session['units'] == 'STANDARD':
-        #         weight = lbs_to_kg(weight)
-        #         squat = lbs_to_kg(squat)
-        #         bench = lbs_to_kg(bench)
-        #         deadlift = lbs_to_kg(deadlift)
-
-        #         # Calculate user age
-        #         age = relativedelta(today, user.birth_date).years
-
-        #         # Determine user sex
-        #         male = 0
-        #         female = 0
-        #         if user.sex == 0:
-        #             male = 1
-        #         elif user.sex == 1:
-        #             female = 1
-        #         else:
-        #             pass
-
-        #         if metric == 'squat':
-        #             input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
-        #             pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
-        #         elif metric == 'bench':
-        #             input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
-        #             pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
-        #         elif metric == 'deadlift':
-        #             input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
-        #             pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
-        #         else:
-        #             pred = 'Invalid lift'
-                
-        #         # Convert prediction to lbs if necessary
-        #         if type(pred) == np.float64:
-        #             pred = round(pred, 2)
-        #             if session['units'] == 'STANDARD':
-        #                 pred = kg_to_lbs(pred)
-        #     else:
-        #         pred = 'No data'
-
+        db_session.commit()
+        db_session.close()
         # Show the update form with message (if any)
         # return render_template('metrics.html', msg=msg, pred=pred)
         return render_template('metricspage.html', msg=msg)
@@ -451,7 +411,10 @@ def goals(metric):
         .first()
 
         if user_metric != None:
-            conversion = handle_unit_conversion(input_unit_kg=True, user_metric=user_metric)
+            if session['units'] == 'STANDARD':
+                conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=False, user_metric=user_metric)
+            else:
+                conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=True, user_metric=user_metric)
         else:
             conversion = generate_null_metrics()
 
@@ -499,39 +462,48 @@ def goals(metric):
             female = 1
         else:
             pass
-
-        if metric == 'squat':
-            input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
-            pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
-        elif metric == 'bench':
-            input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
-            pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
-        elif metric == 'deadlift':
-            input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
-            pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
-        else:
-            pred = 'Invalid lift'
-
-        squat_input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
-        squat_pred = squat_model.predict(np.array(squat_input).reshape(1,-1))[0]
-
-        bench_input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
-        bench_pred = bench_model.predict(np.array(bench_input).reshape(1,-1))[0]
         
-        deadlift_input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
-        deadlift_pred = deadlift_model.predict(np.array(deadlift_input).reshape(1,-1))[0]
-
-        # Convert prediction to lbs if necessary
-        if type(pred) == np.float64:
-            pred = round(pred, 2)
-            squat_pred = round(squat_pred, 2)
-            bench_pred = round(bench_pred, 2)
-            deadlift_pred = round(deadlift_pred, 2)
-            if session['units'] == 'STANDARD':
-                pred = kg_to_lbs(pred)
-
-        else:
+        if isinstance(user_metric, DummyUserMetrics):
             pred = 'No data'
+            squat_pred = 'No data'
+            bench_pred = 'No data'
+            deadlift_pred = 'No data'
+        else:
+            if metric == 'squat':
+                input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
+                pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
+            elif metric == 'bench':
+                input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
+                pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
+            elif metric == 'deadlift':
+                input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
+                pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
+            else:
+                pred = 'Invalid lift'
+
+            squat_input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
+            squat_pred = squat_model.predict(np.array(squat_input).reshape(1,-1))[0]
+
+            bench_input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
+            bench_pred = bench_model.predict(np.array(bench_input).reshape(1,-1))[0]
+            
+            deadlift_input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
+            deadlift_pred = deadlift_model.predict(np.array(deadlift_input).reshape(1,-1))[0]
+
+            # Convert prediction to lbs if necessary
+            if type(pred) == np.float64:
+                pred = round(pred, 2)
+                squat_pred = round(squat_pred, 2)
+                bench_pred = round(bench_pred, 2)
+                deadlift_pred = round(deadlift_pred, 2)
+                if session['units'] == 'STANDARD':
+                    pred = kg_to_lbs(pred)
+
+            else:
+                pred = 'No data'
+                squat_pred = 'No data'
+                bench_pred = 'No data'
+                deadlift_pred = 'No data'
         return render_template('goals.html', metric=metric, pred=pred, last_record=user_metric, sp=squat_pred, bp=bench_pred, dp=deadlift_pred, units=conversion['units'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))

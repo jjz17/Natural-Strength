@@ -10,7 +10,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="{{ url_for( 'metrics', metric='none') }}">
+    <a class="nav-link" href="{{ url_for( 'metrics') }}">
         <span data-feather="file"></span> Metrics
     </a>
 </li>
@@ -62,7 +62,7 @@
         <!-- <img src="..." class="card-img-top" alt="..."> -->
         <!-- <div class="card-header">Metric Upload Status:</div> -->
         <div class="card-body">
-            <h5 class="card-title">Prediction for {{ metric }}: {{pred}} {{unit}}</h5>
+            <h5 class="card-title">Prediction for {{ metric }}: {{pred}} {{units}}</h5>
             <!-- <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p> -->
         </div>
         <div class="card-footer">
@@ -78,8 +78,8 @@
         <!-- <img src="..." class="card-img-top" alt="..."> -->
         <div class="card-body">
             <h5 class="card-title">Squat</h5>
-            <p class="card-text">Current: {{ last_record.squat }} {{unit}}</p>
-            <p class="card-text">Projected Goal: {{sp}} {{unit}}</p>
+            <p class="card-text">Current: {{ last_record.squat }} {{units}}</p>
+            <p class="card-text">Projected Goal: {{sp}} {{units}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{last_record.date}}</small>
@@ -89,8 +89,8 @@
         <!-- <img src="..." class="card-img-top" alt="..."> -->
         <div class="card-body">
             <h5 class="card-title">Bench</h5>
-            <p class="card-text">Current: {{ last_record.bench }} {{unit}}</p>
-            <p class="card-text">Projected Goal: {{bp}} {{unit}}</p>
+            <p class="card-text">Current: {{ last_record.bench }} {{units}}</p>
+            <p class="card-text">Projected Goal: {{bp}} {{units}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{last_record.date}}</small>
@@ -100,8 +100,8 @@
         <!-- <img src="..." class="card-img-top" alt="..."> -->
         <div class="card-body">
             <h5 class="card-title">Deadlift</h5>
-            <p class="card-text">Current: {{ last_record.deadlift }} {{unit}}</p>
-            <p class="card-text">Projected Goal: {{dp}} {{unit}}</p>
+            <p class="card-text">Current: {{ last_record.deadlift }} {{units}}</p>
+            <p class="card-text">Projected Goal: {{dp}} {{units}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{last_record.date}}</small>

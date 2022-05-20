@@ -10,7 +10,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link active" href="{{ url_for( 'metrics', metric='none') }}">
+    <a class="nav-link active" href="{{ url_for( 'metrics') }}">
         <span data-feather="file"></span> Metrics
     </a>
 </li>
@@ -51,7 +51,7 @@
         <!-- <div class="card-body">
             <h5 class="card-title"></h5>
         </div> -->
-        <form action="{{ url_for('metrics', metric='none') }}" method="post" autocomplete="off">
+        <form action="{{ url_for('metrics') }}" method="post" autocomplete="off">
             <div class="form-floating">
                 <input type="number" min="0" step="0.01" name="weight" class="form-control" placeholder="Weight" id="floatingInput" required>
                 <label for="floatingInput">Weight</label>
@@ -79,5 +79,13 @@
             <small class="text-muted">Last updated 3 mins ago</small>
         </div> -->
     </div>
-
-    {% endblock %}
+    <div class="card">
+        <form action="{{ url_for('metrics') }}" method="post" autocomplete="off">
+            <input type="submit" name="delete_last" value="Delete Last Record">
+            <input type="submit" name="delete_all" value="Delete All Records">
+        </form>
+        <!-- <a href="#" class="btn btn-primary btn-lg" tabindex="-1" role="button" aria-disabled="true">Primary link</a>
+        <a href="#" class="btn btn-secondary btn-lg" tabindex="-1" role="button" aria-disabled="true">Link</a> -->
+    </div>
+</div>
+{% endblock %}
