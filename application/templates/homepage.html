@@ -106,7 +106,7 @@ This week
         <div class="card-body">
             <h5 class="card-title">Squat</h5>
             <p class="card-text">Current: {{ last_record.squat }} {{units}}</p>
-            <p class="card-text">All Time PR: {{ms}} {{units}}</p>
+            <p class="card-text">All Time PR: {{data['max_squat']}} {{units}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{last_record.date}}</small>
@@ -117,7 +117,7 @@ This week
         <div class="card-body">
             <h5 class="card-title">Bench</h5>
             <p class="card-text">Current: {{ last_record.bench }} {{units}}</p>
-            <p class="card-text">All Time PR: {{mb}} {{units}}</p>
+            <p class="card-text">All Time PR: {{data['max_bench']}} {{units}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{last_record.date}}</small>
@@ -128,7 +128,7 @@ This week
         <div class="card-body">
             <h5 class="card-title">Deadlift</h5>
             <p class="card-text">Current: {{ last_record.deadlift }} {{units}}</p>
-            <p class="card-text">All Time PR: {{md}} {{units}}</p>
+            <p class="card-text">All Time PR: {{data['max_deadlift']}} {{units}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{last_record.date}}</small>
