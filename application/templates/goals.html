@@ -43,7 +43,7 @@
     <h1 class="h2">Goals</h1>
 </div>
 
-<div class="dropdown">
+<div class="dropdown mb-3">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
       Metric Selection
     </button>
@@ -79,7 +79,7 @@
         <div class="card-body">
             <h5 class="card-title">Squat</h5>
             <p class="card-text">Current: {{ last_record.squat }} {{unit}}</p>
-            <p class="card-text">All Time PR: {{ms}} {{unit}}</p>
+            <p class="card-text">Projected Goal: {{sp}} {{unit}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{last_record.date}}</small>
@@ -90,7 +90,7 @@
         <div class="card-body">
             <h5 class="card-title">Bench</h5>
             <p class="card-text">Current: {{ last_record.bench }} {{unit}}</p>
-            <p class="card-text">All Time PR: {{mb}} {{unit}}</p>
+            <p class="card-text">Projected Goal: {{bp}} {{unit}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{last_record.date}}</small>
@@ -101,7 +101,7 @@
         <div class="card-body">
             <h5 class="card-title">Deadlift</h5>
             <p class="card-text">Current: {{ last_record.deadlift }} {{unit}}</p>
-            <p class="card-text">All Time PR: {{md}} {{unit}}</p>
+            <p class="card-text">Projected Goal: {{dp}} {{unit}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{last_record.date}}</small>

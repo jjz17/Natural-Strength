@@ -40,6 +40,18 @@ def kg_to_lbs(kg):
     return round(float(kg) * 2.20462, 2)
 
 
+def handle_unit_conversion(input_unit_kg: True, **data):
+    if input_unit_kg and session['units'] == 'STANDARD':
+        for key in data.keys():
+            data[key] = kg_to_lbs(data[key])
+    elif not input_unit_kg and session['units'] == 'METRIC':
+        for key in data.keys():
+            data[key] = lbs_to_kg(data[key])
+    else:
+        pass
+    return data
+
+
 def load_model(model_file: str):
     return cPickle.load(open(model_file, 'rb'))
 
@@ -421,26 +433,11 @@ def goals(metric):
         .order_by(UserMetrics.date.desc()) \
         .first()
 
-        max_squat = db_session.query(func.max(UserMetrics.squat)) \
-            .filter(UserMetrics.user_id == session['id']) \
-                .first()[0]
-
-        max_bench = db_session.query(func.max(UserMetrics.bench)) \
-            .filter(UserMetrics.user_id == session['id']) \
-                .first()[0]
-
-        max_deadlift = db_session.query(func.max(UserMetrics.deadlift)) \
-            .filter(UserMetrics.user_id == session['id']) \
-                .first()[0]
-
         if session['units'] == 'STANDARD':
             unit = 'Lbs'
         else:
             unit = 'Kg'
             user_metric = metrics_lbs_to_kg(user_metric)
-            max_squat = lbs_to_kg(max_squat)
-            max_bench= lbs_to_kg(max_bench)
-            max_deadlift = lbs_to_kg(max_deadlift)
 
         # Output message if something goes wrong...
         msg = ''
@@ -449,58 +446,71 @@ def goals(metric):
         pred = ''
         stats = None
         # Check if metric prediction is requested
-        if metric != 'none':
-            stats = db_session.query(UserMetrics) \
-                .order_by(UserMetrics.date.desc())
-            if stats.count() > 0:
-                stats = stats[0]
+        # if metric != 'none':
+        stats = db_session.query(UserMetrics) \
+            .order_by(UserMetrics.date.desc())
+        if stats.count() > 0:
+            stats = stats[0]
 
-                # Parse out stats
-                weight = stats.weight
-                squat = stats.squat
-                bench = stats.bench
-                deadlift = stats.deadlift
+            # Parse out stats
+            weight = stats.weight
+            squat = stats.squat
+            bench = stats.bench
+            deadlift = stats.deadlift
 
-                # Convert metrics data to kg for models
-                # if session['units'] == 'STANDARD':
-                weight = lbs_to_kg(weight)
-                squat = lbs_to_kg(squat)
-                bench = lbs_to_kg(bench)
-                deadlift = lbs_to_kg(deadlift)
+            # Convert metrics data to kg for models
+            # if session['units'] == 'STANDARD':
+            weight = lbs_to_kg(weight)
+            squat = lbs_to_kg(squat)
+            bench = lbs_to_kg(bench)
+            deadlift = lbs_to_kg(deadlift)
 
-                # Calculate user age
-                age = relativedelta(today, user.birth_date).years
+            # Calculate user age
+            age = relativedelta(today, user.birth_date).years
 
-                # Determine user sex
-                male = 0
-                female = 0
-                if user.sex == 0:
-                    male = 1
-                elif user.sex == 1:
-                    female = 1
-                else:
-                    pass
+            # Determine user sex
+            male = 0
+            female = 0
+            if user.sex == 0:
+                male = 1
+            elif user.sex == 1:
+                female = 1
+            else:
+                pass
 
-                if metric == 'squat':
-                    input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
-                    pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
-                elif metric == 'bench':
-                    input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
-                    pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
-                elif metric == 'deadlift':
-                    input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
-                    pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
-                else:
-                    pred = 'Invalid lift'
-                
-                # Convert prediction to lbs if necessary
-                if type(pred) == np.float64:
-                    pred = round(pred, 2)
-                    if session['units'] == 'STANDARD':
-                        pred = kg_to_lbs(pred)
+            if metric == 'squat':
+                input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
+                pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
+            elif metric == 'bench':
+                input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
+                pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
+            elif metric == 'deadlift':
+                input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
+                pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
+            else:
+                pred = 'Invalid lift'
+
+            squat_input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
+            squat_pred = squat_model.predict(np.array(squat_input).reshape(1,-1))[0]
+
+            bench_input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
+            bench_pred = bench_model.predict(np.array(bench_input).reshape(1,-1))[0]
+            
+            deadlift_input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
+            deadlift_pred = deadlift_model.predict(np.array(deadlift_input).reshape(1,-1))[0]
+
+            # Convert prediction to lbs if necessary
+            if type(pred) == np.float64:
+                pred = round(pred, 2)
+                squat_pred = round(squat_pred, 2)
+                bench_pred = round(bench_pred, 2)
+                deadlift_pred = round(deadlift_pred, 2)
+                if session['units'] == 'STANDARD':
+                    pred = kg_to_lbs(pred)
+
             else:
                 pred = 'No data'
-        return render_template('goals.html', metric=metric, pred=pred, last_record=user_metric, ms=max_squat, mb=max_bench, md=max_deadlift, unit=unit)
+        return render_template('goals.html', metric=metric, pred=pred, last_record=user_metric, sp=squat_pred, bp=bench_pred, dp=deadlift_pred, unit=unit)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
