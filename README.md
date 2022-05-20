@@ -7,6 +7,9 @@ Full-Stack Development
 MySQL Backend Database
 Bootstrap Styling
 
+## NOTE:
+Data is stored in Kg in the database
+
 ## Problem Statement/Motivation
 https://barbend.com/social-media-training-impact/
 
