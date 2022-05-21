@@ -72,7 +72,6 @@
                 <input type="date" name="date" class="form-control" placeholder="Date" id="date" required>
                 <label for="floatingPassword">Date</label>
             </div>
-            <div class="msg">{{ msg }}</div>
             <button class="w-100 btn btn-lg btn-primary" type="submit">Upload</button>
         </form>
         <!-- <div class="card-footer">
@@ -80,12 +79,19 @@
         </div> -->
     </div>
     <div class="card">
+        <div class="card-header">Shortcut Commands:</div>
         <form action="{{ url_for('metrics') }}" method="post" autocomplete="off">
-            <input type="submit" name="delete_last" value="Delete Last Record">
-            <input type="submit" name="delete_all" value="Delete All Records">
+            <!-- <input type="submit" name="delete_last" value="Delete Last Record">
+            <input type="submit" name="delete_all" value="Delete All Records"> -->
+            <button type="submit" name="delete_last" class="w-100 btn btn-lg btn-primary border border-dark">Delete Last Record</button>
+            <button type="submit" name="delete_all" class="w-100 btn btn-lg btn-primary">Delete All Records</button>
         </form>
         <!-- <a href="#" class="btn btn-primary btn-lg" tabindex="-1" role="button" aria-disabled="true">Primary link</a>
         <a href="#" class="btn btn-secondary btn-lg" tabindex="-1" role="button" aria-disabled="true">Link</a> -->
     </div>
+</div>
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{msg}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endblock %}
