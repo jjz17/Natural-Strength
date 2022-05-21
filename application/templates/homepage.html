@@ -67,7 +67,7 @@ This week
         <div class="card-header">Metric Upload Status:</div>
         {% if no_metrics_for_today %}
         <div class="card-body bg-danger">
-            <h5 class="card-title">Would you like to upload your metrics for today?</h5>
+            <h5 class="card-title">Would you like to upload your <a class="link-dark" href="{{ url_for( 'metrics') }}">metrics</a> for today?</h5>
             <!-- <p class="card-text">It is important to consistently log your metrics in order to accurately track your progress.</p> -->
         </div>
         {% else %}

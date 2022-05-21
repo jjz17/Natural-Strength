@@ -90,8 +90,9 @@
         <a href="#" class="btn btn-secondary btn-lg" tabindex="-1" role="button" aria-disabled="true">Link</a> -->
     </div>
 </div>
+{% if msg != '' %}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
     {{msg}}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-{% endblock %}
+{% endif %} {% endblock %}
