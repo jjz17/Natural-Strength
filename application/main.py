@@ -16,6 +16,7 @@ import re
 
 from application import app
 from application import forms
+from application import user
 from application.base import Session
 from application.user import User
 from application.user_metrics import UserMetrics, DummyUserMetrics
@@ -41,25 +42,55 @@ def kg_to_lbs(kg):
     return round(float(kg) * 2.20462, 2)
 
 
-def handle_unit_conversion(input_unit_kg: True, output_unit_kg: False, user_metric=None, **data):
+# def handle_unit_conversion(input_unit_kg: True, output_unit_kg: False, user_metric=None, **data):
+#     if input_unit_kg and not output_unit_kg:
+#         for key in data.keys():
+#             data[key] = kg_to_lbs(data[key])
+#         user_metric = metrics_kg_to_lbs(user_metric)
+#         units = 'Lbs'
+#     elif not input_unit_kg and output_unit_kg:
+#         for key in data.keys():
+#             data[key] = lbs_to_kg(data[key])
+#         units = 'Kg'
+#     elif not output_unit_kg:
+#         user_metric = metrics_kg_to_lbs(user_metric)
+#         units = 'Lbs'
+#     else:
+#         units = 'Kg'
+#     return {'user_metric': user_metric, 'data': data, 'units': units}
+
+def handle_unit_conversion(input_unit_kg: True, output_unit_kg: False, **data):
     if input_unit_kg and not output_unit_kg:
         for key in data.keys():
-            data[key] = kg_to_lbs(data[key])
-        user_metric = metrics_kg_to_lbs(user_metric)
+            # Check if data is a UserMetrics object
+            if isinstance(data[key], UserMetrics):
+                data[key] = metrics_kg_to_lbs(data[key])
+            else:
+                data[key] = kg_to_lbs(data[key])        
         units = 'Lbs'
     elif not input_unit_kg and output_unit_kg:
         for key in data.keys():
             data[key] = lbs_to_kg(data[key])
         units = 'Kg'
     elif not output_unit_kg:
-        user_metric = metrics_kg_to_lbs(user_metric)
+        for key in data.keys():
+            # Check if data is a UserMetrics object
+            if isinstance(data[key], UserMetrics):
+                data[key] = metrics_kg_to_lbs(data[key])
         units = 'Lbs'
     else:
         units = 'Kg'
-    return {'user_metric': user_metric, 'data': data, 'units': units}
+    return {'data': data, 'units': units}
+
+
+def copy_metrics(user_metric: UserMetrics):
+    if user_metric != None:
+        return DummyUserMetrics(user_metric.weight, user_metric.squat, user_metric.bench, user_metric.deadlift, user_metric.date)
+    return None
+
 
 def generate_null_metrics():
-    return {'user_metric': DummyUserMetrics(None,None,None,None,None), 'data': None, 'units': ''}
+    return {'data': {'user_metric': DummyUserMetrics(None,None,None,None,None)}, 'units': ''}
 
 
 def load_model(model_file: str):
@@ -193,6 +224,21 @@ def home():
             .filter(UserMetrics.user_id == session['id']) \
                 .first()[0]
 
+        max_squa = copy_metrics(db_session.query(UserMetrics) \
+            .filter(UserMetrics.user_id == session['id']) \
+            .order_by(UserMetrics.squat.desc()) \
+            .first())
+
+        max_benc = copy_metrics(db_session.query(UserMetrics) \
+            .filter(UserMetrics.user_id == session['id']) \
+            .order_by(UserMetrics.bench.desc()) \
+            .first())
+
+        max_deadlif = copy_metrics(db_session.query(UserMetrics) \
+            .filter(UserMetrics.user_id == session['id']) \
+            .order_by(UserMetrics.deadlift.desc()) \
+            .first())
+
         db_session.close()
 
         no_metrics_for_today = True
@@ -211,7 +257,7 @@ def home():
         # return str(user_metric.date)
         # return render_template('home.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric)
         # return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric, ms=max_squat, mb=max_bench, md=max_deadlift, unit=unit)
-        return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=conversion['user_metric'], data=conversion['data'], units=conversion['units'])
+        return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=conversion['data']['user_metric'], data=conversion['data'], units=conversion['units'], max_test=max_deadlif)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -418,7 +464,7 @@ def goals(metric):
         else:
             conversion = generate_null_metrics()
 
-        user_metric = conversion['user_metric']             
+        user_metric = conversion['data']['user_metric']             
         weight = user_metric.weight
         squat = user_metric.squat
         bench = user_metric.bench
