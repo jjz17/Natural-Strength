@@ -109,4 +109,37 @@
     </div>
 </div>
 
-<h2 class="mb-3">Model Interaction</h2>{% endblock %}
+<h2 class="mb-3">Model Interaction</h2>
+<div class="card">
+    <!-- <img src="..." class="card-img-top" alt="..."> -->
+    <div class="card-header">Input Metrics:</div>
+    <!-- <div class="card-body">
+        <h5 class="card-title"></h5>
+    </div> -->
+    <form action="{{ url_for('goals', metric='none') }}" method="post" autocomplete="off">
+        <div class="form-floating">
+            <input type="number" min="0" step="0.01" name="weight" class="form-control" placeholder="Weight" id="floatingInput" required>
+            <label for="floatingInput">Weight</label>
+        </div>
+        <div class="form-floating">
+            <input type="number" min="0" step="0.01" name="squat" class="form-control" placeholder="Squat" id="squat" required>
+            <label for="floatingPassword">Squat</label>
+        </div>
+        <div class="form-floating">
+            <input type="number" min="0" step="0.01" name="bench" class="form-control" placeholder="Bench" id="bench" required>
+            <label for="floatingPassword">Bench</label>
+        </div>
+        <div class="form-floating">
+            <input type="number" min="0" step="0.01" name="deadlift" class="form-control" placeholder="Deadlift" id="deadlift" required>
+            <label for="floatingPassword">Deadlift</label>
+        </div>
+        <div class="form-floating">
+            <input type="date" name="date" class="form-control" placeholder="Date" id="date" required>
+            <label for="floatingPassword">Date</label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Upload</button>
+    </form>
+    <!-- <div class="card-footer">
+        <small class="text-muted">Last updated 3 mins ago</small>
+    </div> -->
+</div>{% endblock %}

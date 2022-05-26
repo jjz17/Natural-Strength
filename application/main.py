@@ -494,7 +494,7 @@ def goals(metric):
         else:
             pass
         
-        if isinstance(user_metric, DummyUserMetrics):
+        if isinstance(user_metric, DummyUserMetrics) and user_metric.weight == None:
             pred = 'No data'
             squat_pred = 'No data'
             bench_pred = 'No data'
@@ -529,12 +529,37 @@ def goals(metric):
                 deadlift_pred = round(deadlift_pred, 2)
                 if session['units'] == 'STANDARD':
                     pred = kg_to_lbs(pred)
-
+                    squat_pred = kg_to_lbs(squat_pred)
+                    bench_pred = kg_to_lbs(bench_pred)
+                    deadlift_pred = kg_to_lbs(deadlift_pred)
             else:
-                pred = 'No data'
-                squat_pred = 'No data'
-                bench_pred = 'No data'
-                deadlift_pred = 'No data'
+                pred = 'No   data'
+                squat_pred = 'No   data'
+                bench_pred = 'No   data'
+                deadlift_pred = 'No   data'
+
+
+        if request.method == 'POST':
+            # Create variables for easy access
+            age = request.form['age']
+            sex = request.form['sex']
+            weight = request.form['weight']
+            squat = request.form['squat']
+            bench = request.form['bench']
+            deadlift = request.form['deadlift']
+            entry_date = request.form['date']
+
+            # Convert metrics to be inserted
+            if session['units'] == 'STANDARD':
+                conversion = handle_unit_conversion(input_unit_kg=False, output_unit_kg=False, weight=weight, squat=squat, bench=bench, deadlift=deadlift)
+            else:
+                conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=True, weight=weight, squat=squat, bench=bench, deadlift=deadlift)
+
+            data = conversion['data']             
+            weight = data['weight']
+            squat = data['squat']
+            bench = data['bench']
+            deadlift = data['deadlift']
         return render_template('goals.html', metric=metric, pred=pred, last_record=user_metric, sp=squat_pred, bp=bench_pred, dp=deadlift_pred, units=conversion['units'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
