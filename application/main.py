@@ -42,23 +42,6 @@ def kg_to_lbs(kg):
     return round(float(kg) * 2.20462, 2)
 
 
-# def handle_unit_conversion(input_unit_kg: True, output_unit_kg: False, user_metric=None, **data):
-#     if input_unit_kg and not output_unit_kg:
-#         for key in data.keys():
-#             data[key] = kg_to_lbs(data[key])
-#         user_metric = metrics_kg_to_lbs(user_metric)
-#         units = 'Lbs'
-#     elif not input_unit_kg and output_unit_kg:
-#         for key in data.keys():
-#             data[key] = lbs_to_kg(data[key])
-#         units = 'Kg'
-#     elif not output_unit_kg:
-#         user_metric = metrics_kg_to_lbs(user_metric)
-#         units = 'Lbs'
-#     else:
-#         units = 'Kg'
-#     return {'user_metric': user_metric, 'data': data, 'units': units}
-
 def handle_unit_conversion(input_unit_kg: True, output_unit_kg: False, **data):
     if input_unit_kg and not output_unit_kg:
         for key in data.keys():
@@ -212,29 +195,29 @@ def home():
         .order_by(UserMetrics.date.desc()) \
         .first()
 
-        max_squat = db_session.query(func.max(UserMetrics.squat)) \
-            .filter(UserMetrics.user_id == session['id']) \
-                .first()[0]
+        # max_squat = db_session.query(func.max(UserMetrics.squat)) \
+        #     .filter(UserMetrics.user_id == session['id']) \
+        #         .first()[0]
 
-        max_bench = db_session.query(func.max(UserMetrics.bench)) \
-            .filter(UserMetrics.user_id == session['id']) \
-                .first()[0]
+        # max_bench = db_session.query(func.max(UserMetrics.bench)) \
+        #     .filter(UserMetrics.user_id == session['id']) \
+        #         .first()[0]
 
-        max_deadlift = db_session.query(func.max(UserMetrics.deadlift)) \
-            .filter(UserMetrics.user_id == session['id']) \
-                .first()[0]
+        # max_deadlift = db_session.query(func.max(UserMetrics.deadlift)) \
+        #     .filter(UserMetrics.user_id == session['id']) \
+        #         .first()[0]
 
-        max_squa = copy_metrics(db_session.query(UserMetrics) \
+        max_squat = copy_metrics(db_session.query(UserMetrics) \
             .filter(UserMetrics.user_id == session['id']) \
             .order_by(UserMetrics.squat.desc()) \
             .first())
 
-        max_benc = copy_metrics(db_session.query(UserMetrics) \
+        max_bench = copy_metrics(db_session.query(UserMetrics) \
             .filter(UserMetrics.user_id == session['id']) \
             .order_by(UserMetrics.bench.desc()) \
             .first())
 
-        max_deadlif = copy_metrics(db_session.query(UserMetrics) \
+        max_deadlift = copy_metrics(db_session.query(UserMetrics) \
             .filter(UserMetrics.user_id == session['id']) \
             .order_by(UserMetrics.deadlift.desc()) \
             .first())
@@ -254,10 +237,12 @@ def home():
             conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=output_unit_kg, user_metric=user_metric, max_squat=max_squat, max_bench=max_bench, max_deadlift=max_deadlift)
         else:
             conversion = generate_null_metrics()
+
+        data = conversion['data']
         # return str(user_metric.date)
         # return render_template('home.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric)
         # return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric, ms=max_squat, mb=max_bench, md=max_deadlift, unit=unit)
-        return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=conversion['data']['user_metric'], data=conversion['data'], units=conversion['units'], max_test=max_deadlif)
+        return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=data['user_metric'], max_squat=data['max_squat'], max_bench=data['max_bench'], max_deadlift=data['max_deadlift'], units=conversion['units'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 

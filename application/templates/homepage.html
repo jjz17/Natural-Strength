@@ -54,7 +54,7 @@ This week
 </div>
 
 
-<h2>Welcome back, {{ username }} {{max_test}} {{max_test.date}}!</h2>
+<h2>Welcome back, {{ username }}!</h2>
 
 <!-- {% if last_record != None %}
 <p>
@@ -106,7 +106,7 @@ This week
         <div class="card-body">
             <h5 class="card-title">Squat</h5>
             <p class="card-text">Current: {{ last_record.squat }} {{units}}</p>
-            <p class="card-text">All Time PR: {{data['max_squat']}} {{units}}</p>
+            <p class="card-text">All Time PR: {{max_squat.squat}} {{units}}, set on: {{max_squat.date}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{last_record.date}}</small>
@@ -117,7 +117,7 @@ This week
         <div class="card-body">
             <h5 class="card-title">Bench</h5>
             <p class="card-text">Current: {{ last_record.bench }} {{units}}</p>
-            <p class="card-text">All Time PR: {{data['max_bench']}} {{units}}</p>
+            <p class="card-text">All Time PR: {{max_bench.bench}} {{units}}, set on: {{max_bench.date}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{last_record.date}}</small>
@@ -128,7 +128,7 @@ This week
         <div class="card-body">
             <h5 class="card-title">Deadlift</h5>
             <p class="card-text">Current: {{ last_record.deadlift }} {{units}}</p>
-            <p class="card-text">All Time PR: {{data['max_deadlift']}} {{units}}</p>
+            <p class="card-text">All Time PR: {{max_deadlift.deadlift}} {{units}}, set on: {{max_deadlift.date}}</p>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{last_record.date}}</small>
