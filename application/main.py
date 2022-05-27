@@ -46,7 +46,7 @@ def handle_unit_conversion(input_unit_kg: True, output_unit_kg: False, **data):
     if input_unit_kg and not output_unit_kg:
         for key in data.keys():
             # Check if data is a UserMetrics object
-            if isinstance(data[key], UserMetrics):
+            if isinstance(data[key], UserMetrics) or isinstance(data[key], DummyUserMetrics):
                 data[key] = metrics_kg_to_lbs(data[key])
             else:
                 data[key] = kg_to_lbs(data[key])        
@@ -58,7 +58,7 @@ def handle_unit_conversion(input_unit_kg: True, output_unit_kg: False, **data):
     elif not output_unit_kg:
         for key in data.keys():
             # Check if data is a UserMetrics object
-            if isinstance(data[key], UserMetrics):
+            if isinstance(data[key], UserMetrics) or isinstance(data[key], DummyUserMetrics):
                 data[key] = metrics_kg_to_lbs(data[key])
         units = 'Lbs'
     else:
