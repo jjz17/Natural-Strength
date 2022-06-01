@@ -104,8 +104,6 @@ bench_model = xgb.XGBRegressor()
 bench_model.load_model('models/bench.txt')
 deadlift_model = xgb.XGBRegressor()
 deadlift_model.load_model('models/deadlift.txt')
-print(squat_model)
-print(type(squat_model))
 # Global variable
 today = date.today()
 
@@ -504,7 +502,7 @@ def goals(metric):
             pass
         
         if isinstance(user_metric, DummyUserMetrics) and user_metric.weight == None:
-            pred = 'No data'
+            pred = 'No abdata'
             squat_pred = 'No data'
             bench_pred = 'No data'
             deadlift_pred = 'No data'
@@ -530,7 +528,7 @@ def goals(metric):
             # deadlift_input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
             # deadlift_pred = deadlift_model.predict(np.array(deadlift_input).reshape(1,-1))[0]
 
-            pred = 0
+            pred = np.float64(1.0)
             squat_input = pd.DataFrame({'Age': [age], 'BodyweightKg': [weight], 'Best3BenchKg': [bench], 'Best3DeadliftKg': [deadlift], 'Sex_F': [female], 'Sex_M': [male]})
             squat_pred = squat_model.predict(squat_input)[0]
             bench_input = pd.DataFrame({'Age': [age], 'BodyweightKg': [weight], 'Best3SquatKg': [squat], 'Best3DeadliftKg': [deadlift], 'Sex_F': [female], 'Sex_M': [male]})
@@ -551,7 +549,7 @@ def goals(metric):
                     deadlift_pred = kg_to_lbs(deadlift_pred)
             else:
                 pred = 'No   data'
-                squat_pred = 'No   data'
+                squat_pred = 'No a  data'
                 bench_pred = 'No   data'
                 deadlift_pred = 'No   data'
 
