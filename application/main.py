@@ -5,7 +5,8 @@ from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 from matplotlib.style import use
 import numpy as np
-from sqlalchemy import func 
+from sqlalchemy import func
+import xgboost as xgb
 
 from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
@@ -90,13 +91,15 @@ def metrics_kg_to_lbs(user_metric):
 
 
 # # Load in the models and scalers
-bench_model = load_model(f'models{os.path.sep}bench_model.pickle')
-bench_scaler = joblib.load(f'models{os.path.sep}bench_scaler')
-squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
-squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
-deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
-deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
-
+# bench_model = load_model(f'models{os.path.sep}bench_model.pickle')
+# bench_scaler = joblib.load(f'models{os.path.sep}bench_scaler')
+# squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
+# squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
+# deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
+# deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
+squat_model = xgb.XGBRegressor().load_model('models/squat.txt')
+bench_model = xgb.XGBRegressor().load_model('models/bench.txt')
+deadlift_model = xgb.XGBRegressor().load_model('models/deadlift.txt')
 # Global variable
 today = date.today()
 
