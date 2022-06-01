@@ -5,6 +5,7 @@ from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 from matplotlib.style import use
 import numpy as np
+import pandas as pd
 from sqlalchemy import func
 import xgboost as xgb
 
@@ -97,9 +98,14 @@ def metrics_kg_to_lbs(user_metric):
 # squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
 # deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
 # deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
-squat_model = xgb.XGBRegressor().load_model('models/squat.txt')
-bench_model = xgb.XGBRegressor().load_model('models/bench.txt')
-deadlift_model = xgb.XGBRegressor().load_model('models/deadlift.txt')
+squat_model = xgb.XGBRegressor()
+squat_model.load_model('models/squat.txt')
+bench_model = xgb.XGBRegressor()
+bench_model.load_model('models/bench.txt')
+deadlift_model = xgb.XGBRegressor()
+deadlift_model.load_model('models/deadlift.txt')
+print(squat_model)
+print(type(squat_model))
 # Global variable
 today = date.today()
 
@@ -503,26 +509,34 @@ def goals(metric):
             bench_pred = 'No data'
             deadlift_pred = 'No data'
         else:
-            if metric == 'squat':
-                input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
-                pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
-            elif metric == 'bench':
-                input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
-                pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
-            elif metric == 'deadlift':
-                input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
-                pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
-            else:
-                pred = 'Invalid lift'
+            # if metric == 'squat':
+            #     input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
+            #     pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
+            # elif metric == 'bench':
+            #     input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
+            #     pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
+            # elif metric == 'deadlift':
+            #     input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
+            #     pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
+            # else:
+            #     pred = 'Invalid lift'
 
-            squat_input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
-            squat_pred = squat_model.predict(np.array(squat_input).reshape(1,-1))[0]
+            # squat_input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
+            # squat_pred = squat_model.predict(np.array(squat_input).reshape(1,-1))[0]
 
-            bench_input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
-            bench_pred = bench_model.predict(np.array(bench_input).reshape(1,-1))[0]
+            # bench_input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
+            # bench_pred = bench_model.predict(np.array(bench_input).reshape(1,-1))[0]
             
-            deadlift_input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
-            deadlift_pred = deadlift_model.predict(np.array(deadlift_input).reshape(1,-1))[0]
+            # deadlift_input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
+            # deadlift_pred = deadlift_model.predict(np.array(deadlift_input).reshape(1,-1))[0]
+
+            pred = 0
+            squat_input = pd.DataFrame({'Age': [age], 'BodyweightKg': [weight], 'Best3BenchKg': [bench], 'Best3DeadliftKg': [deadlift], 'Sex_F': [female], 'Sex_M': [male]})
+            squat_pred = squat_model.predict(squat_input)[0]
+            bench_input = pd.DataFrame({'Age': [age], 'BodyweightKg': [weight], 'Best3SquatKg': [squat], 'Best3DeadliftKg': [deadlift], 'Sex_F': [female], 'Sex_M': [male]})
+            bench_pred = bench_model.predict(bench_input)[0]
+            deadlift_input = pd.DataFrame({'Age': [age], 'BodyweightKg': [weight], 'Best3SquatKg': [squat], 'Best3BenchKg': [bench], 'Sex_F': [female], 'Sex_M': [male]})
+            deadlift_pred = deadlift_model.predict(deadlift_input)[0]
 
             # Convert prediction to lbs if necessary
             if type(pred) == np.float64:
