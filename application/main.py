@@ -22,6 +22,7 @@ from application import user
 from application.base import Session
 from application.user import User
 from application.user_metrics import UserMetrics, DummyUserMetrics
+from application.utils import choose_pred, copy_metrics, generate_null_metrics, handle_unit_conversion, kg_to_lbs, lbs_to_kg, metrics_kg_to_lbs
 
 # Uncomment to run app through this file (main.py)
 # app = Flask(__name__)
@@ -35,6 +36,7 @@ plt.switch_backend('Agg')
 '''
 Helper Functions
 '''
+
 
 def lbs_to_kg(lbs):
     return round(float(lbs) * 0.453592, 2)
@@ -51,7 +53,7 @@ def handle_unit_conversion(input_unit_kg: True, output_unit_kg: False, **data):
             if isinstance(data[key], UserMetrics) or isinstance(data[key], DummyUserMetrics):
                 data[key] = metrics_kg_to_lbs(data[key])
             else:
-                data[key] = kg_to_lbs(data[key])        
+                data[key] = kg_to_lbs(data[key])
         units = 'Lbs'
     elif not input_unit_kg and output_unit_kg:
         for key in data.keys():
@@ -75,7 +77,7 @@ def copy_metrics(user_metric: UserMetrics):
 
 
 def generate_null_metrics():
-    return {'data': {'user_metric': DummyUserMetrics(None,None,None,None,None)}, 'units': ''}
+    return {'data': {'user_metric': DummyUserMetrics(None, None, None, None, None)}, 'units': ''}
 
 
 def load_model(model_file: str):
@@ -95,7 +97,7 @@ def metrics_kg_to_lbs(user_metric):
 def choose_pred(current, pred):
     result = max(current, pred)
     if result == current:
-        result*=1.05
+        result *= 1.05
     return result
 
 
@@ -206,9 +208,9 @@ def home():
         db_session = Session()
 
         user_metric = db_session.query(UserMetrics) \
-        .filter(UserMetrics.user_id == session['id']) \
-        .order_by(UserMetrics.date.desc()) \
-        .first()
+            .filter(UserMetrics.user_id == session['id']) \
+            .order_by(UserMetrics.date.desc()) \
+            .first()
 
         # max_squat = db_session.query(func.max(UserMetrics.squat)) \
         #     .filter(UserMetrics.user_id == session['id']) \
@@ -222,20 +224,20 @@ def home():
         #     .filter(UserMetrics.user_id == session['id']) \
         #         .first()[0]
 
-        max_squat = copy_metrics(db_session.query(UserMetrics) \
-            .filter(UserMetrics.user_id == session['id']) \
-            .order_by(UserMetrics.squat.desc()) \
-            .first())
+        max_squat = copy_metrics(db_session.query(UserMetrics)
+                                 .filter(UserMetrics.user_id == session['id'])
+                                 .order_by(UserMetrics.squat.desc())
+                                 .first())
 
-        max_bench = copy_metrics(db_session.query(UserMetrics) \
-            .filter(UserMetrics.user_id == session['id']) \
-            .order_by(UserMetrics.bench.desc()) \
-            .first())
+        max_bench = copy_metrics(db_session.query(UserMetrics)
+                                 .filter(UserMetrics.user_id == session['id'])
+                                 .order_by(UserMetrics.bench.desc())
+                                 .first())
 
-        max_deadlift = copy_metrics(db_session.query(UserMetrics) \
-            .filter(UserMetrics.user_id == session['id']) \
-            .order_by(UserMetrics.deadlift.desc()) \
-            .first())
+        max_deadlift = copy_metrics(db_session.query(UserMetrics)
+                                    .filter(UserMetrics.user_id == session['id'])
+                                    .order_by(UserMetrics.deadlift.desc())
+                                    .first())
 
         db_session.close()
 
@@ -249,7 +251,8 @@ def home():
                 output_unit_kg = False
             else:
                 output_unit_kg = True
-            conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=output_unit_kg, user_metric=user_metric, max_squat=max_squat, max_bench=max_bench, max_deadlift=max_deadlift)
+            conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=output_unit_kg,
+                                                user_metric=user_metric, max_squat=max_squat, max_bench=max_bench, max_deadlift=max_deadlift)
         else:
             conversion = generate_null_metrics()
 
@@ -313,11 +316,13 @@ def metrics():
 
             # Convert metrics to be inserted
             if session['units'] == 'STANDARD':
-                conversion = handle_unit_conversion(input_unit_kg=False, output_unit_kg=True, weight=weight, squat=squat, bench=bench, deadlift=deadlift)
+                conversion = handle_unit_conversion(
+                    input_unit_kg=False, output_unit_kg=True, weight=weight, squat=squat, bench=bench, deadlift=deadlift)
             else:
-                conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=True, weight=weight, squat=squat, bench=bench, deadlift=deadlift)
+                conversion = handle_unit_conversion(
+                    input_unit_kg=True, output_unit_kg=True, weight=weight, squat=squat, bench=bench, deadlift=deadlift)
 
-            data = conversion['data']             
+            data = conversion['data']
             weight = data['weight']
             squat = data['squat']
             bench = data['bench']
@@ -452,19 +457,20 @@ def goals(metric):
         db_session = Session()
 
         user_metric = db_session.query(UserMetrics) \
-        .filter(UserMetrics.user_id == session['id']) \
-        .order_by(UserMetrics.date.desc()) \
-        .first()
+            .filter(UserMetrics.user_id == session['id']) \
+            .order_by(UserMetrics.date.desc()) \
+            .first()
 
         if user_metric != None:
             # if session['units'] == 'STANDARD':
             #     conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=False, user_metric=user_metric)
             # else:
-                conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=True, user_metric=user_metric)
+            conversion = handle_unit_conversion(
+                input_unit_kg=True, output_unit_kg=True, user_metric=user_metric)
         else:
             conversion = generate_null_metrics()
 
-        user_metric = conversion['data']['user_metric']             
+        user_metric = conversion['data']['user_metric']
         weight = user_metric.weight
         squat = user_metric.squat
         bench = user_metric.bench
@@ -488,7 +494,7 @@ def goals(metric):
             female = 1
         else:
             pass
-        
+
         if isinstance(user_metric, DummyUserMetrics) and user_metric.weight == None:
             pred = 'No data'
             squat_pred = 'No data'
@@ -512,16 +518,19 @@ def goals(metric):
 
             # bench_input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
             # bench_pred = bench_model.predict(np.array(bench_input).reshape(1,-1))[0]
-            
+
             # deadlift_input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
             # deadlift_pred = deadlift_model.predict(np.array(deadlift_input).reshape(1,-1))[0]
 
             pred = np.float64(1.0)
-            squat_input = pd.DataFrame({'Age': [age], 'BodyweightKg': [weight], 'Best3BenchKg': [bench], 'Best3DeadliftKg': [deadlift], 'Sex_F': [female], 'Sex_M': [male]})
+            squat_input = pd.DataFrame({'Age': [age], 'BodyweightKg': [weight], 'Best3BenchKg': [
+                                       bench], 'Best3DeadliftKg': [deadlift], 'Sex_F': [female], 'Sex_M': [male]})
             squat_pred = squat_model.predict(squat_input)[0]
-            bench_input = pd.DataFrame({'Age': [age], 'BodyweightKg': [weight], 'Best3SquatKg': [squat], 'Best3DeadliftKg': [deadlift], 'Sex_F': [female], 'Sex_M': [male]})
+            bench_input = pd.DataFrame({'Age': [age], 'BodyweightKg': [weight], 'Best3SquatKg': [
+                                       squat], 'Best3DeadliftKg': [deadlift], 'Sex_F': [female], 'Sex_M': [male]})
             bench_pred = bench_model.predict(bench_input)[0]
-            deadlift_input = pd.DataFrame({'Age': [age], 'BodyweightKg': [weight], 'Best3SquatKg': [squat], 'Best3BenchKg': [bench], 'Sex_F': [female], 'Sex_M': [male]})
+            deadlift_input = pd.DataFrame({'Age': [age], 'BodyweightKg': [weight], 'Best3SquatKg': [
+                                          squat], 'Best3BenchKg': [bench], 'Sex_F': [female], 'Sex_M': [male]})
             deadlift_pred = deadlift_model.predict(deadlift_input)[0]
 
             # Convert prediction to lbs if necessary
@@ -540,7 +549,7 @@ def goals(metric):
                     squat_pred = kg_to_lbs(squat_pred)
                     bench_pred = kg_to_lbs(bench_pred)
                     deadlift_pred = kg_to_lbs(deadlift_pred)
-                
+
             else:
                 pred = 'No data'
                 squat_pred = 'Nodata'
@@ -549,12 +558,13 @@ def goals(metric):
 
             # Convert metrics to be inserted
             if session['units'] == 'STANDARD':
-                conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=False, weight=weight, squat=squat, bench=bench, deadlift=deadlift, user_metric=user_metric)
+                conversion = handle_unit_conversion(
+                    input_unit_kg=True, output_unit_kg=False, weight=weight, squat=squat, bench=bench, deadlift=deadlift, user_metric=user_metric)
             else:
-                conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=True, weight=weight, squat=squat, bench=bench, deadlift=deadlift, user_metric=user_metric)
+                conversion = handle_unit_conversion(
+                    input_unit_kg=True, output_unit_kg=True, weight=weight, squat=squat, bench=bench, deadlift=deadlift, user_metric=user_metric)
 
             user_metric = conversion['data']['user_metric']
-
 
         if request.method == 'POST':
             # Create variables for easy access
@@ -634,6 +644,7 @@ def about():
 --------------------Experiemental pages------------------------
 '''
 
+
 @app.route('/boot')
 def boot():
     return render_template('homepage.html')
@@ -691,4 +702,3 @@ def plot_points(points):
 # if __name__ == '__main__':
 #     app.run()
     # app.run(host='0.0.0.0', port=5000)
-
