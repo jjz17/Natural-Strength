@@ -85,10 +85,18 @@ def load_model(model_file: str):
 def scale_stats(scaler, stats: list):
     return scaler.transform(np.array(stats).reshape(1, -1))
 
+
 def metrics_kg_to_lbs(user_metric):
     if user_metric == None:
         return None
     return DummyUserMetrics(kg_to_lbs(user_metric.weight), kg_to_lbs(user_metric.squat), kg_to_lbs(user_metric.bench), kg_to_lbs(user_metric.deadlift), user_metric.date)
+
+
+def choose_pred(current, pred):
+    result = max(current, pred)
+    if result == current:
+        result*=1.05
+    return result
 
 
 # # Load in the models and scalers
