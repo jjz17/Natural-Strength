@@ -510,7 +510,7 @@ def goals(metric):
             pass
         
         if isinstance(user_metric, DummyUserMetrics) and user_metric.weight == None:
-            pred = 'No abdata'
+            pred = 'No data'
             squat_pred = 'No data'
             bench_pred = 'No data'
             deadlift_pred = 'No data'
@@ -546,6 +546,11 @@ def goals(metric):
 
             # Convert prediction to lbs if necessary
             if type(pred) == np.float64:
+                # Handle extrapolation
+                squat_pred = choose_pred(squat, squat_pred)
+                bench_pred = choose_pred(bench, bench_pred)
+                deadlift_pred = choose_pred(deadlift, deadlift_pred)
+                
                 pred = round(pred, 2)
                 squat_pred = round(squat_pred, 2)
                 bench_pred = round(bench_pred, 2)
@@ -555,11 +560,12 @@ def goals(metric):
                     squat_pred = kg_to_lbs(squat_pred)
                     bench_pred = kg_to_lbs(bench_pred)
                     deadlift_pred = kg_to_lbs(deadlift_pred)
+                
             else:
-                pred = 'No   data'
-                squat_pred = 'No a  data'
-                bench_pred = 'No   data'
-                deadlift_pred = 'No   data'
+                pred = 'No data'
+                squat_pred = 'Nodata'
+                bench_pred = 'No data'
+                deadlift_pred = 'No data'
 
 
         if request.method == 'POST':
