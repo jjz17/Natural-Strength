@@ -34,6 +34,10 @@ kill -9 (PID)
 ## Ideas
 Add news pages
 
+## Important
+Configuration Tutorial
+https://hackersandslackers.com/configure-flask-applications/
+
 
 
 ## Resources
@@ -72,3 +76,6 @@ https://www.youtube.com/watch?v=geKvJbQsOmM
 
 #### Dropdown menu tutorial
 https://www.w3schools.com/howto/howto_css_dropdown.asp
+
+#### Example Flask App
+https://github.com/cuducos/whiskyton
