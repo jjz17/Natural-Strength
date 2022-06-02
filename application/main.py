@@ -313,7 +313,7 @@ def metrics():
 
             # Convert metrics to be inserted
             if session['units'] == 'STANDARD':
-                conversion = handle_unit_conversion(input_unit_kg=False, output_unit_kg=False, weight=weight, squat=squat, bench=bench, deadlift=deadlift)
+                conversion = handle_unit_conversion(input_unit_kg=False, output_unit_kg=True, weight=weight, squat=squat, bench=bench, deadlift=deadlift)
             else:
                 conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=True, weight=weight, squat=squat, bench=bench, deadlift=deadlift)
 
@@ -457,9 +457,9 @@ def goals(metric):
         .first()
 
         if user_metric != None:
-            if session['units'] == 'STANDARD':
-                conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=False, user_metric=user_metric)
-            else:
+            # if session['units'] == 'STANDARD':
+            #     conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=False, user_metric=user_metric)
+            # else:
                 conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=True, user_metric=user_metric)
         else:
             conversion = generate_null_metrics()
@@ -475,26 +475,6 @@ def goals(metric):
         user = db_session.query(User).get(id)
 
         pred = ''
-        stats = None
-        # Check if metric prediction is requested
-        # if metric != 'none':
-        # stats = db_session.query(UserMetrics) \
-        #     .order_by(UserMetrics.date.desc())
-        # if stats.count() > 0:
-        #     stats = stats[0]
-
-        #     # Parse out stats
-        #     weight = stats.weight
-        #     squat = stats.squat
-        #     bench = stats.bench
-        #     deadlift = stats.deadlift
-
-        #     # Convert metrics data to kg for models
-        #     # if session['units'] == 'STANDARD':
-        #     weight = lbs_to_kg(weight)
-        #     squat = lbs_to_kg(squat)
-        #     bench = lbs_to_kg(bench)
-        #     deadlift = lbs_to_kg(deadlift)
 
         # Calculate user age
         age = relativedelta(today, user.birth_date).years
@@ -550,7 +530,7 @@ def goals(metric):
                 squat_pred = choose_pred(squat, squat_pred)
                 bench_pred = choose_pred(bench, bench_pred)
                 deadlift_pred = choose_pred(deadlift, deadlift_pred)
-                
+
                 pred = round(pred, 2)
                 squat_pred = round(squat_pred, 2)
                 bench_pred = round(bench_pred, 2)
@@ -567,6 +547,14 @@ def goals(metric):
                 bench_pred = 'No data'
                 deadlift_pred = 'No data'
 
+            # Convert metrics to be inserted
+            if session['units'] == 'STANDARD':
+                conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=False, weight=weight, squat=squat, bench=bench, deadlift=deadlift, user_metric=user_metric)
+            else:
+                conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=True, weight=weight, squat=squat, bench=bench, deadlift=deadlift, user_metric=user_metric)
+
+            user_metric = conversion['data']['user_metric']
+
 
         if request.method == 'POST':
             # Create variables for easy access
@@ -578,17 +566,6 @@ def goals(metric):
             deadlift = request.form['deadlift']
             entry_date = request.form['date']
 
-            # Convert metrics to be inserted
-            if session['units'] == 'STANDARD':
-                conversion = handle_unit_conversion(input_unit_kg=False, output_unit_kg=False, weight=weight, squat=squat, bench=bench, deadlift=deadlift)
-            else:
-                conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=True, weight=weight, squat=squat, bench=bench, deadlift=deadlift)
-
-            data = conversion['data']             
-            weight = data['weight']
-            squat = data['squat']
-            bench = data['bench']
-            deadlift = data['deadlift']
         return render_template('goals.html', metric=metric, pred=pred, last_record=user_metric, sp=squat_pred, bp=bench_pred, dp=deadlift_pred, units=conversion['units'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
