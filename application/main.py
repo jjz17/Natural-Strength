@@ -41,7 +41,6 @@ deadlift_model.load_model('models/deadlift.txt')
 # Global variable
 today = date.today()
 
-
 @app.route('/', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
@@ -127,6 +126,7 @@ def register():
 def home():
     # Check if user is loggedin
     if 'loggedin' in session:
+        session['current_page'] = 'home'
         db_session = Session()
 
         user_metric = db_session.query(UserMetrics) \
@@ -177,6 +177,7 @@ def home():
 def profile():
     # Check if user is loggedin
     if 'loggedin' in session:
+        session['current_page'] = 'profile'
         # We need all the user's info so we can display it on the profile page
 
         db_session = Session()
@@ -200,6 +201,7 @@ def profile():
 def metrics():
     # Check if user is loggedin
     if 'loggedin' in session:
+        session['current_page'] = 'metrics'
         id = session['id']
 
         # Create a new session
@@ -274,25 +276,28 @@ def metrics():
     return redirect(url_for('login'))
 
 
-@app.route('/data/<metric>', methods=['GET'])
-def data(metric):
-    return jsonify({'results': None})
-
-
-# Displays the plot of the requested user metric
-@app.route('/chart/<metric>', methods=['GET', 'POST'])
-def chart_metric(metric):
-
+@app.route('/units', methods=['POST'])
+def set_units():
     if request.method == 'POST' and 'units' in request.form:
         # Create variables for easy access
         units = request.form['units']
         session['units'] = units
+        if session['current_page'] in {'chart_metric', 'goals'}:
+            return redirect(url_for(session['current_page'], metric=session['param']))
+        return redirect(url_for(session['current_page']))
 
-    title = f'Your Custom {metric.title()} Plot'
-    plot = plot_metric(metric)
-    # return render_template('plot.html', title=title, plot=plot)
-    return render_template('chart.html', title=title, plot=plot)
-
+# Displays the plot of the requested user metric
+@app.route('/chart/<metric>', methods=['GET', 'POST'])
+def chart_metric(metric):
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        session['current_page'] = 'chart_metric'
+        session['param'] = metric
+        title = f'Your Custom {metric.title()} Plot'
+        plot = plot_metric(metric)
+        return render_template('chart.html', title=title, plot=plot)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 def plot_metric(metric):
     fig, ax = plt.subplots(1, 1, figsize=(12, 6))
@@ -340,9 +345,10 @@ def plot_metric(metric):
 
 @app.route('/goals/<metric>', methods=['GET', 'POST'])
 def goals(metric):
-
     # Check if user is loggedin
     if 'loggedin' in session:
+        session['current_page'] = 'goals'
+        session['param'] = metric
         id = session['id']
 
         # Create a new session
@@ -451,13 +457,19 @@ def goals(metric):
 
 @app.route('/news')
 def news():
-    return render_template('news.html')
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        session['current_page'] = 'news'
+        return render_template('news.html')
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
     # Check if user is loggedin
     if 'loggedin' in session:
+        session['current_page'] = 'settings'
         id = session['id']
 
         # Create a new session
@@ -504,8 +516,13 @@ def settings():
 
 
 @app.route('/about')
-def about():
-    return render_template('about.html')
+def about():    
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        session['current_page'] = 'about'
+        return render_template('about.html')
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 
 '''
