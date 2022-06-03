@@ -9,16 +9,13 @@ import pandas as pd
 from sqlalchemy import func
 import xgboost as xgb
 
-from datetime import date, datetime
+from datetime import date
 from dateutil.relativedelta import relativedelta
 import io
-import os
-import _pickle as cPickle
 import re
 
 from application import app
 from application import forms
-from application import user
 from application.base import Session
 from application.user import User
 from application.user_metrics import UserMetrics, DummyUserMetrics
@@ -33,13 +30,7 @@ app.secret_key = 'your secret key'
 # Avoid multithreading MatPlotLib GUI error
 plt.switch_backend('Agg')
 
-# # Load in the models and scalers
-# bench_model = load_model(f'models{os.path.sep}bench_model.pickle')
-# bench_scaler = joblib.load(f'models{os.path.sep}bench_scaler')
-# squat_model = load_model(f'models{os.path.sep}squat_model.pickle')
-# squat_scaler = joblib.load(f'models{os.path.sep}squat_scaler')
-# deadlift_model = load_model(f'models{os.path.sep}deadlift_model.pickle')
-# deadlift_scaler = joblib.load(f'models{os.path.sep}deadlift_scaler')
+# # Load in the models
 squat_model = xgb.XGBRegressor()
 squat_model.load_model('models/squat.txt')
 bench_model = xgb.XGBRegressor()
@@ -81,7 +72,6 @@ def login():
             # User doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
     # Show the login form with message (if any)
-    # return render_template('index.html', msg=msg)
     return render_template('loginpage.html', msg=msg)
 
 
@@ -129,7 +119,6 @@ def register():
         # Form is empty... (no POST data)
         msg = 'Please fill out the form!'
     # Show registration form with message (if any)
-    # return render_template('register.html', msg=msg)
     return render_template('registerpage.html', msg=msg)
 
 
@@ -144,18 +133,6 @@ def home():
             .filter(UserMetrics.user_id == session['id']) \
             .order_by(UserMetrics.date.desc()) \
             .first()
-
-        # max_squat = db_session.query(func.max(UserMetrics.squat)) \
-        #     .filter(UserMetrics.user_id == session['id']) \
-        #         .first()[0]
-
-        # max_bench = db_session.query(func.max(UserMetrics.bench)) \
-        #     .filter(UserMetrics.user_id == session['id']) \
-        #         .first()[0]
-
-        # max_deadlift = db_session.query(func.max(UserMetrics.deadlift)) \
-        #     .filter(UserMetrics.user_id == session['id']) \
-        #         .first()[0]
 
         max_squat = copy_metrics(db_session.query(UserMetrics)
                                  .filter(UserMetrics.user_id == session['id'])
@@ -190,9 +167,6 @@ def home():
             conversion = generate_null_metrics()
 
         data = conversion['data']
-        # return str(user_metric.date)
-        # return render_template('home.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric)
-        # return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=user_metric, ms=max_squat, mb=max_bench, md=max_deadlift, unit=unit)
         return render_template('homepage.html', username=session['username'].title(), no_metrics_for_today=no_metrics_for_today, last_record=data['user_metric'], max_squat=data['max_squat'], max_bench=data['max_bench'], max_deadlift=data['max_deadlift'], units=conversion['units'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
@@ -200,8 +174,6 @@ def home():
 
 # Profile page, only accessible for loggedin users
 @app.route('/profile', methods=['GET', 'POST'])
-# @app.route('/profile/', defaults={'units': ''})
-# @app.route('/profile/<units>', methods=['GET', 'POST'])
 def profile():
     # Check if user is loggedin
     if 'loggedin' in session:
@@ -218,14 +190,12 @@ def profile():
         age = relativedelta(today, user.birth_date).years
 
         # Show the profile page with user info
-        # return render_template('profile.html', user=user)
         return render_template('profilepage.html', user=user, age=age)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
 
 # Metrics insert page, only accessible for loggedin users
-# @app.route('/metrics', methods=['GET', 'POST'])
 @app.route('/metrics', methods=['GET', 'POST'])
 def metrics():
     # Check if user is loggedin
@@ -260,16 +230,6 @@ def metrics():
             squat = data['squat']
             bench = data['bench']
             deadlift = data['deadlift']
-            # Validation checks
-            # if not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', weight):
-            #     msg = 'Weight must be a positive number'
-            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', squat):
-            #     msg = 'Squat must be a positive number'
-            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', bench):
-            #     msg = 'Bench must be a positive number'
-            # elif not re.match(r'^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$', deadlift):
-            #     msg = 'Deadlift must be a positive number'
-            # else:
 
             metrics_query = db_session.query(UserMetrics) \
                 .filter((UserMetrics.date == today) & (UserMetrics.user == user))
@@ -309,7 +269,6 @@ def metrics():
         db_session.commit()
         db_session.close()
         # Show the update form with message (if any)
-        # return render_template('metrics.html', msg=msg, pred=pred)
         return render_template('metricspage.html', msg=msg)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
@@ -395,9 +354,6 @@ def goals(metric):
             .first()
 
         if user_metric != None:
-            # if session['units'] == 'STANDARD':
-            #     conversion = handle_unit_conversion(input_unit_kg=True, output_unit_kg=False, user_metric=user_metric)
-            # else:
             conversion = handle_unit_conversion(
                 input_unit_kg=True, output_unit_kg=True, user_metric=user_metric)
         else:
@@ -434,27 +390,6 @@ def goals(metric):
             bench_pred = 'No data'
             deadlift_pred = 'No data'
         else:
-            # if metric == 'squat':
-            #     input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
-            #     pred = squat_model.predict(np.array(input).reshape(1,-1))[0]
-            # elif metric == 'bench':
-            #     input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
-            #     pred = bench_model.predict(np.array(input).reshape(1,-1))[0]
-            # elif metric == 'deadlift':
-            #     input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
-            #     pred = deadlift_model.predict(np.array(input).reshape(1,-1))[0]
-            # else:
-            #     pred = 'Invalid lift'
-
-            # squat_input = scale_stats(squat_scaler, [age, weight, bench, deadlift, female, male])
-            # squat_pred = squat_model.predict(np.array(squat_input).reshape(1,-1))[0]
-
-            # bench_input = scale_stats(bench_scaler, [age, weight, squat, deadlift, female, male])
-            # bench_pred = bench_model.predict(np.array(bench_input).reshape(1,-1))[0]
-
-            # deadlift_input = scale_stats(deadlift_scaler, [age, weight, bench, squat, female, male])
-            # deadlift_pred = deadlift_model.predict(np.array(deadlift_input).reshape(1,-1))[0]
-
             pred = np.float64(1.0)
             squat_input = pd.DataFrame({'Age': [age], 'BodyweightKg': [weight], 'Best3BenchKg': [
                                        bench], 'Best3DeadliftKg': [deadlift], 'Sex_F': [female], 'Sex_M': [male]})
@@ -591,44 +526,6 @@ def wtforms():
         name = form.name.data
         form.name.data = ''
     return render_template('wtforms.html', name=name, form=form)
-
-
-@app.route('/plot/<int:points>', methods=['GET'])
-def plot(points):
-    title = 'Randomly Generated Scatterplot'
-    plot = plot_points(points)
-    return render_template('plot.html', title=title, plot=plot)
-
-
-def plot_points(points):
-    """Generate a plot with a varying number of randomly generated points
-    Args:
-    points (int): a number of points to plot
-    Returns: An svg plot with <points> data points
-    """
-    # data for plotting
-    data = np.random
-
-    data = np.random.rand(points, 2)
-
-    fig = Figure()
-    FigureCanvas(fig)
-
-    ax = fig.add_subplot(111)
-
-    ax.scatter(data[:, 0], data[:, 1])
-
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_title(f'There are {points} data points!')
-    ax.grid(True)
-
-    img = io.StringIO()
-    fig.savefig(img, format='svg')
-    # clip off the xml headers from the image
-    svg_img = '<svg' + img.getvalue().split('<svg')[1]
-
-    return svg_img
 
 
 # Uncomment to run app through this file (main.py)
