@@ -485,6 +485,10 @@ def settings():
             password = request.form['password']
             birth_date = request.form['birth_date']
             email = request.form['email']
+            if request.form.get('notifications'):
+                notifications = 1
+            else:
+                notifications = 0
 
             # Validation checks
             if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
@@ -502,6 +506,7 @@ def settings():
                 user.password = password
                 user.birth_date = birth_date
                 user.email = email
+                user.notifications = notifications
                 db_session.commit()
                 db_session.close()
                 msg = 'You have successfully updated!'
