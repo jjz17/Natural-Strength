@@ -13,10 +13,12 @@ class User(Base):
     birth_date = Column(Date)
     email = Column(String)
     sex = Column(Integer)
+    notifications = Column(Integer)
 
-    def __init__(self, username, password, birth_date, email, sex):
+    def __init__(self, username, password, birth_date, email, sex, notifications):
         self.username = username
         self.password = password
         self.birth_date = birth_date
         self.email = email
         self.sex = sex
+        self.notifications = notifications
