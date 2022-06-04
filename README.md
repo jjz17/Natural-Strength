@@ -38,6 +38,8 @@ Add news pages
 Configuration Tutorial
 https://hackersandslackers.com/configure-flask-applications/
 
+Send Email
+https://www.justintodata.com/send-email-using-python-tutorial/
 
 
 ## Resources
