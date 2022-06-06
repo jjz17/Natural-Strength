@@ -3,7 +3,7 @@
 from sqlalchemy import Column, Integer, Float, Date, ForeignKey
 from sqlalchemy.orm import relationship
 
-from application.base import Base
+from base import Base
 
 class UserMetrics(Base):
     __tablename__ = 'user_metrics'

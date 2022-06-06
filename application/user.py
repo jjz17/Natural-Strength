@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 from sqlalchemy import Column, String, Integer, Date
 
-from application.base import Base
+from base import Base
 
 class User(Base):
     __tablename__ = 'users'
