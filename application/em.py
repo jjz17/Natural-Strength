@@ -7,11 +7,19 @@ import base64
 from google.oauth2 import service_account
 from google.oauth2.credentials import Credentials
 
-# Email variables. Modify this!
+# Email variables.
 EMAIL_FROM = 'a.plus.or.no.rice@gmail.com'
 EMAIL_TO = 'jasonjzhang17@gmail.com'
 EMAIL_SUBJECT = 'Hello  from Lyfepedia!'
-EMAIL_CONTENT = 'Hello, this is a test\nLyfepedia\nhttps://lyfepedia.com'
+EMAIL_CONTENT = f'''
+                <html>
+                    <body>
+                        <h1>Daily Fitness Motivation</h1>
+                        <p>Hello {EMAIL_TO}, let's get to work!</p>
+                    </body>
+                </html>
+                '''
+# EMAIL_CONTENT = 'Hello, this is a test\nLyfepedia\nhttps://lyfepedia.com'
 
 def create_message(sender, to, subject, message_text):
   """Create a message for an email.
@@ -23,7 +31,8 @@ def create_message(sender, to, subject, message_text):
   Returns:
     An object containing a base64url encoded email object.
   """
-  message = MIMEText(message_text)
+  message = MIMEText(message_text, 'html')
+  # message = MIMEText(message_text)
   message['to'] = to
   message['from'] = sender
   message['subject'] = subject
