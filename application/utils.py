@@ -9,6 +9,28 @@ from datetime import date
 import _pickle as cPickle
 
 from user_metrics import UserMetrics, DummyUserMetrics
+from em import service_account_login, create_message, send_message
+
+
+def send_notification_emails(users: list):
+    service = service_account_login()
+    EMAIL_FROM = 'a.plus.or.no.rice@gmail.com'
+    date_str = date.today()
+    for user in users:
+        EMAIL_TO = user.email
+        EMAIL_SUBJECT = f'Daily Fitness Motivation: {date_str}'
+        EMAIL_CONTENT = f'''
+                <html>
+                    <body>
+                        <h1>Daily Fitness Motivation</h1>
+                        <p>Hello {user.username}, let's get to work!</p>
+                    </body>
+                </html>
+                '''
+        
+        message = create_message(EMAIL_FROM, EMAIL_TO, EMAIL_SUBJECT, EMAIL_CONTENT)
+        sent = send_message(service,'me', message)
+        print(sent)
 
 
 def send_notif_emails(users: list):
