@@ -1,15 +1,9 @@
 import numpy as np
-import smtplib
-import ssl
-# email.mime subclasses
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 from datetime import date
 import _pickle as cPickle
 from collections.abc import Iterable
 
-from user import User
 from user_metrics import UserMetrics, DummyUserMetrics
 from em import service_account_login, create_message, send_message
 
@@ -29,6 +23,7 @@ def send_notification_emails(users: Iterable):
                         <body>
                             <h1>Daily Fitness Motivation</h1>
                             <p>Hello {user.username}, let's get to work!</p>
+                            <p>Upload your daily metrics to stay on track and continue progressing on your fitness journey.</p>
                         </body>
                     </html>
                     '''
@@ -36,48 +31,7 @@ def send_notification_emails(users: Iterable):
             message = create_message(EMAIL_FROM, EMAIL_TO, EMAIL_SUBJECT, EMAIL_CONTENT)
             # Send email message
             sent = send_message(service,'me', message)
-            print(sent)
-
-
-def send_notif_emails(users: list):
-    # Set up the email addresses and password. Please replace below with your email address and password
-    email_from = 'a.plus.or.no.rice@gmail.com'
-    password = 'jiajia2002'
-
-    for user in users:
-        # If User has notifications turned on
-        if user.notifications == 1:
-            email_to = user.email
-
-            # Define the HTML document
-            html = f'''
-                <html>
-                    <body>
-                        <h1>Daily Fitness Motivation</h1>
-                        <p>Hello {user.username}, let's get to work!</p>
-                    </body>
-                </html>
-                '''
-            # Generate today's date to be included in the email Subject
-            date_str = date.today()
-
-            # Create a MIMEMultipart class, and set up the From, To, Subject fields
-            email_message = MIMEMultipart()
-            email_message['From'] = email_from
-            email_message['To'] = email_to
-            email_message['Subject'] = f'Daily Fitness Motivation: {date_str}'
-
-            # Attach the html doc defined earlier, as a MIMEText html content type to the MIME message
-            email_message.attach(MIMEText(html, "html"))
-            # Convert it as a string
-            email_string = email_message.as_string()
-
-            # Connect to the Gmail SMTP server and Send Email
-            context = ssl.create_default_context()
-            with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-                server.login(email_from, password)
-                server.sendmail(email_from, email_to, email_string)
-                print(f'Email sent to {user.username} at {user.email}')
+            # print(sent)
 
 
 def choose_pred(current, pred):
