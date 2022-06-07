@@ -286,7 +286,9 @@ def metrics():
 def search():
     if request.method == 'POST' and 'search' in request.form:
         search_query = request.form['search']
-        return search_query
+        # Replace spaces in query with + for google search
+        search_query = search_query.replace(' ', '+')
+        return redirect(f'http://www.google.com/search?q={search_query}')
  
 
 @app.route('/units', methods=['POST'])
