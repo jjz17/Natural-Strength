@@ -14,15 +14,20 @@ from dateutil.relativedelta import relativedelta
 import io
 import re
 
-from application import app
-from application import forms
-from application.base import Session
-from application.user import User
-from application.user_metrics import UserMetrics, DummyUserMetrics
-from application.utils import choose_pred, copy_metrics, generate_null_metrics, handle_unit_conversion, kg_to_lbs, lbs_to_kg, metrics_kg_to_lbs
+# from application import app
+# from application import forms
+# from application.base import Session
+# from application.user import User
+# from application.user_metrics import UserMetrics, DummyUserMetrics
+# from application.utils import choose_pred, copy_metrics, generate_null_metrics, handle_unit_conversion, kg_to_lbs, lbs_to_kg, metrics_kg_to_lbs
+
+from base import Session
+from user import User
+from user_metrics import UserMetrics, DummyUserMetrics
+from utils import choose_pred, copy_metrics, generate_null_metrics, handle_unit_conversion, kg_to_lbs, lbs_to_kg, metrics_kg_to_lbs
 
 # Uncomment to run app through this file (main.py)
-# app = Flask(__name__)
+app = Flask(__name__)
 
 # Change this to your secret key (can be anything, it's for extra protection)
 app.secret_key = 'your secret key'
@@ -32,11 +37,11 @@ plt.switch_backend('Agg')
 
 # # Load in the models
 squat_model = xgb.XGBRegressor()
-squat_model.load_model('models/squat.txt')
+squat_model.load_model('../models/squat.txt')
 bench_model = xgb.XGBRegressor()
-bench_model.load_model('models/bench.txt')
+bench_model.load_model('../models/bench.txt')
 deadlift_model = xgb.XGBRegressor()
-deadlift_model.load_model('models/deadlift.txt')
+deadlift_model.load_model('../models/deadlift.txt')
 
 # Global variable
 today = date.today()
@@ -551,6 +556,6 @@ def wtforms():
 
 
 # Uncomment to run app through this file (main.py)
-# if __name__ == '__main__':
-#     app.run()
-    # app.run(host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    app.run()
+    app.run(host='0.0.0.0', port=5000)
