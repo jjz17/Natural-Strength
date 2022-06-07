@@ -21,6 +21,7 @@ import re
 # from application.user_metrics import UserMetrics, DummyUserMetrics
 # from application.utils import choose_pred, copy_metrics, generate_null_metrics, handle_unit_conversion, kg_to_lbs, lbs_to_kg, metrics_kg_to_lbs
 
+import forms
 from base import Session
 from user import User
 from user_metrics import UserMetrics, DummyUserMetrics
@@ -280,6 +281,13 @@ def metrics():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+
+@app.route('/search', methods=['POST'])
+def search():
+    if request.method == 'POST' and 'search' in request.form:
+        search_query = request.form['search']
+        return search_query
+ 
 
 @app.route('/units', methods=['POST'])
 def set_units():
