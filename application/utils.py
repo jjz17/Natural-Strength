@@ -7,12 +7,15 @@ from email.mime.text import MIMEText
 
 from datetime import date
 import _pickle as cPickle
+from collections.abc import Iterable
 
+from user import User
 from user_metrics import UserMetrics, DummyUserMetrics
 from em import service_account_login, create_message, send_message
 
 
-def send_notification_emails(users: list):
+def send_notification_emails(users: Iterable[User]):
+    # Log in to gmail account
     service = service_account_login()
     EMAIL_FROM = 'a.plus.or.no.rice@gmail.com'
     date_str = date.today()
@@ -27,8 +30,9 @@ def send_notification_emails(users: list):
                     </body>
                 </html>
                 '''
-        
+        # Create email message
         message = create_message(EMAIL_FROM, EMAIL_TO, EMAIL_SUBJECT, EMAIL_CONTENT)
+        # Send email message
         sent = send_message(service,'me', message)
         print(sent)
 
